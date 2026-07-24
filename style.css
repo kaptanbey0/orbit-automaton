@@ -1422,16 +1422,115 @@ a { color: inherit; text-decoration: none; }
   font-size: 0.8rem;
   color: var(--text-secondary);
   line-height: 1.6;
-  margin-bottom: 16px;
-}
-.project-card__footer {
-  display: flex;
-  justify-content: space-between;
+/* ─── DISCORD COPY BUTTON ─── */
+.discord-copy-btn {
+  font-family: var(--font-mono);
+  font-size: 0.72rem;
+  color: #5865F2;
+  background: rgba(88, 101, 242, 0.12);
+  border: 1px solid rgba(88, 101, 242, 0.35);
+  padding: 5px 12px;
+  border-radius: 4px;
+  cursor: pointer;
+  margin-right: 10px;
+  transition: all 0.3s;
+  display: inline-flex;
   align-items: center;
+  gap: 6px;
+  font-weight: 600;
+}
+.discord-copy-btn:hover {
+  background: rgba(88, 101, 242, 0.25);
+  box-shadow: 0 0 15px rgba(88, 101, 242, 0.4);
+  transform: translateY(-1px);
+}
+
+/* ─── HIGH-TECH CINEMATIC BOOT LOADER ─── */
+#boot-loader {
+  position: fixed;
+  inset: 0;
+  z-index: 9999;
+  background: #030306;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: opacity 0.8s ease-out, visibility 0.8s;
+}
+#boot-loader.loaded {
+  opacity: 0;
+  visibility: hidden;
+  pointer-events: none;
+}
+.boot-content {
+  text-align: center;
+  max-width: 450px;
+  padding: 20px;
+}
+.boot-logo {
+  position: relative;
+  width: 70px;
+  height: 70px;
+  margin: 0 auto 24px;
+}
+.boot-ring {
+  position: absolute;
+  inset: 0;
+  border: 2px solid transparent;
+  border-radius: 50%;
+}
+.boot-ring-1 {
+  border-top-color: var(--neon-cyan);
+  animation: spin 1.2s linear infinite;
+}
+.boot-ring-2 {
+  inset: 8px;
+  border-bottom-color: var(--neon-purple);
+  animation: spin 0.8s linear infinite reverse;
+}
+.boot-core {
+  position: absolute;
+  inset: 22px;
+  background: var(--neon-cyan);
+  border-radius: 50%;
+  box-shadow: 0 0 20px var(--neon-cyan);
+  animation: pulse 1s infinite ease-in-out;
+}
+.boot-title {
+  font-family: var(--font-mono);
+  font-size: 1.4rem;
+  letter-spacing: 0.2em;
+  color: #fff;
+  margin-bottom: 6px;
+}
+.boot-title span { color: var(--neon-cyan); }
+.boot-sub {
   font-family: var(--font-mono);
   font-size: 0.75rem;
-  border-top: 1px solid var(--border-subtle);
-  padding-top: 12px;
+  color: var(--text-muted);
+  letter-spacing: 0.1em;
+  margin-bottom: 20px;
 }
+.boot-progress-bar {
+  width: 100%;
+  height: 4px;
+  background: rgba(255, 255, 255, 0.08);
+  border-radius: 2px;
+  overflow: hidden;
+  margin-bottom: 10px;
+}
+.boot-progress-fill {
+  width: 0%;
+  height: 100%;
+  background: linear-gradient(90deg, var(--neon-cyan), var(--neon-purple));
+  box-shadow: 0 0 10px var(--neon-cyan);
+  transition: width 0.1s linear;
+}
+.boot-status {
+  font-family: var(--font-mono);
+  font-size: 0.7rem;
+  color: var(--neon-cyan);
+  letter-spacing: 0.15em;
+}
+
 
 

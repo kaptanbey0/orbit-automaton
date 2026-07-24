@@ -3,14 +3,32 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <meta name="description" content="Orbit Automaton — GitLab Orbit entegrasyonu, JavaScript/Lua otomasyon zekası ve genişletilmiş vizyon paneli. Dark Zenith teması." />
-  <title>Orbit Automaton — Dark Zenith</title>
+  <meta name="description" content="KaptanBey0 Automaton — Dark Zenith teması, JavaScript/Luau otomasyon zekası ve anomali arşivi." />
+  <title>KaptanBey0 Automaton — Dark Zenith</title>
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@300;400;500;600;700&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
   <link rel="stylesheet" href="style.css" />
 </head>
 <body>
+
+  <!-- ═══ HIGH-TECH CINEMATIC BOOT LOADER ═══ -->
+  <div id="boot-loader">
+    <div class="boot-content">
+      <div class="boot-logo">
+        <div class="boot-ring boot-ring-1"></div>
+        <div class="boot-ring boot-ring-2"></div>
+        <div class="boot-core"></div>
+      </div>
+      <h1 class="boot-title">KAPTANBEY0 <span>AUTOMATON</span></h1>
+      <p class="boot-sub">Dark Zenith Core System Initializing...</p>
+      <div class="boot-progress-bar">
+        <div class="boot-progress-fill" id="boot-progress-fill"></div>
+      </div>
+      <div class="boot-status" id="boot-status">MOUNTING SUBSTRATE ARCHIVE... 0%</div>
+    </div>
+  </div>
+
   <!-- ═══ STARFIELD CANVAS ═══ -->
   <canvas id="starfield"></canvas>
 
@@ -26,18 +44,21 @@
         <div class="orbit-core"></div>
       </div>
       <div class="topbar__title">
-        <span class="topbar__name">Orbit Automaton</span>
+        <span class="topbar__name">KaptanBey0 Automaton</span>
         <span class="topbar__version">v2.4.1 &middot; Dark Zenith</span>
       </div>
     </div>
     <nav class="topbar__nav">
       <a href="#dashboard" class="topbar__link active" data-section="dashboard">Dashboard</a>
-      <a href="#orbit" class="topbar__link" data-section="orbit">Orbit</a>
+      <a href="#projects" class="topbar__link" data-section="projects">Projeler</a>
       <a href="#languages" class="topbar__link" data-section="languages">Diller</a>
       <a href="#vision" class="topbar__link" data-section="vision">Vizyon</a>
       <a href="#terminal" class="topbar__link" data-section="terminal">Terminal</a>
     </nav>
     <div class="topbar__right">
+      <button class="discord-copy-btn" id="discord-btn" title="Discord Nickini Kopyala (kaptanbey01)">
+        <span>💬 kaptanbey01</span>
+      </button>
       <div id="observer-id-badge" class="observer-badge">
         <span class="observer-badge__dot"></span>
         <span>OBSERVER-8942-OMEGA</span>

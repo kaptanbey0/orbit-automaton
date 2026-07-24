@@ -4,6 +4,8 @@
    ═══════════════════════════════════════════════════ */
 
 document.addEventListener('DOMContentLoaded', () => {
+  initBootLoader();
+  initDiscordCopyBtn();
   initStarfield();
   initOrbitVisualization();
   initActivityGraph();
@@ -711,11 +713,67 @@ async function initLiveGitHubRepos() {
         `;
         container.appendChild(card);
       });
+/* ─── CINEMATIC BOOT LOADER ─── */
+function initBootLoader() {
+  const loader = document.getElementById('boot-loader');
+  const fill = document.getElementById('boot-progress-fill');
+  const status = document.getElementById('boot-status');
+  if (!loader || !fill || !status) return;
+
+  const steps = [
+    { p: 25, txt: 'MOUNTING SUBSTRATE ARCHIVE... 25%' },
+    { p: 55, txt: 'AUTHENTICATING KAPTANBEY0 CORE... 55%' },
+    { p: 85, txt: 'SYNCHRONIZING REPOSITORY NODES... 85%' },
+    { p: 100, txt: 'KAPTANBEY0 AUTOMATON READY 100%' }
+  ];
+
+  let currentStep = 0;
+  const interval = setInterval(() => {
+    if (currentStep < steps.length) {
+      fill.style.width = steps[currentStep].p + '%';
+      status.textContent = steps[currentStep].txt;
+      if (window.orbitSynthBeep) window.orbitSynthBeep(500 + currentStep * 150, 0.03);
+      currentStep++;
+    } else {
+      clearInterval(interval);
+      setTimeout(() => {
+        loader.classList.add('loaded');
+        if (window.orbitSynthBeep) window.orbitSynthBeep(1200, 0.08);
+      }, 300);
     }
-  } catch (e) {
-    // Silent fallback keeps static card
-  }
+  }, 350);
 }
+
+/* ─── DISCORD NICK COPY BUTTON (kaptanbey01) ─── */
+function initDiscordCopyBtn() {
+  const btn = document.getElementById('discord-btn');
+  if (!btn) return;
+
+  btn.addEventListener('click', () => {
+    const nick = 'kaptanbey01';
+    navigator.clipboard.writeText(nick).then(() => {
+      const originalText = btn.innerHTML;
+      btn.innerHTML = `<span>✓ Kopyalandı: ${nick}!</span>`;
+      btn.style.borderColor = 'var(--neon-green)';
+      btn.style.color = 'var(--neon-green)';
+      if (window.orbitSynthBeep) window.orbitSynthBeep(950, 0.06);
+
+      setTimeout(() => {
+        btn.innerHTML = originalText;
+        btn.style.borderColor = '';
+        btn.style.color = '';
+      }, 2500);
+
+      // Open Discord user URL or app fallback
+      setTimeout(() => {
+        window.open('https://discord.com/users/' + nick, '_blank');
+      }, 600);
+    }).catch(() => {
+      prompt('Discord kullanıcı adı:', nick);
+    });
+  });
+}
+
 
 
 
