@@ -42,9 +42,18 @@
         <span class="observer-badge__dot"></span>
         <span>OBSERVER-8942-OMEGA</span>
       </div>
-      <button class="lang-toggle-btn" id="lang-toggle-btn" title="Dili Değiştir / Switch Language">
-        <span id="lang-toggle-text">🌐 TR / EN</span>
-      </button>
+      <div class="lang-select-wrapper">
+        <span style="font-size: 0.75rem;">🌐</span>
+        <select class="lang-select-box" id="lang-select">
+          <option value="tr">TR (Türkçe)</option>
+          <option value="en">EN (English)</option>
+          <option value="de">DE (Deutsch)</option>
+          <option value="fr">FR (Français)</option>
+          <option value="es">ES (Español)</option>
+          <option value="ru">RU (Русский)</option>
+          <option value="ja">JA (日本語)</option>
+        </select>
+      </div>
       <button class="nav-database-btn" id="nav-db-btn" data-tr="&gt; VERİTABANI ERİŞİMİ" data-en="&gt; ACCESS DATABASE">
         <span>&gt; ACCESS DATABASE</span>
       </button>
@@ -265,10 +274,31 @@ Players.<span class="fn">PlayerAdded</span>:Connect(<span class="kw">function</s
       <div class="automation-status">
         <div class="panel-header">
           <span class="panel-header__dot"></span>
-          <span>Otomasyon Durumu</span>
+          <span data-tr="Otomasyon Durumu" data-en="Automation Pipeline Status">Otomasyon Durumu</span>
         </div>
         <div class="auto-grid" id="auto-grid">
           <!-- Populated by JS -->
+        </div>
+      </div>
+    </section>
+
+    <!-- ── SECTION: LIVE PROJECTS SHOWCASE ── -->
+    <section class="section section--projects" id="projects">
+      <div class="section__header">
+        <h2 class="glitch-title" data-text="Canlı Projeler & Düğümler" data-tr="Canlı Projeler & Düğümler" data-en="Live Projects & Repositories">Canlı Projeler & Düğümler</h2>
+        <p class="section__subtitle" data-tr="GitHub API ile otomatik eşlenen projeler &amp; bot sistemleri" data-en="Real-time synced repositories via GitHub API">GitHub API ile otomatik eşlenen projeler &amp; bot sistemleri</p>
+      </div>
+
+      <div class="projects-grid" id="github-projects-grid">
+        <!-- Dynamically populated by JS initLiveGitHubRepos -->
+        <div class="project-card-skeleton">
+          <span class="project-card__tag">⚡ DÜĞÜM 01</span>
+          <h3>orbit-automaton</h3>
+          <p>Dark Zenith temalı, GitLab/GitHub otomasyonu ve Substrate lore zekası.</p>
+          <div class="project-card__footer">
+            <span style="color:var(--neon-cyan);">★ LIVE NODE</span>
+            <a href="https://github.com/kaptanbey0/orbit-automaton" target="_blank" style="color:var(--neon-green); text-decoration:underline;">Repoyu İncele →</a>
+          </div>
         </div>
       </div>
     </section>
