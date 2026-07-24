@@ -1,0 +1,853 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+<title>PHENOMENA</title>
+<style>
+*{margin:0;padding:0}
+html,body{width:100%;height:100%;overflow:hidden;background:#030308}
+canvas{display:block;position:fixed;inset:0}
+#label{position:fixed;bottom:4vh;left:50%;transform:translateX(-50%);
+font-family:Georgia,'Times New Roman',serif;font-size:.45rem;font-weight:300;
+letter-spacing:.8em;text-transform:uppercase;color:rgba(180,150,120,.08);
+pointer-events:none;z-index:2}
+#phase{position:fixed;top:4vh;left:50%;transform:translateX(-50%);
+font-family:Georgia,serif;font-size:.4rem;font-weight:300;
+letter-spacing:1.2em;text-transform:uppercase;color:rgba(180,150,120,.0);
+pointer-events:none;z-index:2;transition:color 3s,opacity 3s;white-space:nowrap}
+</style>
+<script type="importmap">
+{"imports":{"three":"https://unpkg.com/three@0.164.1/build/three.module.js","three/addons/":"https://unpkg.com/three@0.164.1/examples/jsm/"}}
+</script>
+</head>
+<body>
+<canvas id="c"></canvas>
+<div id="label">phenomena</div>
+<div id="phase"></div>
+<script type="module">
+import*as THREE from'three';
+import{EffectComposer}from'three/addons/postprocessing/EffectComposer.js';
+import{RenderPass}from'three/addons/postprocessing/RenderPass.js';
+import{ShaderPass}from'three/addons/postprocessing/ShaderPass.js';
+import{UnrealBloomPass}from'three/addons/postprocessing/UnrealBloomPass.js';
+
+/* ═══════════════════════════════════════════════
+   PHENOMENA
+   Seven original visual mechanics.
+   Each one: never seen before.
+   ═══════════════════════════════════════════════ */
+
+const r=(a,b)=>Math.random()*(b-a)+a;
+const lerp=(a,b,t)=>a+(b-a)*t;
+const smoothstep=(a,b,t)=>{t=Math.max(0,Math.min(1,(t-a)/(b-a)));return t*t*(3-2*t)};
+const clamp=(v,a,b)=>Math.max(a,Math.min(b,v));
+
+let renderer,scene,camera,composer,clock=new THREE.Clock();
+let mouseX=0,mouseY=0;
+
+/* ────────── BIOLUMINESCENT PALETTE ────────── */
+/* No neon. No cyber. Think: deep ocean, volcanic mineral, living light. */
+const PAL={
+  void:0x030308,
+  obsidian:0x0e0b10,
+  amber:0xc08030,
+  coral:0xd04840,
+  jade:0x2a8060,
+  rose:0xa03848,
+  bone:0xe8dcc8,
+  gold:0xb8860b,
+  deep:0x0a0818,
+  warm:0x201510,
+};
+
+/* ═══════════ INIT ═══════════ */
+function init(){
+  renderer=new THREE.WebGLRenderer({canvas:document.getElementById('c'),antialias:true,powerPreference:'high-performance'});
+  renderer.setSize(innerWidth,innerHeight);
+  renderer.setPixelRatio(Math.min(devicePixelRatio,2));
+  renderer.toneMapping=THREE.ACESFilmicToneMapping;
+  renderer.toneMappingExposure=.7;
+  renderer.shadowMap.enabled=true;
+  renderer.shadowMap.type=THREE.PCFSoftShadowMap;
+  renderer.outputColorSpace=THREE.SRGBColorSpace;
+
+  scene=new THREE.Scene();
+  scene.background=new THREE.Color(PAL.void);
+  scene.fog=new THREE.FogExp2(PAL.void,.012);
+
+  camera=new THREE.PerspectiveCamera(40,innerWidth/innerHeight,.1,300);
+  camera.position.set(0,2,12);
+
+  // Environment
+  const envS=new THREE.Scene();
+  envS.add(new THREE.Mesh(new THREE.SphereGeometry(100,16,16),new THREE.MeshBasicMaterial({color:PAL.void,side:THREE.BackSide})));
+  envS.add(Object.assign(new THREE.PointLight(PAL.amber,.2,200),{position:new THREE.Vector3(40,30,20)}));
+  envS.add(Object.assign(new THREE.PointLight(PAL.jade,.15,200),{position:new THREE.Vector3(-30,-20,40)}));
+  const pm=new THREE.PMREMGenerator(renderer);
+  scene.environment=pm.fromScene(envS,.05).texture;pm.dispose();
+
+  initLights();
+  initOrganism();
+  initDNA();
+  initGrowth();
+  initFoldingGrid();
+  initFluidSurface();
+  initPost();
+
+  addEventListener('resize',()=>{
+    camera.aspect=innerWidth/innerHeight;camera.updateProjectionMatrix();
+    renderer.setSize(innerWidth,innerHeight);composer.setSize(innerWidth,innerHeight);
+  });
+  addEventListener('mousemove',e=>{mouseX=(e.clientX/innerWidth-.5)*2;mouseY=(e.clientY/innerHeight-.5)*2});
+}
+
+/* ═══════════ LIGHTING ═══════════ */
+function initLights(){
+  scene.add(new THREE.AmbientLight(0x0a0808,.3));
+
+  const key=new THREE.DirectionalLight(0xffe8cc,.5);
+  key.position.set(10,15,8);key.castShadow=true;
+  key.shadow.mapSize.set(1024,1024);key.shadow.bias=-.001;
+  scene.add(key);
+
+  const fill=new THREE.DirectionalLight(0x2a2a40,.25);
+  fill.position.set(-8,5,-10);scene.add(fill);
+
+  // Bioluminescent point lights that orbit slowly
+  for(let i=0;i<3;i++){
+    const colors=[PAL.amber,PAL.jade,PAL.coral];
+    const pl=new THREE.PointLight(colors[i],.4,30);
+    scene.add(pl);
+    pl.userData={idx:i,radius:8+i*3};
+  }
+}
+
+/* ══════════════════════════════════════════════
+   🎭 MECHANIC 1: LIVING GEOMETRY
+   A polyhedron that continuously morphs between
+   impossible forms. Not rotating — reconstructing.
+   Its vertices flow like living tissue.
+   ══════════════════════════════════════════════ */
+let organism;
+function initOrganism(){
+  const detail=32;
+  const geo=new THREE.IcosahedronGeometry(2,4);
+
+  // Store original positions for morphing
+  const origPos=geo.attributes.position.array.slice();
+
+  const mat=new THREE.ShaderMaterial({
+    uniforms:{
+      uTime:{value:0},
+      uMorph:{value:0},
+      uColor1:{value:new THREE.Color(PAL.obsidian)},
+      uColor2:{value:new THREE.Color(PAL.amber)},
+      uColor3:{value:new THREE.Color(PAL.coral)},
+    },
+    vertexShader:`
+      uniform float uTime;
+      uniform float uMorph;
+      varying vec3 vNormal;
+      varying vec3 vPos;
+      varying float vDisplacement;
+
+      // Simplex-like noise
+      vec3 mod289(vec3 x){return x-floor(x*(1./289.))*289.;}
+      vec4 mod289(vec4 x){return x-floor(x*(1./289.))*289.;}
+      vec4 perm(vec4 x){return mod289((x*34.+1.)*x);}
+      float snoise(vec3 p){
+        vec3 a=floor(p),d=p-a;d=d*d*(3.-2.*d);
+        vec4 b=a.xxyy+vec4(0,1,0,1),k1=perm(b.xyxy),k2=perm(k1.xyxy+b.zzww);
+        vec4 c=k2+a.zzzz,k3=perm(c),k4=perm(c+1.);
+        vec4 o1=fract(k3*(1./41.)),o2=fract(k4*(1./41.));
+        vec4 o3=o2*d.z+o1*(1.-d.z),o4=o3.yw*d.x+o3.xz*(1.-d.x);
+        return o4.y*d.y+o4.x*(1.-d.y);
+      }
+
+      void main(){
+        vec3 p=position;
+        float t=uTime;
+
+        // MECHANIC: Living reconstruction
+        // Each vertex follows its own organic path
+        float n1=snoise(p*1.5+t*0.3)*0.8;
+        float n2=snoise(p*3.0-t*0.2)*0.3;
+        float n3=snoise(p*0.5+t*0.15)*1.2;
+
+        // Morphological breathing — the form inhales/exhales
+        // through different topologies
+        float breath=sin(t*0.4)*0.5+0.5;
+        float pulse=sin(t*0.7+length(p)*2.0)*0.3;
+
+        // Dimensional shift — vertices slide between
+        // platonic solid positions
+        float shift=sin(t*0.2)*0.5+0.5;
+        vec3 stellated=normalize(p)*(2.0+sin(atan(p.z,p.x)*5.0+t)*0.3*shift);
+        vec3 organic=p+normal*(n1+n2+pulse)*0.5;
+        vec3 final_p=mix(organic,stellated,sin(t*0.15)*0.5+0.5);
+
+        // Anti-gravity: vertices occasionally lift away
+        // then snap back, like elastic tissue
+        float lift=pow(max(sin(t*0.5+length(p.xz)*3.0),0.0),8.0)*0.8;
+        final_p+=normal*lift;
+
+        vDisplacement=n1+n2+lift;
+        vNormal=normalize(normalMatrix*normal);
+        vPos=final_p;
+
+        gl_Position=projectionMatrix*modelViewMatrix*vec4(final_p,1.0);
+      }
+    `,
+    fragmentShader:`
+      uniform float uTime;
+      uniform vec3 uColor1,uColor2,uColor3;
+      varying vec3 vNormal,vPos;
+      varying float vDisplacement;
+
+      void main(){
+        // CHROMATIC STRATA — color emerges from depth
+        float depth=vDisplacement*0.5+0.5;
+
+        // Mineral layers
+        vec3 layer1=uColor1; // obsidian base
+        vec3 layer2=uColor2; // amber veins
+        vec3 layer3=uColor3; // coral hot spots
+
+        vec3 col=mix(layer1,layer2,smoothstep(0.3,0.7,depth));
+        col=mix(col,layer3,smoothstep(0.7,1.0,depth));
+
+        // Bioluminescent edge glow
+        float fresnel=pow(1.0-max(dot(vNormal,vec3(0,0,1)),0.0),3.0);
+        col+=vec3(0.7,0.35,0.1)*fresnel*0.3;
+
+        // Living pulse — faint internal glow
+        float pulse=sin(uTime*0.8+length(vPos)*4.0)*0.5+0.5;
+        col+=vec3(0.5,0.2,0.05)*pulse*0.08;
+
+        // Subtle iridescence on stressed vertices
+        float stress=max(vDisplacement-0.5,0.0);
+        col+=vec3(
+          sin(vPos.x*10.0+uTime)*0.5+0.5,
+          sin(vPos.y*10.0+uTime+2.094)*0.5+0.5,
+          sin(vPos.z*10.0+uTime+4.189)*0.5+0.5
+        )*stress*0.06;
+
+        // Lighting
+        vec3 lightDir=normalize(vec3(sin(uTime*0.13)*2.0,1.5,cos(uTime*0.11)*2.0));
+        float diff=max(dot(vNormal,lightDir),0.0);
+        float spec=pow(max(dot(reflect(-lightDir,vNormal),vec3(0,0,1)),0.0),40.0);
+        vec3 lightCol=vec3(1.0,0.85,0.65);
+
+        col=col*(diff*0.7+0.15)*lightCol+spec*0.15*lightCol;
+
+        gl_FragColor=vec4(col,1.0);
+      }
+    `,
+    side:THREE.DoubleSide,
+  });
+
+  organism=new THREE.Mesh(geo,mat);
+  organism.castShadow=true;
+  scene.add(organism);
+}
+
+/* ══════════════════════════════════════════════
+   🧬 MECHANIC 2: DNA REPOSITORY
+   A double helix where commits are base pairs.
+   The helix breathes, unwinds, and rewinds.
+   Base pairs light up sequentially — each one a commit.
+   ══════════════════════════════════════════════ */
+let dnaGroup,dnaBasePairs=[];
+function initDNA(){
+  dnaGroup=new THREE.Group();
+
+  const turns=4,ptsPerTurn=40,totalPts=turns*ptsPerTurn;
+  const radius=4,pitch=0.25;
+
+  // Create two helical strands
+  for(let strand=0;strand<2;strand++){
+    const points=[];
+    const offset=strand*Math.PI;
+    for(let i=0;i<=totalPts;i++){
+      const t=i/ptsPerTurn;
+      const angle=t*Math.PI*2+offset;
+      points.push(new THREE.Vector3(
+        Math.cos(angle)*radius,
+        (i-totalPts/2)*pitch,
+        Math.sin(angle)*radius
+      ));
+    }
+    const curve=new THREE.CatmullRomCurve3(points);
+    const tubeGeo=new THREE.TubeGeometry(curve,totalPts*2,.06,6,false);
+    const tubeMat=new THREE.MeshStandardMaterial({
+      color:strand===0?PAL.jade:PAL.rose,
+      metalness:.7,roughness:.3,
+      emissive:strand===0?PAL.jade:PAL.rose,
+      emissiveIntensity:.1,
+    });
+    const tube=new THREE.Mesh(tubeGeo,tubeMat);
+    dnaGroup.add(tube);
+  }
+
+  // Base pairs (rungs between strands)
+  for(let i=0;i<totalPts;i+=3){
+    const t=i/ptsPerTurn;
+    const angle1=t*Math.PI*2;
+    const angle2=angle1+Math.PI;
+    const y=(i-totalPts/2)*pitch;
+
+    const p1=new THREE.Vector3(Math.cos(angle1)*radius,y,Math.sin(angle1)*radius);
+    const p2=new THREE.Vector3(Math.cos(angle2)*radius,y,Math.sin(angle2)*radius);
+
+    // Create a thin cylinder between points
+    const mid=new THREE.Vector3().addVectors(p1,p2).multiplyScalar(.5);
+    const len=p1.distanceTo(p2);
+    const dir=new THREE.Vector3().subVectors(p2,p1).normalize();
+
+    const pairGeo=new THREE.CylinderGeometry(.03,.03,len,4);
+    const pairMat=new THREE.MeshStandardMaterial({
+      color:0x1a1012,metalness:.5,roughness:.4,
+      emissive:PAL.amber,emissiveIntensity:0,
+      transparent:true,opacity:.4,
+    });
+    const pair=new THREE.Mesh(pairGeo,pairMat);
+    pair.position.copy(mid);
+    pair.quaternion.setFromUnitVectors(new THREE.Vector3(0,1,0),dir);
+    dnaGroup.add(pair);
+
+    // Small sphere at center of each pair
+    const nodeMat=new THREE.MeshStandardMaterial({
+      color:0x1a1012,emissive:PAL.gold,emissiveIntensity:0,
+      metalness:.8,roughness:.2,
+    });
+    const node=new THREE.Mesh(new THREE.SphereGeometry(.08,8,8),nodeMat);
+    node.position.copy(mid);
+    dnaGroup.add(node);
+
+    dnaBasePairs.push({pair,node,idx:dnaBasePairs.length,mat:pairMat,nodeMat,y});
+  }
+
+  dnaGroup.rotation.x=Math.PI*.05;
+  scene.add(dnaGroup);
+}
+
+/* ══════════════════════════════════════════════
+   🌱 MECHANIC 3: LIVING CODE (ORGANIC GROWTH)
+   Branches grow from the organism like coral/mycelium.
+   Each branch tip carries a faint code character.
+   Growth is continuous — never stops, never repeats.
+   ══════════════════════════════════════════════ */
+let branches=[];
+function initGrowth(){
+  // Generate branch paths using L-system-like recursion
+  function growBranch(origin,dir,length,depth,maxDepth){
+    if(depth>maxDepth||length<.1)return;
+
+    const segments=8;
+    const pts=[origin.clone()];
+    let current=origin.clone();
+    const step=length/segments;
+
+    for(let i=0;i<segments;i++){
+      // Organic deviation
+      dir=dir.clone().applyAxisAngle(new THREE.Vector3(r(-1,1),r(-1,1),r(-1,1)).normalize(),r(-.15,.15));
+      current=current.clone().add(dir.clone().multiplyScalar(step));
+      pts.push(current.clone());
+    }
+
+    const curve=new THREE.CatmullRomCurve3(pts);
+    const radius=.03*(1-depth/maxDepth*.7);
+    const tubeGeo=new THREE.TubeGeometry(curve,segments*2,radius,5,false);
+    const tubeMat=new THREE.MeshStandardMaterial({
+      color:0x0a1a10,metalness:.3,roughness:.6,
+      emissive:0x1a4030,emissiveIntensity:.05,
+    });
+    const tube=new THREE.Mesh(tubeGeo,tubeMat);
+    tube.visible=false;
+    scene.add(tube);
+
+    // Glowing tip
+    const tipMat=new THREE.MeshBasicMaterial({
+      color:PAL.jade,transparent:true,opacity:0,
+    });
+    const tip=new THREE.Mesh(new THREE.SphereGeometry(.05,6,6),tipMat);
+    tip.position.copy(current);
+    scene.add(tip);
+
+    branches.push({tube,tip,tipMat,growStart:depth*2+r(0,3),depth,pts:current});
+
+    // Recurse — create child branches
+    if(depth<maxDepth){
+      const childCount=depth<2?r(2,3):r(1,2);
+      for(let c=0;c<childCount;c++){
+        const childDir=dir.clone().applyAxisAngle(
+          new THREE.Vector3(r(-1,1),r(-1,1),r(-1,1)).normalize(),
+          r(.3,.8)
+        );
+        growBranch(current,childDir,length*r(.5,.7),depth+1,maxDepth);
+      }
+    }
+  }
+
+  // Grow from multiple points on the organism
+  for(let i=0;i<5;i++){
+    const angle=i/5*Math.PI*2;
+    const origin=new THREE.Vector3(Math.cos(angle)*2.2,r(-1,1),Math.sin(angle)*2.2);
+    const dir=origin.clone().normalize().add(new THREE.Vector3(0,r(.2,.5),0)).normalize();
+    growBranch(origin,dir,r(2,4),0,4);
+  }
+}
+
+/* ══════════════════════════════════════════════
+   ♾️ MECHANIC 4: IMPOSSIBLE FOLDING
+   A flat contribution-like grid that folds itself
+   into impossible origami — continuously.
+   ══════════════════════════════════════════════ */
+let foldGrid;
+function initFoldingGrid(){
+  const cols=20,rows=7;
+  const geo=new THREE.PlaneGeometry(8,3,cols,rows);
+
+  const mat=new THREE.ShaderMaterial({
+    uniforms:{
+      uTime:{value:0},
+      uFold:{value:0},
+    },
+    vertexShader:`
+      uniform float uTime,uFold;
+      varying vec2 vUv;
+      varying float vFold;
+
+      void main(){
+        vUv=uv;
+        vec3 p=position;
+        float t=uTime;
+
+        // IMPOSSIBLE FOLDING —
+        // The grid folds along different axes over time
+        // creating shapes that shouldn't exist in 3D
+
+        // Fold 1: Horizontal accordion
+        float foldX=sin(p.x*2.0+t*0.3)*0.8*uFold;
+        p.z+=foldX;
+        p.y+=abs(foldX)*0.3;
+
+        // Fold 2: Vertical wave fold
+        float foldY=sin(p.y*3.0+t*0.4)*0.5*uFold;
+        p.z+=foldY;
+
+        // Fold 3: Diagonal twist
+        float twist=t*0.2;
+        float angle=p.x*0.5*uFold;
+        float cy=cos(angle+twist),sy=sin(angle+twist);
+        vec3 twisted=vec3(p.x,p.y*cy-p.z*sy,p.y*sy+p.z*cy);
+        p=mix(p,twisted,uFold*0.5);
+
+        // Fold 4: Curl into impossible topology
+        float curl=sin(t*0.15)*uFold*1.5;
+        float r2=5.0;
+        float theta=p.x/r2*curl;
+        vec3 curled=vec3(
+          (r2+p.z)*cos(theta)-r2,
+          p.y,
+          (r2+p.z)*sin(theta)
+        );
+        p=mix(p,curled,smoothstep(0.3,0.8,uFold));
+
+        vFold=foldX+foldY;
+        gl_Position=projectionMatrix*modelViewMatrix*vec4(p,1.0);
+      }
+    `,
+    fragmentShader:`
+      uniform float uTime;
+      varying vec2 vUv;
+      varying float vFold;
+
+      void main(){
+        // Contribution-like grid coloring
+        vec2 cell=floor(vUv*vec2(20.0,7.0));
+        float id=cell.x*7.0+cell.y;
+
+        // Activity level based on noise
+        float activity=fract(sin(id*127.1+43.7)*4375.5453);
+        activity=smoothstep(0.3,0.9,activity);
+
+        // Mineral color palette
+        vec3 empty=vec3(0.04,0.03,0.05);
+        vec3 low=vec3(0.08,0.05,0.03);
+        vec3 mid=vec3(0.25,0.12,0.05);
+        vec3 high=vec3(0.55,0.25,0.08);
+
+        vec3 col=mix(empty,low,smoothstep(0.0,0.3,activity));
+        col=mix(col,mid,smoothstep(0.3,0.6,activity));
+        col=mix(col,high,smoothstep(0.6,1.0,activity));
+
+        // Fold stress — reveals inner glow
+        float stress=abs(vFold)*0.3;
+        col+=vec3(0.5,0.2,0.05)*stress;
+
+        // Cell borders
+        vec2 cellUv=fract(vUv*vec2(20.0,7.0));
+        float border=step(0.05,cellUv.x)*step(cellUv.x,0.95)*
+                      step(0.05,cellUv.y)*step(cellUv.y,0.95);
+        col*=mix(0.5,1.0,border);
+
+        gl_FragColor=vec4(col,0.85);
+      }
+    `,
+    transparent:true,side:THREE.DoubleSide,
+  });
+
+  foldGrid=new THREE.Mesh(geo,mat);
+  foldGrid.position.set(0,-4,0);
+  foldGrid.rotation.x=-0.3;
+  scene.add(foldGrid);
+}
+
+/* ══════════════════════════════════════════════
+   🌊 MECHANIC 5: FLUID SURFACE
+   A liquid metal membrane that responds to
+   "commits" with propagating waves.
+   Not water — liquid obsidian.
+   ══════════════════════════════════════════════ */
+let fluidMesh,fluidWaves=[];
+function initFluidSurface(){
+  const geo=new THREE.PlaneGeometry(30,30,128,128);
+
+  const mat=new THREE.ShaderMaterial({
+    uniforms:{
+      uTime:{value:0},
+      uWaves:{value:new Float32Array(12)}, // 4 waves × 3 params (x,z,birth)
+    },
+    vertexShader:`
+      uniform float uTime;
+      uniform float uWaves[12];
+      varying vec3 vWorldPos;
+      varying vec3 vNormal;
+      varying float vHeight;
+
+      void main(){
+        vec3 p=position;
+        float h=0.0;
+
+        // Base organic undulation
+        h+=sin(p.x*0.3+uTime*0.3)*cos(p.y*0.4+uTime*0.2)*0.15;
+        h+=sin(p.x*0.7-uTime*0.15)*0.08;
+
+        // Commit waves — propagating ripples
+        for(int i=0;i<4;i++){
+          float wx=uWaves[i*3];
+          float wz=uWaves[i*3+1];
+          float wb=uWaves[i*3+2];
+          if(wb>0.0){
+            float age=uTime-wb;
+            float dist=length(p.xy-vec2(wx,wz));
+            float speed=4.0;
+            float wavefront=age*speed;
+            float width=2.0;
+            float amp=0.5*exp(-age*0.5)*exp(-pow(dist-wavefront,2.0)/(width*width));
+            h+=amp*sin(dist*3.0-age*8.0);
+          }
+        }
+
+        p.z+=h;
+        vHeight=h;
+        vWorldPos=(modelMatrix*vec4(p,1.0)).xyz;
+
+        // Compute normal from displacement
+        vNormal=normalize(normalMatrix*vec3(
+          -cos(p.x*0.3+uTime*0.3)*0.3*cos(p.y*0.4+uTime*0.2)*0.15,
+          -sin(p.x*0.3+uTime*0.3)*(-sin(p.y*0.4+uTime*0.2)*0.4)*0.15,
+          1.0
+        ));
+
+        gl_Position=projectionMatrix*modelViewMatrix*vec4(p,1.0);
+      }
+    `,
+    fragmentShader:`
+      uniform float uTime;
+      varying vec3 vWorldPos,vNormal;
+      varying float vHeight;
+
+      void main(){
+        // Liquid obsidian — dark, reflective, alive
+        vec3 base=vec3(0.03,0.025,0.04);
+
+        // Height-based coloring — waves reveal inner warmth
+        float reveal=smoothstep(0.0,0.4,abs(vHeight));
+        base+=vec3(0.4,0.15,0.03)*reveal;
+
+        // Fresnel-like rim
+        float fresnel=pow(1.0-max(dot(normalize(vNormal),vec3(0,0,1)),0.0),4.0);
+        base+=vec3(0.2,0.1,0.04)*fresnel;
+
+        // Subtle surface variation
+        float noise=fract(sin(dot(vWorldPos.xy*10.0,vec2(12.9898,78.233)))*43758.5453);
+        base+=noise*0.01;
+
+        gl_FragColor=vec4(base,0.7);
+      }
+    `,
+    transparent:true,side:THREE.DoubleSide,
+  });
+
+  fluidMesh=new THREE.Mesh(geo,mat);
+  fluidMesh.rotation.x=-Math.PI*.5;
+  fluidMesh.position.y=-6;
+  scene.add(fluidMesh);
+}
+
+function emitFluidWave(){
+  const waves=fluidMesh.material.uniforms.uWaves.value;
+  const slot=(fluidWaves.length%4)*3;
+  waves[slot]=r(-8,8);
+  waves[slot+1]=r(-8,8);
+  waves[slot+2]=clock.getElapsedTime();
+  fluidWaves.push(clock.getElapsedTime());
+}
+
+/* ══════════════════════════════════════════════
+   🕳️ MECHANIC 6: REALITY GLITCH
+   Space itself bends. Not a visual effect ON the
+   scene — the scene's fabric tears and reforms.
+   ══════════════════════════════════════════════ */
+let glitchIntensity=0;
+let lastGlitch=0;
+
+/* ══════════════════════════════════════════════
+   POST PROCESSING — SPACE DISTORTION
+   ══════════════════════════════════════════════ */
+function initPost(){
+  composer=new EffectComposer(renderer);
+  composer.addPass(new RenderPass(scene,camera));
+
+  // Subtle, warm bloom — NOT harsh neon bloom
+  const bloom=new UnrealBloomPass(new THREE.Vector2(innerWidth,innerHeight),.6,.8,.5);
+  composer.addPass(bloom);
+
+  // Reality distortion shader
+  const distortion={
+    uniforms:{
+      tDiffuse:{value:null},
+      uTime:{value:0},
+      uGlitch:{value:0},
+      uTear:{value:0},
+    },
+    vertexShader:`varying vec2 vUv;void main(){vUv=uv;gl_Position=projectionMatrix*modelViewMatrix*vec4(position,1.);}`,
+    fragmentShader:`
+      uniform sampler2D tDiffuse;
+      uniform float uTime,uGlitch,uTear;
+      varying vec2 vUv;
+
+      float hash(vec2 p){return fract(sin(dot(p,vec2(127.1,311.7)))*43758.5453);}
+
+      void main(){
+        vec2 uv=vUv;
+
+        // REALITY GLITCH — space bending
+        if(uGlitch>0.01){
+          // Gravitational lensing effect
+          vec2 center=vec2(0.5+sin(uTime*0.5)*0.1,0.5+cos(uTime*0.7)*0.1);
+          vec2 delta=uv-center;
+          float dist=length(delta);
+          float bend=uGlitch*0.15/(dist+0.1);
+          uv+=normalize(delta)*bend*sin(dist*20.0-uTime*5.0)*exp(-dist*3.0);
+
+          // Chromatic tear — reality splitting
+          float tear=uGlitch*0.003;
+          vec4 cr=texture2D(tDiffuse,uv+vec2(tear,0.0));
+          vec4 cg=texture2D(tDiffuse,uv);
+          vec4 cb=texture2D(tDiffuse,uv-vec2(tear,0.0));
+          gl_FragColor=vec4(cr.r,cg.g,cb.b,1.0);
+        } else {
+          gl_FragColor=texture2D(tDiffuse,uv);
+        }
+
+        // Subtle vignette — warm, not dark
+        float vig=1.0-length(vUv-0.5)*0.8;
+        vig=smoothstep(0.0,1.0,vig);
+        gl_FragColor.rgb*=mix(0.4,1.0,vig);
+
+        // Ultra-subtle grain
+        float grain=hash(vUv*1000.0+fract(uTime))*0.02;
+        gl_FragColor.rgb+=grain-0.01;
+
+        // Warm color grade
+        gl_FragColor.rgb=pow(gl_FragColor.rgb,vec3(0.97,1.0,1.04));
+      }
+    `,
+  };
+  composer.addPass(new ShaderPass(distortion));
+}
+
+/* ══════════════════════════════════════════════
+   🎬 CAMERA — CHOREOGRAPHY OF DISCOVERY
+   Not just orbiting. Revealing. Each angle shows
+   something the previous angle couldn't.
+   ══════════════════════════════════════════════ */
+function updateCamera(t){
+  // Multi-phase camera path
+  const phase=t%80;
+
+  let targetPos=new THREE.Vector3();
+  let targetLook=new THREE.Vector3(0,0,0);
+
+  if(phase<20){
+    // Wide contemplative orbit
+    const a=t*0.08;
+    targetPos.set(Math.sin(a)*14,3+Math.sin(t*.06)*2,Math.cos(a)*14);
+  } else if(phase<35){
+    // Dive into DNA helix
+    const f=(phase-20)/15;
+    const a=t*0.15;
+    targetPos.set(Math.sin(a)*5,lerp(3,-3,f)+Math.sin(t*.3)*.5,Math.cos(a)*5);
+    targetLook.set(0,lerp(0,-3,f),0);
+  } else if(phase<50){
+    // Macro close-up on organism surface
+    const f=(phase-35)/15;
+    const a=t*0.12;
+    const dist=lerp(14,4,Math.sin(f*Math.PI));
+    targetPos.set(Math.sin(a)*dist,Math.sin(t*.08)*2,Math.cos(a)*dist);
+  } else if(phase<65){
+    // Rise up — reveal the fluid surface below
+    const f=(phase-50)/15;
+    const a=t*0.06;
+    targetPos.set(Math.sin(a)*12,lerp(3,10,Math.sin(f*Math.PI)),Math.cos(a)*12);
+    targetLook.set(0,lerp(0,-4,f),0);
+  } else {
+    // Pull back for grand view
+    const f=(phase-65)/15;
+    const a=t*0.1;
+    targetPos.set(Math.sin(a)*16,5+Math.sin(t*.05)*3,Math.cos(a)*16);
+  }
+
+  // Mouse parallax
+  targetPos.x+=mouseX*1.5;
+  targetPos.y+=mouseY*1;
+
+  // Cinematic smoothing
+  camera.position.lerp(targetPos,.015);
+  const look=new THREE.Vector3();
+  camera.getWorldDirection(look);
+  const desired=targetLook.clone().sub(camera.position).normalize();
+  look.lerp(desired,.02);
+  camera.lookAt(camera.position.clone().add(look.multiplyScalar(10)));
+}
+
+/* ══════════════════════════════════════════════
+   ANIMATION LOOP
+   ══════════════════════════════════════════════ */
+let commitTimer=0;
+
+function animate(){
+  requestAnimationFrame(animate);
+  const t=clock.getElapsedTime();
+  const dt=Math.min(clock.getDelta(),.05);
+
+  /* ── 🎭 Living Geometry ── */
+  if(organism){
+    organism.material.uniforms.uTime.value=t;
+    organism.rotation.y=t*.02;
+  }
+
+  /* ── 🧬 DNA ── */
+  if(dnaGroup){
+    dnaGroup.rotation.y=t*.08;
+    // Breathing: the helix radius oscillates
+    const breath=1+Math.sin(t*.3)*.08;
+    dnaGroup.scale.set(breath,1,breath);
+
+    // Sequential commit lighting
+    const commitSpeed=2;
+    const activeIdx=Math.floor(t*commitSpeed)%dnaBasePairs.length;
+    dnaBasePairs.forEach((bp,i)=>{
+      const dist=Math.abs(i-activeIdx);
+      const glow=Math.max(0,1-dist/3);
+      bp.mat.emissiveIntensity=glow*.6;
+      bp.mat.opacity=.4+glow*.5;
+      bp.nodeMat.emissiveIntensity=glow*2;
+      bp.node.scale.setScalar(1+glow*.8);
+    });
+  }
+
+  /* ── 🌱 Growth ── */
+  branches.forEach(br=>{
+    const growT=clamp((t-br.growStart)/2,0,1);
+    br.tube.visible=growT>0;
+    if(growT>0){
+      br.tube.scale.set(1,growT,1);
+      br.tipMat.opacity=growT>.9?Math.sin(t*2+br.depth)*.3+.3:0;
+    }
+  });
+
+  /* ── ♾️ Folding ── */
+  if(foldGrid){
+    const foldCycle=(Math.sin(t*.15)+1)*.5;
+    foldGrid.material.uniforms.uTime.value=t;
+    foldGrid.material.uniforms.uFold.value=foldCycle;
+    foldGrid.rotation.y=t*.03;
+  }
+
+  /* ── 🌊 Fluid ── */
+  if(fluidMesh){
+    fluidMesh.material.uniforms.uTime.value=t;
+  }
+
+  // Emit waves periodically
+  commitTimer+=dt;
+  if(commitTimer>r(2,5)){
+    commitTimer=0;
+    emitFluidWave();
+    // Trigger reality glitch
+    glitchIntensity=r(.3,.8);
+    lastGlitch=t;
+  }
+
+  /* ── 🕳️ Glitch decay ── */
+  glitchIntensity*=.96;
+  if(t-lastGlitch>2)glitchIntensity*=.9;
+
+  /* ── Lights orbit ── */
+  scene.children.forEach(ch=>{
+    if(ch.isPointLight&&ch.userData.idx!==undefined){
+      const i=ch.userData.idx;
+      const a=t*.15+i*2.094;
+      const rad=ch.userData.radius;
+      ch.position.set(Math.sin(a)*rad,Math.cos(a*.7)*3,Math.cos(a)*rad);
+    }
+  });
+
+  /* ── Camera ── */
+  updateCamera(t);
+
+  /* ── Post ── */
+  composer.passes.forEach(p=>{
+    if(p.uniforms){
+      if(p.uniforms.uTime)p.uniforms.uTime.value=t;
+      if(p.uniforms.uGlitch)p.uniforms.uGlitch.value=glitchIntensity;
+    }
+  });
+
+  /* ── Phase label ── */
+  const phase=t%80;
+  const phaseEl=document.getElementById('phase');
+  let phaseName='';
+  if(phase<20)phaseName='contemplation';
+  else if(phase<35)phaseName='the double helix';
+  else if(phase<50)phaseName='living tissue';
+  else if(phase<65)phaseName='liquid obsidian';
+  else phaseName='phenomena';
+  phaseEl.textContent=phaseName;
+  phaseEl.style.color='rgba(180,150,120,0.06)';
+
+  composer.render();
+}
+
+/* ═══════════ START ═══════════ */
+init();
+clock.start();
+animate();
+</script>
+</body>
+</html>

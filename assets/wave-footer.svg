@@ -1,0 +1,33 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 120" preserveAspectRatio="none">
+  <defs>
+    <linearGradient id="fw1" x1="0" y1="1" x2="0" y2="0">
+      <stop offset="0%" stop-color="#00f0ff" stop-opacity="0.12"/>
+      <stop offset="100%" stop-color="#08080c" stop-opacity="0"/>
+    </linearGradient>
+    <linearGradient id="fw2" x1="0" y1="1" x2="0" y2="0">
+      <stop offset="0%" stop-color="#a855f7" stop-opacity="0.08"/>
+      <stop offset="100%" stop-color="#08080c" stop-opacity="0"/>
+    </linearGradient>
+  </defs>
+  <path fill="url(#fw1)">
+    <animate attributeName="d"
+      values="M0,60 C200,20 400,100 600,60 C800,20 1000,100 1200,60 L1200,0 L0,0Z;
+              M0,40 C200,80 400,10 600,50 C800,90 1000,20 1200,40 L1200,0 L0,0Z;
+              M0,60 C200,20 400,100 600,60 C800,20 1000,100 1200,60 L1200,0 L0,0Z"
+      dur="8s" repeatCount="indefinite"/>
+  </path>
+  <path fill="url(#fw2)">
+    <animate attributeName="d"
+      values="M0,40 C200,70 400,20 600,50 C800,80 1000,30 1200,40 L1200,0 L0,0Z;
+              M0,60 C200,30 400,80 600,40 C800,10 1000,70 1200,60 L1200,0 L0,0Z;
+              M0,40 C200,70 400,20 600,50 C800,80 1000,30 1200,40 L1200,0 L0,0Z"
+      dur="6s" repeatCount="indefinite"/>
+  </path>
+  <path fill="none" stroke="#a855f7" stroke-width="0.8" opacity="0.25">
+    <animate attributeName="d"
+      values="M0,40 C200,70 400,20 600,50 C800,80 1000,30 1200,40;
+              M0,60 C200,30 400,80 600,40 C800,10 1000,70 1200,60;
+              M0,40 C200,70 400,20 600,50 C800,80 1000,30 1200,40"
+      dur="6s" repeatCount="indefinite"/>
+  </path>
+</svg>

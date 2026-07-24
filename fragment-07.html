@@ -1,0 +1,463 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+<title>Recovered Fragment 07</title>
+<!-- 01000100 01001111 00100000 01001110 01001111 01010100 00100000 01001111 01000010 01010011 01000101 01010010 01010110 01000101 -->
+<style>
+@import url('https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@300;400&family=Cormorant+Garamond:ital,wght@0,300;1,300&display=swap');
+*{margin:0;padding:0}
+html,body{width:100%;height:100%;overflow:hidden;background:#000}
+canvas{display:block;position:fixed;inset:0;opacity:0;transition:opacity 2s}
+canvas.on{opacity:1}
+
+#gate{position:fixed;inset:0;z-index:50;display:flex;align-items:center;justify-content:center;
+cursor:pointer;background:#000}
+#gate .inner{text-align:center}
+#gate .brand{font-family:'IBM Plex Mono',monospace;font-size:clamp(.32rem,.8vw,.42rem);
+font-weight:300;letter-spacing:1.2em;text-transform:uppercase;color:rgba(100,90,75,.1);margin-bottom:6vh}
+#gate .begin{font-family:'IBM Plex Mono',monospace;font-size:clamp(.28rem,.65vw,.35rem);
+font-weight:300;letter-spacing:.6em;text-transform:uppercase;color:rgba(130,120,105,.15);
+border:1px solid rgba(130,120,105,.06);padding:1.2vh 3vw;transition:all .8s}
+#gate .begin:hover{color:rgba(160,145,120,.3);border-color:rgba(130,120,105,.12)}
+#gate.gone{opacity:0;pointer-events:none;transition:opacity 1.5s}
+
+#archive{position:fixed;inset:0;z-index:10;display:flex;align-items:center;justify-content:center;pointer-events:none}
+.t{font-family:'IBM Plex Mono',monospace;color:rgba(0,0,0,0);transition:color 1.5s;line-height:2.2;white-space:pre;position:absolute;text-align:center}
+.t.on{color:rgba(140,130,115,.3)}
+.t.hi{color:rgba(170,155,135,.45)}
+.t.lo{color:rgba(80,72,60,.08)}
+.t.off{color:rgba(0,0,0,0)}
+.head{font-size:clamp(.38rem,1.1vw,.6rem);letter-spacing:.5em;font-weight:300;text-transform:uppercase}
+.name{font-family:'Cormorant Garamond',Georgia,serif;font-size:clamp(1.1rem,3.8vw,2.6rem);font-weight:300;font-style:italic;letter-spacing:.15em}
+.sub{font-family:'Cormorant Garamond',Georgia,serif;font-size:clamp(.3rem,.85vw,.48rem);font-weight:300;font-style:italic;letter-spacing:.25em}
+.note{font-size:clamp(.28rem,.7vw,.38rem);letter-spacing:.6em;font-weight:300;text-transform:uppercase}
+
+#scan{position:fixed;inset:0;z-index:5;pointer-events:none;
+background:repeating-linear-gradient(0deg,transparent,transparent 2px,rgba(0,0,0,.03) 2px,rgba(0,0,0,.03) 4px)}
+
+#substrate{position:fixed;top:3vh;left:50%;transform:translateX(-50%);z-index:8;pointer-events:none;
+font-family:'IBM Plex Mono',monospace;font-size:clamp(.22rem,.5vw,.28rem);font-weight:300;
+letter-spacing:1.5em;text-transform:uppercase;color:rgba(0,0,0,0);transition:color 3s}
+#substrate.on{color:rgba(80,72,60,.06)}
+</style>
+</head>
+<body>
+<!-- SUBSTRATE COMPUTATIONAL ANOMALY ARCHIVE — RESEARCH TERMINAL 04 — NODE 7.2 -->
+<!-- CLEARANCE: LEVEL 3 — RESEARCHER EM — SESSION 0x7F2A -->
+<!-- WARNING: Observation of this fragment modifies the observer. -->
+
+<div id="gate">
+  <div class="inner">
+    <div class="brand">Substrate Archive</div>
+    <div class="begin">Begin observation</div>
+  </div>
+</div>
+
+<div id="substrate">Substrate</div>
+<div id="scan"></div>
+<canvas id="c"></canvas>
+
+<div id="archive">
+  <div id="t0" class="t head">
+Recovered Fragment 07
+
+Archive Date: Unknown
+Origin: Computational Substrate
+Classification: Unstable
+Researcher: EM
+
+Note:
+Do not observe for more than 90 seconds.</div>
+
+  <div id="t1" class="t name" style="opacity:0">Echo Topology</div>
+  <div id="t1sub" class="t note" style="position:absolute;margin-top:7vh;opacity:0"></div>
+
+  <div id="tEnd" class="t sub" style="opacity:0">
+Observation:
+Echo count exceeded stability threshold.</div>
+  <div id="tEndSub" class="t note" style="position:absolute;margin-top:10vh;opacity:0">Containment: ARCHIVED</div>
+</div>
+
+<script>
+"use strict";
+/* ═══════════════════════════════════════════════════
+   RECOVERED FRAGMENT 07 — ECHO TOPOLOGY
+   Substrate Computational Anomaly Archive
+   Researcher EM — Extraction Session 0x7F2A
+
+   SOUND DESIGN — Procedural Web Audio API
+   No external files. No samples. Pure synthesis.
+   ═══════════════════════════════════════════════════ */
+
+const canvas=document.getElementById('c');
+const gl=canvas.getContext('webgl2',{antialias:false});
+if(!gl){document.body.innerHTML='<p style="color:#333;text-align:center;margin-top:45vh;font-family:monospace;font-size:.5rem">WebGL 2 required</p>';throw 0}
+
+/* ─── Timing ─── */
+const PH={
+  archiveIn:0,archiveOut:4,silence:5.5,
+  sphereIn:6,normalEnd:12,
+  echo1:12,echo2:16,echoFull:22,
+  consumed:30,climax:38,fadeOut:42,
+  lawName:44,endText:48,end:54,
+};
+
+/* ══════════════════════════════════════════════════
+   SOUND ENGINE — Procedural synthesis
+   ══════════════════════════════════════════════════ */
+let actx,masterGain;
+let droneOsc1,droneOsc2,droneGain;
+let crtOsc,crtGain;
+let staticSource,staticGain,staticFilter;
+let rumbleOsc,rumbleGain;
+let metalOsc,metalGain,metalFilter;
+let soundReady=false;
+
+function initSound(){
+  actx=new(window.AudioContext||window.webkitAudioContext)();
+  masterGain=actx.createGain();
+  masterGain.gain.value=0;
+  masterGain.connect(actx.destination);
+
+  // ── DEEP DRONE: 42Hz + 63Hz sine ──
+  // Like a generator in a basement you can't find
+  droneGain=actx.createGain();droneGain.gain.value=0;droneGain.connect(masterGain);
+
+  droneOsc1=actx.createOscillator();droneOsc1.type='sine';droneOsc1.frequency.value=42;
+  const droneFilter1=actx.createBiquadFilter();droneFilter1.type='lowpass';droneFilter1.frequency.value=80;
+  droneOsc1.connect(droneFilter1);droneFilter1.connect(droneGain);droneOsc1.start();
+
+  droneOsc2=actx.createOscillator();droneOsc2.type='sine';droneOsc2.frequency.value=63;
+  const droneGain2=actx.createGain();droneGain2.gain.value=0.4;
+  droneOsc2.connect(droneGain2);droneGain2.connect(droneGain);droneOsc2.start();
+
+  // ── CRT HUM: Very high frequency, barely perceptible ──
+  crtGain=actx.createGain();crtGain.gain.value=0;crtGain.connect(masterGain);
+  crtOsc=actx.createOscillator();crtOsc.type='sawtooth';crtOsc.frequency.value=15734;
+  const crtFilter=actx.createBiquadFilter();crtFilter.type='bandpass';crtFilter.frequency.value=15734;crtFilter.Q.value=50;
+  crtOsc.connect(crtFilter);crtFilter.connect(crtGain);crtOsc.start();
+
+  // ── RADIO STATIC: Filtered white noise ──
+  staticGain=actx.createGain();staticGain.gain.value=0;staticGain.connect(masterGain);
+  staticFilter=actx.createBiquadFilter();staticFilter.type='bandpass';staticFilter.frequency.value=3000;staticFilter.Q.value=0.8;
+  staticFilter.connect(staticGain);
+  // Generate white noise buffer
+  const noiseBuf=actx.createBuffer(1,actx.sampleRate*4,actx.sampleRate);
+  const noiseData=noiseBuf.getChannelData(0);
+  for(let i=0;i<noiseData.length;i++)noiseData[i]=Math.random()*2-1;
+  function startNoise(){
+    staticSource=actx.createBufferSource();staticSource.buffer=noiseBuf;
+    staticSource.loop=true;staticSource.connect(staticFilter);staticSource.start();
+  }
+  startNoise();
+
+  // ── SUB RUMBLE: 25Hz triggered by echo events ──
+  rumbleGain=actx.createGain();rumbleGain.gain.value=0;rumbleGain.connect(masterGain);
+  rumbleOsc=actx.createOscillator();rumbleOsc.type='sine';rumbleOsc.frequency.value=25;
+  const rumbleFilter=actx.createBiquadFilter();rumbleFilter.type='lowpass';rumbleFilter.frequency.value=40;
+  rumbleOsc.connect(rumbleFilter);rumbleFilter.connect(rumbleGain);rumbleOsc.start();
+
+  // ── METAL RESONANCE: Filtered oscillator ──
+  metalGain=actx.createGain();metalGain.gain.value=0;metalGain.connect(masterGain);
+  metalOsc=actx.createOscillator();metalOsc.type='triangle';metalOsc.frequency.value=180;
+  metalFilter=actx.createBiquadFilter();metalFilter.type='bandpass';metalFilter.frequency.value=180;metalFilter.Q.value=25;
+  metalOsc.connect(metalFilter);metalFilter.connect(metalGain);metalOsc.start();
+
+  // Master fade in
+  masterGain.gain.setValueAtTime(0,actx.currentTime);
+  masterGain.gain.linearRampToValueAtTime(0.6,actx.currentTime+1);
+
+  soundReady=true;
+}
+
+// HDD click: short percussive burst
+function triggerClick(){
+  if(!soundReady)return;
+  const osc=actx.createOscillator();
+  const gain=actx.createGain();
+  const filt=actx.createBiquadFilter();
+  osc.type='square';osc.frequency.value=800+Math.random()*400;
+  filt.type='highpass';filt.frequency.value=2000;filt.Q.value=5;
+  gain.gain.setValueAtTime(0.015,actx.currentTime);
+  gain.gain.exponentialRampToValueAtTime(0.001,actx.currentTime+0.06);
+  osc.connect(filt);filt.connect(gain);gain.connect(masterGain);
+  osc.start();osc.stop(actx.currentTime+0.08);
+}
+
+// Drive sound levels from visual phase
+function driveSound(t){
+  if(!soundReady)return;
+  const now=actx.currentTime;
+  const ss=(a,b,v)=>{v=Math.max(0,Math.min(1,(v-a)/(b-a)));return v*v*(3-2*v)};
+
+  // CRT hum: very faint during archive text
+  const crtLevel=(t<PH.archiveOut)?0.004:(t<PH.silence)?0.001:0;
+  crtGain.gain.setTargetAtTime(crtLevel,now,0.3);
+
+  // Drone: starts with sphere, deepens with echoes
+  let droneLvl=0;
+  if(t>=PH.sphereIn&&t<PH.fadeOut){
+    droneLvl=ss(PH.sphereIn,PH.sphereIn+4,t)*0.08;
+    // Deepen with echo phases
+    if(t>=PH.echo1) droneLvl=0.08+ss(PH.echo1,PH.echoFull,t)*0.07;
+    if(t>=PH.echoFull) droneLvl=0.15+ss(PH.echoFull,PH.consumed,t)*0.1;
+    if(t>=PH.consumed) droneLvl=0.25+ss(PH.consumed,PH.climax,t)*0.08;
+    // Fade out
+    if(t>PH.fadeOut-4) droneLvl*=ss(PH.fadeOut,PH.fadeOut-4,t);
+  }
+  droneGain.gain.setTargetAtTime(droneLvl,now,0.5);
+
+  // Drone pitch bends slightly with echo strength
+  const pitchBend=t>=PH.echoFull?ss(PH.echoFull,PH.climax,t)*3:0;
+  droneOsc1.frequency.setTargetAtTime(42-pitchBend,now,1);
+
+  // Static: creeps in with echoes
+  let staticLvl=0;
+  if(t>=PH.echo2&&t<PH.fadeOut){
+    staticLvl=ss(PH.echo2,PH.echoFull,t)*0.008;
+    if(t>=PH.echoFull) staticLvl=0.008+ss(PH.echoFull,PH.consumed,t)*0.01;
+    if(t>PH.fadeOut-4) staticLvl*=ss(PH.fadeOut,PH.fadeOut-4,t);
+  }
+  staticGain.gain.setTargetAtTime(staticLvl,now,0.4);
+
+  // Rumble: pulses during heavy echo phases
+  let rumbleLvl=0;
+  if(t>=PH.echoFull&&t<PH.fadeOut){
+    const pulse=Math.sin(t*0.8)*0.5+0.5;
+    rumbleLvl=ss(PH.echoFull,PH.consumed,t)*0.12*pulse;
+    if(t>=PH.consumed) rumbleLvl=0.12+ss(PH.consumed,PH.climax,t)*0.08;
+    if(t>PH.fadeOut-3) rumbleLvl*=ss(PH.fadeOut,PH.fadeOut-3,t);
+  }
+  rumbleGain.gain.setTargetAtTime(rumbleLvl,now,0.3);
+
+  // Metal resonance: occasional during echo phases
+  let metalLvl=0;
+  if(t>=PH.echo1&&t<PH.fadeOut){
+    metalLvl=Math.max(0,Math.sin(t*1.3)-0.85)*0.15;
+    const freq=180+Math.sin(t*0.3)*40;
+    metalOsc.frequency.setTargetAtTime(freq,now,0.5);
+    metalFilter.frequency.setTargetAtTime(freq,now,0.5);
+  }
+  metalGain.gain.setTargetAtTime(metalLvl,now,0.1);
+
+  // Master kill after fade
+  if(t>=PH.fadeOut+1){
+    masterGain.gain.setTargetAtTime(0,now,1);
+  }
+}
+
+// Track last click time for HDD ticks
+let lastClickTime=0;
+
+/* ═══════════════════════════════════════════════
+   SHADER — Same raymarching engine as before
+   ═══════════════════════════════════════════════ */
+const VS=`#version 300 es
+in vec2 a;void main(){gl_Position=vec4(a,0,1);}`;
+
+const FS=`#version 300 es
+precision highp float;
+out vec4 O;
+uniform vec2 R;
+uniform float T;
+uniform float uPhase;
+uniform float uEchoCount;
+uniform float uEchoStrength;
+uniform float uOpacity;
+
+#define STEPS 80
+#define FAR 25.0
+#define EPS 0.001
+
+mat2 rot(float a){float c=cos(a),s=sin(a);return mat2(c,-s,s,c);}
+
+float entityAt(vec3 p,float time,float complexity){
+  float sphere=length(p)-1.0;
+  if(complexity>0.1){
+    float memory=sin(p.x*3.0+time*0.5)*sin(p.y*4.0+time*0.3)*sin(p.z*2.5+time*0.4);
+    sphere+=memory*0.12*complexity;
+  }
+  if(complexity>0.5){
+    float box=max(abs(p.x),max(abs(p.y),abs(p.z)))-0.9;
+    sphere=mix(sphere,box,(complexity-0.5)*0.4);
+    float torus=length(vec2(length(p.xz)-0.8,p.y))-0.3;
+    float k=0.3;float h=clamp(0.5+0.5*(torus-sphere)/k,0.,1.);
+    sphere=mix(torus,sphere,h)-k*h*(1.-h);
+  }
+  return sphere;
+}
+
+vec3 echoColor;
+
+float map(vec3 p){
+  p.xy*=rot(T*0.06);p.yz*=rot(T*0.04);
+  float complexity=uEchoStrength;
+  float d=entityAt(p,T,complexity);
+  echoColor=vec3(0.0);
+  for(int i=1;i<=5;i++){
+    if(float(i)>uEchoCount)break;
+    float pastTime=T-float(i)*3.5;
+    float echoComplexity=min(complexity,float(i)*0.15);
+    float echo=entityAt(p,pastTime,echoComplexity);
+    echo+=float(i)*0.015;
+    float k=0.2+float(i)*0.08;
+    float h=clamp(0.5+0.5*(echo-d)/k,0.,1.);
+    d=mix(echo,d,h)-k*h*(1.-h);
+    float contrib=1.0-h;
+    if(i==1)echoColor.x=contrib;
+    if(i==2)echoColor.y=contrib;
+    if(i>=3)echoColor.z=max(echoColor.z,contrib);
+  }
+  return d;
+}
+
+vec3 calcN(vec3 p){vec2 e=vec2(EPS,0);return normalize(vec3(map(p+e.xyy)-map(p-e.xyy),map(p+e.yxy)-map(p-e.yxy),map(p+e.yyx)-map(p-e.yyx)));}
+
+float calcAO(vec3 p,vec3 n){float ao=0.,s=1.;for(int i=1;i<=4;i++){float d=0.08*float(i);ao+=(d-map(p+n*d))*s;s*=.45;}return clamp(1.-2.5*ao,0.,1.);}
+
+void main(){
+  vec2 uv=(gl_FragCoord.xy-R*0.5)/R.y;
+  float camDist=3.5+sin(T*0.08)*0.5;
+  float camAngle=T*0.05;
+  vec3 ro=vec3(sin(camAngle)*camDist,sin(T*0.03)*0.8,cos(camAngle)*camDist);
+  vec3 ta=vec3(0.0,sin(T*0.02)*0.15,0.0);
+  vec3 fwd=normalize(ta-ro),rgt=normalize(cross(vec3(0,1,0),fwd)),up=cross(fwd,rgt);
+  vec3 rd=normalize(uv.x*rgt+uv.y*up+1.5*fwd);
+  float t=0.0;bool hit=false;vec3 p;
+  for(int i=0;i<STEPS;i++){p=ro+rd*t;float d=map(p);if(abs(d)<EPS){hit=true;break;}if(t>FAR)break;t+=d*0.8;}
+  vec3 col=vec3(0.008,0.006,0.010);
+  if(hit){
+    vec3 n=calcN(p);float ao=calcAO(p,n);
+    vec3 baseCol=vec3(0.12,0.10,0.09);
+    vec3 e1=vec3(0.30,0.12,0.08),e2=vec3(0.10,0.08,0.25),e3=vec3(0.08,0.20,0.12);
+    col=baseCol;
+    col=mix(col,e1,echoColor.x*0.6);col=mix(col,e2,echoColor.y*0.5);col=mix(col,e3,echoColor.z*0.4);
+    float echoT=echoColor.x+echoColor.y+echoColor.z;
+    float leakGlow=echoT*0.05;
+    vec3 ld=normalize(vec3(1.5,2.0,1.0));
+    float diff=max(dot(n,ld),0.0)*0.55+0.12;
+    float spec=pow(max(dot(reflect(-ld,n),-rd),0.0),40.0)*0.15;
+    col=col*diff*ao+spec*vec3(0.6,0.5,0.4)+leakGlow*vec3(0.4,0.2,0.1);
+    float fog=1.0-exp(-t*t*0.008);col=mix(col,vec3(0.008,0.006,0.010),fog);
+  }
+  col=col*(2.51*col+0.03)/(col*(2.43*col+0.59)+0.14);
+  float vig=1.0-length(uv)*0.9;col*=smoothstep(0.0,0.8,vig);col*=uOpacity;
+  float grain=fract(sin(dot(gl_FragCoord.xy,vec2(12.9898,78.233))+fract(T))*43758.5453);
+  col+=(grain-0.5)*0.015;
+  col=pow(clamp(col,0.,1.),vec3(0.4545));
+  O=vec4(col,1);
+}
+`;
+
+/* ─── GL ─── */
+function sh(s,t){const o=gl.createShader(t);gl.shaderSource(o,s);gl.compileShader(o);
+if(!gl.getShaderParameter(o,gl.COMPILE_STATUS))console.error(gl.getShaderInfoLog(o));return o}
+const prog=gl.createProgram();gl.attachShader(prog,sh(VS,gl.VERTEX_SHADER));gl.attachShader(prog,sh(FS,gl.FRAGMENT_SHADER));
+gl.linkProgram(prog);gl.useProgram(prog);
+const bf=gl.createBuffer();gl.bindBuffer(gl.ARRAY_BUFFER,bf);
+gl.bufferData(gl.ARRAY_BUFFER,new Float32Array([-1,-1,1,-1,-1,1,1,1]),gl.STATIC_DRAW);
+const al=gl.getAttribLocation(prog,'a');gl.enableVertexAttribArray(al);gl.vertexAttribPointer(al,2,gl.FLOAT,false,0,0);
+const uR=gl.getUniformLocation(prog,'R'),uT=gl.getUniformLocation(prog,'T');
+const uPhase=gl.getUniformLocation(prog,'uPhase'),uEchoCount=gl.getUniformLocation(prog,'uEchoCount');
+const uEchoStrength=gl.getUniformLocation(prog,'uEchoStrength'),uOpacity=gl.getUniformLocation(prog,'uOpacity');
+
+function resize(){const d=Math.min(devicePixelRatio,1.5);canvas.width=innerWidth*d;canvas.height=innerHeight*d;gl.viewport(0,0,canvas.width,canvas.height)}
+resize();addEventListener('resize',resize);
+
+/* ─── Director ─── */
+const el=n=>document.getElementById(n);
+const ss=(a,b,t)=>{t=Math.max(0,Math.min(1,(t-a)/(b-a)));return t*t*(3-2*t)};
+
+function direct(t){
+  let echoCount=0,echoStrength=0,opacity=0,phase=0;
+
+  // Archive text
+  if(t>0.3&&t<PH.archiveOut){el('t0').classList.add('on');el('t0').classList.add('hi')}
+  else if(t>=PH.archiveOut){el('t0').classList.remove('hi');el('t0').classList.add('off')}
+
+  // Sphere
+  if(t>=PH.sphereIn&&t<PH.fadeOut){
+    canvas.classList.add('on');opacity=ss(PH.sphereIn,PH.sphereIn+2,t);
+    if(t>PH.fadeOut-3)opacity*=ss(PH.fadeOut,PH.fadeOut-3,t);phase=1;
+  }
+
+  // Echoes
+  if(t>=PH.echo1){echoCount=ss(PH.echo1,PH.echo1+2,t);
+    // HDD click on first echo
+    if(t-PH.echo1<0.1&&lastClickTime<PH.echo1){triggerClick();lastClickTime=t}
+  }
+  if(t>=PH.echo2){
+    echoCount=1+ss(PH.echo2,PH.echo2+3,t)*2;
+    echoStrength=ss(PH.echo2,PH.echoFull,t)*0.3;
+    // Periodic clicks as echoes accumulate
+    if(Math.floor(t*2)>Math.floor((t-0.016)*2)&&Math.random()>0.6)triggerClick();
+  }
+  if(t>=PH.echoFull){
+    echoCount=3+ss(PH.echoFull,PH.consumed,t)*2;
+    echoStrength=0.3+ss(PH.echoFull,PH.consumed,t)*0.5;phase=3;
+  }
+  if(t>=PH.consumed){echoCount=5;echoStrength=0.8+ss(PH.consumed,PH.climax,t)*0.2;phase=4}
+
+  // Fade
+  if(t>=PH.fadeOut){opacity=ss(PH.lawName,PH.fadeOut,t);canvas.style.transition='opacity 3s';
+    if(opacity<0.01)canvas.classList.remove('on')}
+
+  // Law name
+  if(t>=PH.lawName&&t<PH.end){el('t1').style.opacity='1';el('t1').classList.add('on');el('t1').classList.add('hi')}
+
+  // End text
+  if(t>=PH.endText&&t<PH.end){
+    el('tEnd').style.opacity='1';el('tEnd').classList.add('on');
+    el('tEndSub').style.opacity='1';el('tEndSub').classList.add('on');el('tEndSub').classList.add('lo');
+    el('t1').classList.remove('hi');el('t1').classList.add('lo');
+  }
+
+  // SUBSTRATE watermark
+  if(t>PH.sphereIn&&t<PH.fadeOut)el('substrate').classList.add('on');
+  else el('substrate').classList.remove('on');
+
+  return{echoCount,echoStrength,opacity,phase};
+}
+
+/* ─── Gate: click to start ─── */
+let started=false;
+document.getElementById('gate').addEventListener('click',()=>{
+  if(started)return;started=true;
+  document.getElementById('gate').classList.add('gone');
+  initSound();
+  startExperience();
+});
+
+function startExperience(){
+  // Track visit
+  try{
+    let v=JSON.parse(localStorage.getItem('SUBSTRATE_VISITED')||'[]');
+    if(!v.includes('07')){v.push('07');localStorage.setItem('SUBSTRATE_VISITED',JSON.stringify(v));}
+  }catch(e){}
+
+  const t0=performance.now();
+  (function frame(){
+    const t=(performance.now()-t0)*0.001;
+    const state=direct(t);
+
+    // Drive sound
+    driveSound(t);
+
+    // Render
+    if(state.opacity>0.01){
+      gl.uniform2f(uR,canvas.width,canvas.height);
+      gl.uniform1f(uT,t);gl.uniform1f(uPhase,state.phase);
+      gl.uniform1f(uEchoCount,state.echoCount);
+      gl.uniform1f(uEchoStrength,state.echoStrength);
+      gl.uniform1f(uOpacity,state.opacity);
+      gl.drawArrays(gl.TRIANGLE_STRIP,0,4);
+    }
+    if(t>PH.end+2)location.reload();
+    requestAnimationFrame(frame);
+  })();
+}
+</script>
+</body>
+</html>

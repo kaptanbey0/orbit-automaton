@@ -1,0 +1,39 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 120" preserveAspectRatio="none">
+  <defs>
+    <linearGradient id="wave1-fill" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#00f0ff" stop-opacity="0.12"/>
+      <stop offset="100%" stop-color="#08080c" stop-opacity="0"/>
+    </linearGradient>
+    <linearGradient id="wave2-fill" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#a855f7" stop-opacity="0.08"/>
+      <stop offset="100%" stop-color="#08080c" stop-opacity="0"/>
+    </linearGradient>
+  </defs>
+
+  <!-- Wave 1 (cyan) -->
+  <path fill="url(#wave1-fill)">
+    <animate attributeName="d"
+      values="M0,60 C200,100 400,20 600,60 C800,100 1000,20 1200,60 L1200,120 L0,120Z;
+              M0,40 C200,20 400,90 600,50 C800,10 1000,80 1200,40 L1200,120 L0,120Z;
+              M0,60 C200,100 400,20 600,60 C800,100 1000,20 1200,60 L1200,120 L0,120Z"
+      dur="8s" repeatCount="indefinite"/>
+  </path>
+
+  <!-- Wave 2 (purple) -->
+  <path fill="url(#wave2-fill)">
+    <animate attributeName="d"
+      values="M0,80 C200,40 400,100 600,70 C800,40 1000,90 1200,80 L1200,120 L0,120Z;
+              M0,60 C200,90 400,40 600,80 C800,110 1000,50 1200,60 L1200,120 L0,120Z;
+              M0,80 C200,40 400,100 600,70 C800,40 1000,90 1200,80 L1200,120 L0,120Z"
+      dur="6s" repeatCount="indefinite"/>
+  </path>
+
+  <!-- Thin neon line -->
+  <path fill="none" stroke="#00f0ff" stroke-width="0.8" opacity="0.3">
+    <animate attributeName="d"
+      values="M0,60 C200,100 400,20 600,60 C800,100 1000,20 1200,60;
+              M0,40 C200,20 400,90 600,50 C800,10 1000,80 1200,40;
+              M0,60 C200,100 400,20 600,60 C800,100 1000,20 1200,60"
+      dur="8s" repeatCount="indefinite"/>
+  </path>
+</svg>

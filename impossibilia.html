@@ -1,0 +1,469 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+<title>IMPOSSIBILIA</title>
+<style>
+*{margin:0;padding:0}
+html,body{width:100%;height:100%;overflow:hidden;background:#000}
+canvas{display:block;width:100%;height:100%;cursor:none}
+#law{position:fixed;bottom:5vh;left:50%;transform:translateX(-50%);
+font-family:Georgia,'Palatino Linotype',serif;font-size:.42rem;
+font-weight:300;font-style:italic;letter-spacing:.4em;
+color:rgba(0,0,0,0);pointer-events:none;z-index:1;
+text-align:center;max-width:80vw;line-height:2;
+transition:color 5s}
+</style>
+</head>
+<body>
+<canvas id="c"></canvas>
+<div id="law"></div>
+<script>
+"use strict";
+/*  ══════════════════════════════════════════════════════
+    I M P O S S I B I L I A
+
+    Three fictional laws of physics.
+    Implemented as a single fragment shader.
+    No libraries. No clichés. No precedent.
+
+    LAW I  — ECHO TOPOLOGY
+    "Every shape remembers every form it has ever been.
+     These memories leak into physical reality, occupying
+     the same space as the present, casting real shadows."
+
+    LAW II — DIMENSIONAL BLEEDING
+    "Space has variable dimensionality. Some zones are 2D,
+     others 4D. At the boundaries, geometry fractures
+     into states that have no name."
+
+    LAW III — OBSERVATION COLLAPSE
+    "Geometry changes its fundamental nature based on
+     the angle of observation. Looking determines
+     what exists. Turning away erases it."
+
+    ══════════════════════════════════════════════════════ */
+
+const canvas=document.getElementById('c');
+const gl=canvas.getContext('webgl2',{antialias:false,alpha:false,preserveDrawingBuffer:false});
+if(!gl){document.body.textContent='WebGL 2 required';throw 0}
+
+const VS=`#version 300 es
+in vec2 a;void main(){gl_Position=vec4(a,0,1);}`;
+
+const FS=`#version 300 es
+precision highp float;
+out vec4 O;
+uniform vec2 R;
+uniform float T;
+
+#define PI 3.14159265
+#define TAU 6.28318530
+#define STEPS 90
+#define FAR 40.0
+#define EPS 0.0008
+
+mat2 rot(float a){float c=cos(a),s=sin(a);return mat2(c,-s,s,c);}
+
+/* ═══════════ BASE ENTITY ═══════════
+   Not a fractal. Not noise. Not morphing.
+   An algebraic interference pattern —
+   multiple implicit surfaces overlapping,
+   creating forms with no analogue in nature
+   or existing CGI. */
+
+float entity(vec3 p, float time){
+  // Rotate the entity's internal frame slowly
+  p.xy*=rot(time*0.07);
+  p.yz*=rot(time*0.05);
+
+  // Three overlapping implicit fields
+  // Each follows different temporal logic
+  float f1=length(p)-1.5+sin(p.x*3.0+time*0.4)*sin(p.y*2.0+time*0.3)*0.3;
+  float f2=max(abs(p.x+sin(time*0.2)*0.5),max(abs(p.y),abs(p.z)))-1.2;
+  float f3=length(vec2(length(p.xz)-1.0+sin(time*0.25)*0.3,p.y))-0.4;
+
+  // The fields don't just combine — they interfere
+  // Like wave interference but in geometry space
+  float interference=sin(f1*8.0)*0.1+sin(f2*6.0)*0.08+sin(f3*10.0)*0.06;
+
+  // Smooth boolean that evolves: sometimes union, sometimes intersection
+  float blend=sin(time*0.13)*0.5+0.5;
+  float d=mix(
+    min(f1,min(f2,f3)),              // union
+    max(f1,max(f2,f3))+interference, // intersection + interference
+    blend
+  );
+
+  // Subtraction that carves impossible channels
+  float carve=length(p*vec3(1,2,1))-0.8-sin(time*0.3)*0.3;
+  d=max(d,-carve);
+
+  return d*0.7; // scale for detail
+}
+
+/* ═══════════ LAW I: ECHO TOPOLOGY ═══════════
+   Query the entity at multiple past times.
+   Past forms persist in present space.
+   Not ghosts — physically real echoes. */
+
+vec3 echoTrap; // stores color data from echo evaluation
+
+float echoField(vec3 p, float time, vec3 rd){
+  float d=entity(p,time);
+  echoTrap=vec3(d); // current state
+
+  // Memory echoes — the entity at past times
+  // Each echo is slightly expanded (memory degrades/grows)
+  float echo1=entity(p*0.97,time-4.0)+0.02;
+  float echo2=entity(p*0.94,time-9.0)+0.05;
+  float echo3=entity(p*0.91,time-15.0)+0.09;
+
+  // Echoes SMOOTHLY merge with present
+  // creating impossible topology where past and present coexist
+  float k=0.3;
+  float h;
+
+  h=clamp(0.5+0.5*(echo1-d)/k,0.,1.);
+  d=mix(echo1,d,h)-k*h*(1.-h);
+  echoTrap.x=mix(1.0,echoTrap.x,h); // track which echo we're seeing
+
+  h=clamp(0.5+0.5*(echo2-d)/k,0.,1.);
+  d=mix(echo2,d,h)-k*h*(1.-h);
+  echoTrap.y=mix(1.0,echoTrap.y,h);
+
+  h=clamp(0.5+0.5*(echo3-d)/k,0.,1.);
+  d=mix(echo3,d,h)-k*h*(1.-h);
+  echoTrap.z=mix(1.0,echoTrap.z,h);
+
+  return d;
+}
+
+/* ═══════════ LAW II: DIMENSIONAL BLEEDING ═══════════
+   Space has variable dimensionality.
+   Some regions evaluate geometry in 2D.
+   Others in 4D.
+   Boundaries create impossible fracture patterns. */
+
+float dimensionField(vec3 p, float time){
+  // A slowly evolving field that determines local dimensionality
+  // This is NOT noise — it's an interference pattern of simple waves
+  // at irrational frequency ratios (golden ratio based)
+  float phi=1.618033988;
+  return sin(p.x*phi+time*0.11)*sin(p.y/phi+time*0.07)*sin(p.z*phi*phi+time*0.13);
+}
+
+float bleedingMap(vec3 p, float time, vec3 rd){
+  float dimF=dimensionField(p,time);
+
+  float d;
+  if(dimF>0.25){
+    // 4D ZONE: add a 4th coordinate
+    // The entity exists in 4D — we see its 3D cross-section
+    float w=sin(time*0.2+length(p)*0.8)*1.5;
+    vec3 p4=vec3(p.x,sqrt(p.y*p.y+w*w),p.z); // project 4D→3D
+    d=echoField(p4,time,rd);
+  }
+  else if(dimF<-0.25){
+    // 2D ZONE: collapse one dimension
+    // Geometry becomes infinitely thin in one axis
+    float collapse=smoothstep(-0.25,-0.5,dimF);
+    vec3 p2=p;
+    p2.y*=mix(1.0,0.01,collapse); // flatten
+    d=echoField(p2,time,rd);
+    d=max(d,abs(p.y)-mix(5.0,0.02,collapse)); // constrain to thin slab
+  }
+  else{
+    // BOUNDARY ZONE: dimensional fracture
+    // Both 2D and 4D evaluations interfere
+    float w=sin(time*0.2+length(p)*0.8)*1.5;
+    vec3 p4=vec3(p.x,sqrt(p.y*p.y+w*w),p.z);
+    float d4=echoField(p4,time,rd);
+
+    vec3 p2=p;p2.y*=0.3;
+    float d2=echoField(p2,time,rd);
+
+    // The fracture: geometry exists partially in both states
+    float frac=smoothstep(-0.25,0.25,dimF);
+    d=mix(d2,d4,frac);
+
+    // At exact boundary, geometry shatters
+    float boundaryDist=abs(dimF)*4.0;
+    if(boundaryDist<1.0){
+      d-=sin(p.x*20.0)*sin(p.z*20.0)*0.015*(1.0-boundaryDist);
+    }
+  }
+
+  return d;
+}
+
+/* ═══════════ LAW III: OBSERVATION COLLAPSE ═══════════
+   The entity's fundamental nature depends on
+   the angle of observation. Different viewers
+   see fundamentally different objects.
+   This is NOT view-dependent shading.
+   This is view-dependent EXISTENCE. */
+
+float map(vec3 p, vec3 rd){
+  float d=bleedingMap(p,T,rd);
+
+  // Observation angle relative to entity center
+  vec3 toCenter=normalize(-p);
+  float obs=dot(toCenter,rd);
+
+  // The observation field modifies the SDF itself
+  // When viewed edge-on (obs≈0): geometry becomes porous
+  // When viewed head-on (obs≈±1): geometry densifies
+  float porosity=1.0-abs(obs);
+  porosity=porosity*porosity;
+
+  // Porous channels open where observation is tangential
+  // This means: turning your head CHANGES the shape
+  float channels=sin(p.x*8.0+p.y*5.0)*sin(p.z*7.0)*0.08*porosity;
+  d+=channels;
+
+  // At extreme tangential observation:
+  // geometry fragments into disconnected islands
+  if(porosity>0.7){
+    float fragment=max(abs(sin(p.x*3.0)),max(abs(sin(p.y*3.0)),abs(sin(p.z*3.0))))-0.7;
+    d=max(d,fragment*(porosity-0.7)*3.0);
+  }
+
+  return d;
+}
+
+/* ═══════════ RENDERING ═══════════ */
+
+vec3 calcN(vec3 p,vec3 rd){
+  vec2 e=vec2(EPS,0);
+  return normalize(vec3(
+    map(p+e.xyy,rd)-map(p-e.xyy,rd),
+    map(p+e.yxy,rd)-map(p-e.yxy,rd),
+    map(p+e.yyx,rd)-map(p-e.yyx,rd)
+  ));
+}
+
+float calcAO(vec3 p,vec3 n,vec3 rd){
+  float ao=0.,s=1.;
+  for(int i=1;i<=5;i++){
+    float d=0.06*float(i);
+    ao+=(d-map(p+n*d,rd))*s;s*=.45;
+  }
+  return clamp(1.-2.0*ao,0.,1.);
+}
+
+/* ═══════════ COLORING ═══════════
+   Colors are NOT designed. They EMERGE from
+   the mathematical properties of the intersection.
+   Each law contributes a color component.
+   The result is colors that cannot be predicted. */
+
+vec3 colorize(vec3 p, vec3 n, vec3 rd, float t_hit, float ao){
+  // Echo contribution (Law I) — past states tint the present
+  // echoTrap.xyz contains how much each echo contributed
+  float echoDepth=echoTrap.x*0.3+echoTrap.y*0.5+echoTrap.z*0.7;
+
+  // Dimensional state (Law II) — dimensionality affects color temperature
+  float dimF=dimensionField(p,T);
+  float dimTemp=dimF*0.5+0.5; // 0=2D(cool), 1=4D(warm)
+
+  // Observation state (Law III) — view angle creates iridescence
+  float obs=dot(normalize(-p),rd);
+  float obsPhase=obs*PI;
+
+  // BUILD COLOR from these three independent sources
+  // This is NOT a palette lookup — it's interference coloring
+  // like thin-film iridescence but in parameter space
+
+  vec3 col;
+
+  // Layer 1: Base material from echo depth
+  col.r=0.08+echoDepth*0.35;
+  col.g=0.05+echoDepth*0.15;
+  col.b=0.06+echoDepth*0.1;
+
+  // Layer 2: Dimensional temperature shifts the hue
+  col.r+=dimTemp*0.2;
+  col.g+=abs(dimTemp-0.5)*0.15;
+  col.b+=(1.0-dimTemp)*0.25;
+
+  // Layer 3: Observation iridescence
+  // These create colors that shift as the camera moves
+  // NOT fresnel — the color depends on the entity's internal state
+  col.r+=sin(obsPhase*2.0+echoDepth*4.0)*0.08;
+  col.g+=sin(obsPhase*3.0+dimTemp*5.0)*0.06;
+  col.b+=sin(obsPhase*5.0+echoDepth*3.0)*0.1;
+
+  // Clamp to unusual range — not full black to white
+  // Colors should feel "pressurized" — too much information in too small a range
+  col=clamp(col,0.02,0.55);
+
+  // Lighting — minimal, just enough to read form
+  vec3 ld=normalize(vec3(sin(T*0.09)*3.0,2.0+sin(T*0.07),cos(T*0.11)*3.0));
+  float diff=max(dot(n,ld),0.0)*0.6+0.1;
+  float spec=pow(max(dot(reflect(-ld,n),rd),0.0),30.0)*0.2;
+
+  // Subsurface scattering for echo regions
+  float sss=pow(max(dot(-n,rd),0.0),2.0)*echoDepth*0.15;
+
+  col=col*diff*ao+spec*vec3(0.7,0.6,0.5)+sss*vec3(0.4,0.15,0.08);
+
+  // Fog — not distance fog. DIMENSIONAL fog.
+  // Density varies with dimensionality
+  float fog=1.0-exp(-t_hit*t_hit*(0.002+abs(dimF)*0.005));
+  col=mix(col,vec3(0.012,0.008,0.015),fog);
+
+  return col;
+}
+
+/* ═══════════ CAMERA ═══════════
+   Not orbiting. Not following a path.
+   The camera behaves like a CURIOUS ENTITY.
+   It approaches, investigates, retreats, circles.
+   Sometimes it gets too close and the geometry
+   responds to its presence (Law III). */
+
+vec3 camPos(float t){
+  // Exploratory movement with irrational period ratios
+  // Ensures the camera NEVER returns to the exact same position
+  float phi=1.618033988;
+  float r2=3.5+sin(t*0.1/phi)*2.0+cos(t*0.07*phi)*1.5;
+  return vec3(
+    sin(t*0.08)*r2*cos(t*0.03/phi*0.5),
+    sin(t*0.05*phi)*r2*0.4+cos(t*0.04)*0.8,
+    cos(t*0.08)*r2*cos(t*0.025*phi)
+  );
+}
+
+/* ═══════════ MAIN ═══════════ */
+void main(){
+  vec2 uv=(gl_FragCoord.xy-R*0.5)/R.y;
+
+  // Camera
+  vec3 ro=camPos(T);
+  vec3 ta=vec3(sin(T*0.02)*0.3,sin(T*0.015)*0.2,cos(T*0.025)*0.2);
+  vec3 fwd=normalize(ta-ro);
+  vec3 rgt=normalize(cross(vec3(0,1,0),fwd));
+  vec3 up=cross(fwd,rgt);
+
+  // LAW III extension: projection itself is alive
+  // The focal length subtly breathes with dimensionality
+  float focalBreath=1.4+sin(T*0.09)*0.1;
+
+  // LOCAL PROJECTION ANOMALY:
+  // The projection varies slightly per pixel
+  // based on the dimensional field at the camera position
+  float localDim=dimensionField(ro,T);
+  float projWarp=localDim*0.05;
+  vec2 warpedUv=uv+uv*length(uv)*projWarp;
+
+  vec3 rd=normalize(warpedUv.x*rgt+warpedUv.y*up+focalBreath*fwd);
+
+  // ── RAYMARCH ──
+  float t=0.0;
+  float d;
+  bool hit=false;
+  vec3 p;
+
+  for(int i=0;i<STEPS;i++){
+    p=ro+rd*t;
+    d=map(p,rd);
+    if(abs(d)<EPS){hit=true;break;}
+    if(t>FAR)break;
+    t+=d*0.75;
+  }
+
+  vec3 col;
+
+  if(!hit){
+    // Background: NOT a void. An ambiguous space.
+    // It's unclear whether this is infinite distance
+    // or an infinitely thin surface.
+    float depth=length(uv);
+    col=vec3(0.010,0.007,0.015);
+
+    // Dimensional field creates subtle patterns even in "empty" space
+    float bgDim=dimensionField(ro+rd*20.0,T);
+    col+=vec3(0.008,0.005,0.012)*abs(bgDim);
+
+    // The background REMEMBERS (Law I)
+    // Faint echo of the entity appears where it used to be
+    float ghostD=entity(ro+rd*5.0,T-10.0);
+    float ghost=exp(-abs(ghostD)*8.0)*0.02;
+    col+=vec3(ghost*0.8,ghost*0.3,ghost*0.5);
+  }
+  else{
+    vec3 n=calcN(p,rd);
+    float ao=calcAO(p,n,rd);
+    col=colorize(p,n,rd,t,ao);
+  }
+
+  // ── POST ──
+  // ACES tone map
+  col=col*(2.51*col+0.03)/(col*(2.43*col+0.59)+0.14);
+
+  // Vignette — asymmetric, alive
+  float vigX=smoothstep(0.0,0.7,1.0-abs(uv.x)*1.2);
+  float vigY=smoothstep(0.0,0.8,1.0-abs(uv.y)*1.1);
+  col*=vigX*vigY*0.85+0.15;
+
+  // Minimal grain
+  float grain=fract(sin(dot(gl_FragCoord.xy,vec2(12.9898,78.233))+fract(T))*43758.5453);
+  col+=(grain-0.5)*0.015;
+
+  col=pow(clamp(col,0.0,1.0),vec3(0.4545));
+
+  O=vec4(col,1);
+}
+`;
+
+/* ─── GL ─── */
+function sh(s,t){const o=gl.createShader(t);gl.shaderSource(o,s);gl.compileShader(o);
+if(!gl.getShaderParameter(o,gl.COMPILE_STATUS)){console.error(gl.getShaderInfoLog(o));return null}return o}
+const vs=sh(VS,gl.VERTEX_SHADER),fs=sh(FS,gl.FRAGMENT_SHADER);
+const pg=gl.createProgram();gl.attachShader(pg,vs);gl.attachShader(pg,fs);gl.linkProgram(pg);
+if(!gl.getProgramParameter(pg,gl.LINK_STATUS))console.error(gl.getProgramInfoLog(pg));
+gl.useProgram(pg);
+const bf=gl.createBuffer();gl.bindBuffer(gl.ARRAY_BUFFER,bf);
+gl.bufferData(gl.ARRAY_BUFFER,new Float32Array([-1,-1,1,-1,-1,1,1,1]),gl.STATIC_DRAW);
+const al=gl.getAttribLocation(pg,'a');gl.enableVertexAttribArray(al);gl.vertexAttribPointer(al,2,gl.FLOAT,false,0,0);
+const uR=gl.getUniformLocation(pg,'R'),uT=gl.getUniformLocation(pg,'T');
+
+function resize(){
+  const d=Math.min(devicePixelRatio,1.5);
+  canvas.width=innerWidth*d;canvas.height=innerHeight*d;
+  gl.viewport(0,0,canvas.width,canvas.height);
+}
+resize();addEventListener('resize',resize);
+
+const t0=performance.now();
+const lawEl=document.getElementById('law');
+const laws=[
+  {at:3,text:'Law I — Echo Topology: every shape remembers every form it has ever been'},
+  {at:25,text:'Law II — Dimensional Bleeding: space has variable dimensionality'},
+  {at:50,text:'Law III — Observation Collapse: looking determines what exists'},
+  {at:72,text:''},
+];
+let lawIdx=0;
+
+(function frame(){
+  const t=(performance.now()-t0)*0.001;
+  gl.uniform2f(uR,canvas.width,canvas.height);
+  gl.uniform1f(uT,t);
+  gl.drawArrays(gl.TRIANGLE_STRIP,0,4);
+
+  // Show laws as subtle text
+  if(lawIdx<laws.length&&t>laws[lawIdx].at){
+    lawEl.textContent=laws[lawIdx].text;
+    lawEl.style.color=laws[lawIdx].text?'rgba(140,120,100,0.07)':'rgba(0,0,0,0)';
+    lawIdx++;if(lawIdx>=laws.length)lawIdx=0;
+  }
+  // Reset cycle
+  if(t>85){lawIdx=0}
+
+  requestAnimationFrame(frame);
+})();
+</script>
+</body>
+</html>

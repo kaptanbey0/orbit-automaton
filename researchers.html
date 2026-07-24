@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Researcher Database — Substrate Personnel Records</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@300;400;600;700&family=IBM+Plex+Mono:ital,wght@0,300;0,400;0,600;1,400&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="style.css" />
+  <style>
+    body {
+      background-color: #050508;
+      color: #94a3b8;
+      font-family: 'IBM Plex Mono', 'JetBrains Mono', monospace;
+      padding: 6vh 6vw;
+      max-width: 860px;
+      margin: 0 auto;
+      line-height: 2;
+    }
+    .header-box {
+      border-bottom: 1px solid rgba(0, 240, 255, 0.2);
+      padding-bottom: 20px;
+      margin-bottom: 30px;
+    }
+    .title-sub {
+      font-size: 0.75rem;
+      letter-spacing: 0.25em;
+      color: var(--neon-purple);
+      text-transform: uppercase;
+    }
+    .main-head {
+      font-size: 1.8rem;
+      color: #f8fafc;
+      font-weight: 700;
+      letter-spacing: 0.1em;
+    }
+    .nav-bar-sub {
+      display: flex;
+      gap: 15px;
+      margin-bottom: 30px;
+      font-size: 0.8rem;
+    }
+    .nav-bar-sub a {
+      color: var(--neon-cyan);
+      text-decoration: none;
+      border: 1px solid rgba(0, 240, 255, 0.2);
+      padding: 4px 12px;
+      border-radius: 4px;
+      transition: all 0.3s;
+    }
+    .nav-bar-sub a:hover {
+      background: rgba(0, 240, 255, 0.1);
+      box-shadow: 0 0 10px rgba(0, 240, 255, 0.2);
+    }
+    .personnel-card {
+      background: rgba(13, 13, 20, 0.7);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      border-left: 3px solid var(--neon-cyan);
+      padding: 24px;
+      margin: 24px 0;
+      border-radius: 4px;
+      position: relative;
+    }
+    .personnel-card--missing {
+      border-left-color: var(--neon-red);
+    }
+    .personnel-card--omega {
+      border-left-color: var(--neon-purple);
+    }
+    .card-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 16px;
+    }
+    .researcher-name {
+      font-size: 1.1rem;
+      font-weight: 700;
+      color: #f1f5f9;
+      letter-spacing: 0.1em;
+    }
+    .status-tag {
+      font-size: 0.7rem;
+      padding: 2px 8px;
+      border-radius: 3px;
+      letter-spacing: 0.15em;
+      font-weight: 600;
+    }
+    .status-tag--missing { background: rgba(255, 68, 102, 0.15); color: var(--neon-red); border: 1px solid var(--neon-red); }
+    .status-tag--active { background: rgba(34, 255, 136, 0.15); color: var(--neon-green); border: 1px solid var(--neon-green); }
+    .status-tag--corrupted { background: rgba(255, 170, 34, 0.15); color: var(--neon-amber); border: 1px solid var(--neon-amber); }
+    .status-tag--omega { background: rgba(168, 85, 247, 0.15); color: var(--neon-purple); border: 1px solid var(--neon-purple); }
+    .quote-box {
+      font-style: italic;
+      color: #e2e8f0;
+      border-left: 2px solid var(--neon-purple);
+      padding-left: 15px;
+      margin: 15px 0;
+      background: rgba(168, 85, 247, 0.05);
+      padding: 10px 15px;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="header-box">
+    <div class="title-sub">SUBSTRATE PERSONNEL DATABASE // RESTRICTED FILE</div>
+    <h1 class="main-head">RESEARCHER DATABASE</h1>
+  </div>
+
+  <div class="nav-bar-sub">
+    <a href="index.html">← Orbit Core Control Center</a>
+    <a href="archive.html">← Substrate Archive</a>
+  </div>
+
+  <!-- RESEARCHER A-07 -->
+  <div class="personnel-card personnel-card--missing">
+    <div class="card-header">
+      <span class="researcher-name">RESEARCHER A-07</span>
+      <span class="status-tag status-tag--missing">STATUS: MISSING</span>
+    </div>
+    <div>
+      <strong>Clearance:</strong> LEVEL 5 (OMEGA)<br/>
+      <strong>Assigned Fragments:</strong> 01, 02, 11, 14, 00 [CLASSIFIED]<br/>
+      <strong>Last Known Transmission:</strong>
+      <div class="quote-box">
+        "I found the original orbit. It was not created. It was remembered."
+      </div>
+      <strong>Notes:</strong> Disappeared during the extraction attempt of Fragment 14. Logs written after disappearance display severe temporal echo resonance.
+    </div>
+  </div>
+
+  <!-- RESEARCHER IX -->
+  <div class="personnel-card">
+    <div class="card-header">
+      <span class="researcher-name">RESEARCHER IX</span>
+      <span class="status-tag status-tag--corrupted">STATUS: DATA CORRUPTED</span>
+    </div>
+    <div>
+      <strong>Clearance:</strong> LEVEL 3<br/>
+      <strong>Assigned Fragments:</strong> 19, 22, 23<br/>
+      <strong>Recovery Progress:</strong>
+      <div class="recovery-progress">
+        <div class="recovery-progress__bar-bg">
+          <div class="recovery-progress__bar-fill"></div>
+        </div>
+        <span style="font-size: 0.75rem; color: var(--neon-red);">17% RECOVERED</span>
+      </div>
+      <div class="quote-box">
+        "I heard the impact sound before I entered the deck. I am writing this note 3 hours ago. Do not let A-07 open the door."
+      </div>
+      <strong>Notes:</strong> Affected by temporal proximity during Fragment 19 extraction. System is reconstructing lost log fragments.
+    </div>
+  </div>
+
+  <!-- RESEARCHER EM -->
+  <div class="personnel-card">
+    <div class="card-header">
+      <span class="researcher-name">RESEARCHER EM</span>
+      <span class="status-tag status-tag--active">STATUS: ACTIVE / SYSTEMATIC</span>
+    </div>
+    <div>
+      <strong>Clearance:</strong> LEVEL 3<br/>
+      <strong>Assigned Fragments:</strong> 03, 07<br/>
+      <strong>Log Style:</strong> Cold, mathematical, strictly objective.<br/>
+      <div class="quote-box">
+        "Fragment 07 geometry exhibits non-reconstructable memory cycles. Recommend archiving without physical probing."
+      </div>
+      <strong>Notes:</strong> Authored initial containment specifications for Echo Topology.
+    </div>
+  </div>
+
+  <!-- RESEARCHER Ω -->
+  <div class="personnel-card personnel-card--omega">
+    <div class="card-header">
+      <span class="researcher-name">RESEARCHER Ω</span>
+      <span class="status-tag status-tag--omega">STATUS: UNCONTACTABLE (NODE 7.2)</span>
+    </div>
+    <div>
+      <strong>Clearance:</strong> LEVEL 4<br/>
+      <strong>Assigned Fragments:</strong> 31, 00<br/>
+      <strong>Log Style:</strong> Archaeological, solemn, philosophical.<br/>
+      <div class="quote-box">
+        "We are not discovering new laws. We are digging up the corpses of physical laws that died before this universe was constructed."
+      </div>
+      <strong>Notes:</strong> Specializes in extinct geometry and space scars. Remaining logs suggest deep solitude in terminal node 7.2.
+    </div>
+  </div>
+
+  <p style="text-align:center; font-size: 0.7rem; color: #475569; margin-top: 50px; letter-spacing: 0.2em;">
+    SUBSTRATE PERSONNEL DATABASE &middot; DO NOT ALTER RECORD HISTORY
+  </p>
+
+</body>
+</html>

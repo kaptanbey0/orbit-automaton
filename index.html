@@ -1,0 +1,393 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="Orbit Automaton — GitLab Orbit entegrasyonu, JavaScript/Lua otomasyon zekası ve genişletilmiş vizyon paneli. Dark Zenith teması." />
+  <title>Orbit Automaton — Dark Zenith</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@300;400;500;600;700&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <!-- ═══ STARFIELD CANVAS ═══ -->
+  <canvas id="starfield"></canvas>
+
+  <!-- ═══ SCANLINE OVERLAY ═══ -->
+  <div class="scanline-overlay"></div>
+
+  <!-- ═══ HEADER / NAVBAR ═══ -->
+  <header class="topbar" id="topbar">
+    <div class="topbar__left">
+      <div class="orbit-logo" id="orbit-logo" title="Click 3x to decrypt secret fragment">
+        <div class="orbit-ring orbit-ring--outer"></div>
+        <div class="orbit-ring orbit-ring--inner"></div>
+        <div class="orbit-core"></div>
+      </div>
+      <div class="topbar__title">
+        <span class="topbar__name">Orbit Automaton</span>
+        <span class="topbar__version">v2.4.1 &middot; Dark Zenith</span>
+      </div>
+    </div>
+    <nav class="topbar__nav">
+      <a href="#dashboard" class="topbar__link active" data-section="dashboard">Dashboard</a>
+      <a href="#orbit" class="topbar__link" data-section="orbit">Orbit</a>
+      <a href="#languages" class="topbar__link" data-section="languages">Diller</a>
+      <a href="#vision" class="topbar__link" data-section="vision">Vizyon</a>
+      <a href="#terminal" class="topbar__link" data-section="terminal">Terminal</a>
+    </nav>
+    <div class="topbar__right">
+      <div id="observer-id-badge" class="observer-badge">
+        <span class="observer-badge__dot"></span>
+        <span>OBSERVER-8942-OMEGA</span>
+      </div>
+      <button class="nav-database-btn" id="nav-db-btn">
+        <span>&gt; ACCESS DATABASE</span>
+      </button>
+      <div class="status-beacon status-beacon--online" id="status-beacon" style="margin-left: 8px;">
+        <span class="status-beacon__dot"></span>
+        <span class="status-beacon__label">Çevrimiçi</span>
+      </div>
+    </div>
+  </header>
+
+  <!-- ═══ DATABASE MENU MODAL ═══ -->
+  <div class="database-menu-modal" id="database-modal">
+    <div class="database-menu-card">
+      <div class="database-menu-card__title">
+        <span>&gt; ORBIT ARCHIVE DATABASE</span>
+        <button id="close-db-modal" style="background:none; border:none; color:var(--neon-red); cursor:pointer; font-family:var(--font-mono); font-size:1.1rem;">[X]</button>
+      </div>
+      <div class="database-menu-card__list">
+        <a href="index.html" class="database-menu-item"><span class="database-menu-item__num">01.</span> Orbit Control Dashboard <span>[ACTIVE]</span></a>
+        <a href="archive.html" class="database-menu-item"><span class="database-menu-item__num">02.</span> Substrate Archive <span>[INDEXED]</span></a>
+        <a href="researchers.html" class="database-menu-item"><span class="database-menu-item__num">03.</span> Researchers Database <span>[RESTRICTED]</span></a>
+        <a href="phenomena.html" class="database-menu-item"><span class="database-menu-item__num">04.</span> Phenomena Catalog <span>[31 ITEMS]</span></a>
+        <a href="impossibilia.html" class="database-menu-item"><span class="database-menu-item__num">05.</span> Impossible Objects Vault <span>[CONTAINED]</span></a>
+        <a href="antigravity.html" class="database-menu-item"><span class="database-menu-item__num">06.</span> Antigravity Research Files <span>[ONLINE]</span></a>
+        <a href="github-universe.html" class="database-menu-item"><span class="database-menu-item__num">07.</span> GitHub External Node <span>[CONNECTED]</span></a>
+        <a href="fragment-00.html" class="database-menu-item" style="border-color: rgba(255,0,85,0.4); background: rgba(255,0,85,0.05);"><span class="database-menu-item__num" style="color:#ff0055;">00.</span> Fragment 00 (Origin Point) <span style="color:#ff0055;">[CLASSIFIED]</span></a>
+      </div>
+    </div>
+  </div>
+
+  <!-- ═══ MAIN CONTENT ═══ -->
+  <main class="main">
+
+    <!-- ── SECTION: DASHBOARD ── -->
+    <section class="section section--dashboard" id="dashboard">
+      
+      <!-- ORBIT CORE BANNER -->
+      <div class="orbit-core-banner">
+        <div class="orbit-core-banner__header">
+          <div class="orbit-core-banner__title">
+            <span style="color:var(--neon-purple);">DARK ZENITH</span> // ORBIT CORE
+          </div>
+          <div class="anomaly-index-box">
+            <span class="anomaly-index__label">ANOMALY INDEX: 82%</span>
+            <div class="anomaly-index__bar-bg">
+              <div class="anomaly-index__bar-fill"></div>
+            </div>
+          </div>
+        </div>
+        <div class="orbit-core-banner__warning">
+          <span>⚠️ WARNING:</span> Fragment 14 synchronization wave unstable. Continuous echo detected across node 7.2.
+        </div>
+      </div>
+
+      <div class="section__header">
+        <h1 class="glitch-title" data-text="Kontrol Merkezi">Kontrol Merkezi</h1>
+        <p class="section__subtitle">Orbit Automaton agent durumu ve sistem metrikleri</p>
+      </div>
+
+      <div class="stats-grid">
+        <div class="stat-card" id="stat-uptime">
+          <div class="stat-card__icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+          </div>
+          <div class="stat-card__body">
+            <span class="stat-card__value" id="uptime-value">99.97%</span>
+            <span class="stat-card__label">Uptime</span>
+          </div>
+          <div class="stat-card__glow"></div>
+        </div>
+
+        <div class="stat-card" id="stat-hooks">
+          <div class="stat-card__icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"/><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"/></svg>
+          </div>
+          <div class="stat-card__body">
+            <span class="stat-card__value" id="hooks-value">47</span>
+            <span class="stat-card__label">Aktif Webhook</span>
+          </div>
+          <div class="stat-card__glow"></div>
+        </div>
+
+        <div class="stat-card" id="stat-apis">
+          <div class="stat-card__icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="2" y="3" width="20" height="14" rx="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/></svg>
+          </div>
+          <div class="stat-card__body">
+            <span class="stat-card__value" id="apis-value">128</span>
+            <span class="stat-card__label">API Endpoint</span>
+          </div>
+          <div class="stat-card__glow"></div>
+        </div>
+
+        <div class="stat-card" id="stat-impact">
+          <div class="stat-card__icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+          </div>
+          <div class="stat-card__body">
+            <span class="stat-card__value" id="impact-value">0</span>
+            <span class="stat-card__label">Risk Uyarısı</span>
+          </div>
+          <div class="stat-card__glow"></div>
+        </div>
+      </div>
+
+      <!-- ACTIVITY GRAPH -->
+      <div class="activity-panel">
+        <div class="panel-header">
+          <span class="panel-header__dot"></span>
+          <span>Commit Aktivitesi — Son 30 Gün</span>
+        </div>
+        <div class="activity-graph" id="activity-graph"></div>
+      </div>
+    </section>
+
+    <!-- ── SECTION: ORBIT ── -->
+    <section class="section section--orbit" id="orbit">
+      <div class="section__header">
+        <h2 class="glitch-title" data-text="Orbit Bağlantısı">Orbit Bağlantısı</h2>
+        <p class="section__subtitle">GitLab Orbit entegrasyonu &middot; Webhook &amp; API bağımlılık haritası</p>
+      </div>
+
+      <div class="orbit-vis-container">
+        <canvas id="orbit-canvas"></canvas>
+        <div class="orbit-info-overlay">
+          <div class="orbit-info-card">
+            <span class="orbit-info-card__tag">GitLab</span>
+            <h3>Bağımlılık Haritası</h3>
+            <p>Kodun bir yerinde değişiklik yaptığında, projenin neresinin etkileneceğini anında öngörüyor.</p>
+            <div class="orbit-info-card__stats">
+              <div><strong id="orbit-nodes">34</strong><small>Node</small></div>
+              <div><strong id="orbit-edges">89</strong><small>Bağlantı</small></div>
+              <div><strong id="orbit-clusters">7</strong><small>Küme</small></div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="dependency-list">
+        <div class="panel-header">
+          <span class="panel-header__dot"></span>
+          <span>Son Değişiklik Etki Analizi</span>
+        </div>
+        <div class="dep-items" id="dep-items">
+          <!-- Populated by JS -->
+        </div>
+      </div>
+    </section>
+
+    <!-- ── SECTION: LANGUAGES ── -->
+    <section class="section section--languages" id="languages">
+      <div class="section__header">
+        <h2 class="glitch-title" data-text="Dil & Otomasyon Zekası">Dil & Otomasyon Zekası</h2>
+        <p class="section__subtitle">Ultra-hassas JavaScript &amp; Lua desteği &middot; Discord &amp; Roblox otomasyonu</p>
+      </div>
+
+      <div class="lang-cards">
+        <div class="lang-card" id="lang-js">
+          <div class="lang-card__header">
+            <div class="lang-card__icon lang-card__icon--js">JS</div>
+            <div>
+              <h3>JavaScript</h3>
+              <span class="lang-card__badge">Birincil</span>
+            </div>
+          </div>
+          <div class="lang-card__code">
+            <pre><code><span class="kw">const</span> <span class="fn">bot</span> = <span class="kw">new</span> <span class="cl">Client</span>({
+  <span class="pr">intents</span>: [
+    GatewayIntentBits.<span class="cn">Guilds</span>,
+    GatewayIntentBits.<span class="cn">GuildMessages</span>
+  ]
+});
+
+bot.<span class="fn">on</span>(<span class="st">'ready'</span>, () => {
+  <span class="cm">// Orbit Automaton hazır ⚡</span>
+  console.<span class="fn">log</span>(<span class="st">`Logged in as </span><span class="vr">${bot.user.tag}</span><span class="st">`</span>);
+});</code></pre>
+          </div>
+          <div class="lang-card__features">
+            <span>Discord.js v14</span>
+            <span>Node.js 20+</span>
+            <span>ESM</span>
+            <span>TypeScript</span>
+          </div>
+        </div>
+
+        <div class="lang-card" id="lang-lua">
+          <div class="lang-card__header">
+            <div class="lang-card__icon lang-card__icon--lua">Lua</div>
+            <div>
+              <h3>Lua</h3>
+              <span class="lang-card__badge lang-card__badge--lua">Birincil</span>
+            </div>
+          </div>
+          <div class="lang-card__code">
+            <pre><code><span class="kw">local</span> Players = game:GetService(<span class="st">"Players"</span>)
+
+Players.<span class="fn">PlayerAdded</span>:Connect(<span class="kw">function</span>(player)
+  <span class="kw">local</span> leaderstats = Instance.<span class="fn">new</span>(<span class="st">"Folder"</span>)
+  leaderstats.Name = <span class="st">"leaderstats"</span>
+  leaderstats.Parent = player
+
+  <span class="cm">-- Orbit Automaton: auto-stat 🎮</span>
+  <span class="kw">local</span> coins = Instance.<span class="fn">new</span>(<span class="st">"IntValue"</span>)
+  coins.Name = <span class="st">"Coins"</span>
+  coins.Parent = leaderstats
+<span class="kw">end</span>)</code></pre>
+          </div>
+          <div class="lang-card__features">
+            <span>Roblox Studio</span>
+            <span>Luau</span>
+            <span>RemoteEvents</span>
+            <span>DataStore</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="automation-status">
+        <div class="panel-header">
+          <span class="panel-header__dot"></span>
+          <span>Otomasyon Durumu</span>
+        </div>
+        <div class="auto-grid" id="auto-grid">
+          <!-- Populated by JS -->
+        </div>
+      </div>
+    </section>
+
+    <!-- ── SECTION: VISION ── -->
+    <section class="section section--vision" id="vision">
+      <div class="section__header">
+        <h2 class="glitch-title" data-text="Genişletilmiş Vizyon">Genişletilmiş Vizyon</h2>
+        <p class="section__subtitle">Esnek öğrenme modu &middot; Yeni teknolojilere anında adaptasyon</p>
+      </div>
+
+      <div class="vision-grid">
+        <div class="vision-node" data-status="active">
+          <div class="vision-node__pulse"></div>
+          <div class="vision-node__icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M12 2L2 7l10 5 10-5-10-5z"/><path d="M2 17l10 5 10-5"/><path d="M2 12l10 5 10-5"/></svg>
+          </div>
+          <h3>Python & AI</h3>
+          <p>Yapay zeka modülleri, ML pipeline'ları, TensorFlow / PyTorch entegrasyonu</p>
+          <span class="vision-node__status">Hazır</span>
+        </div>
+
+        <div class="vision-node" data-status="active">
+          <div class="vision-node__pulse"></div>
+          <div class="vision-node__icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="12" cy="12" r="3"/><path d="M12 1v6m0 6v6m-7-7h6m6 0h6"/><path d="M5.6 5.6l4.3 4.3m4.2 4.2l4.3 4.3M5.6 18.4l4.3-4.3m4.2-4.2l4.3-4.3"/></svg>
+          </div>
+          <h3>Mikro-Servisler</h3>
+          <p>Docker, Kubernetes, gRPC, event-driven mimari, API gateway yönetimi</p>
+          <span class="vision-node__status">Hazır</span>
+        </div>
+
+        <div class="vision-node" data-status="active">
+          <div class="vision-node__pulse"></div>
+          <div class="vision-node__icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/></svg>
+          </div>
+          <h3>Web3 & Blockchain</h3>
+          <p>Solidity, smart contract geliştirme, DApp frontend entegrasyonu</p>
+          <span class="vision-node__status">Hazır</span>
+        </div>
+
+        <div class="vision-node" data-status="active">
+          <div class="vision-node__pulse"></div>
+          <div class="vision-node__icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="4" y="4" width="16" height="16" rx="2"/><rect x="9" y="9" width="6" height="6"/><line x1="9" y1="1" x2="9" y2="4"/><line x1="15" y1="1" x2="15" y2="4"/><line x1="9" y1="20" x2="9" y2="23"/><line x1="15" y1="20" x2="15" y2="23"/><line x1="20" y1="9" x2="23" y2="9"/><line x1="20" y1="14" x2="23" y2="14"/><line x1="1" y1="9" x2="4" y2="9"/><line x1="1" y1="14" x2="4" y2="14"/></svg>
+          </div>
+          <h3>IoT & Embedded</h3>
+          <p>Arduino, Raspberry Pi, MQTT protokolü, gerçek zamanlı veri akışı</p>
+          <span class="vision-node__status">Hazır</span>
+        </div>
+      </div>
+    </section>
+
+    <!-- ── SECTION: TERMINAL ── -->
+    <section class="section section--terminal" id="terminal">
+      <div class="section__header">
+        <h2 class="glitch-title" data-text="Terminal">Terminal</h2>
+        <p class="section__subtitle">Orbit Automaton komut satırı arayüzü</p>
+      </div>
+
+      <div class="terminal-window" id="terminal-window">
+        <div class="terminal-window__bar">
+          <span class="terminal-window__dot terminal-window__dot--red"></span>
+          <span class="terminal-window__dot terminal-window__dot--yellow"></span>
+          <span class="terminal-window__dot terminal-window__dot--green"></span>
+          <span class="terminal-window__bar-title">orbit-automaton — zsh</span>
+        </div>
+        <div class="terminal-window__body" id="terminal-body">
+          <div class="terminal-line terminal-line--system">
+            <span class="terminal-line__prefix">system</span>
+            <span>Orbit Automaton v2.4.1 başlatılıyor...</span>
+          </div>
+          <div class="terminal-line terminal-line--success">
+            <span class="terminal-line__prefix">✓</span>
+            <span>GitLab Orbit bağlantısı kuruldu</span>
+          </div>
+          <div class="terminal-line terminal-line--success">
+            <span class="terminal-line__prefix">✓</span>
+            <span>47 webhook dinleniyor</span>
+          </div>
+          <div class="terminal-line terminal-line--success">
+            <span class="terminal-line__prefix">✓</span>
+            <span>JavaScript & Lua motorları yüklendi</span>
+          </div>
+          <div class="terminal-line terminal-line--info">
+            <span class="terminal-line__prefix">info</span>
+            <span>Dark Zenith teması aktif</span>
+          </div>
+          <div class="terminal-line terminal-line--ready">
+            <span class="terminal-line__prefix">⚡</span>
+            <span>Agent hazır. Komut bekleniyor...</span>
+          </div>
+        </div>
+        <div class="terminal-window__input-row">
+          <span class="terminal-prompt">orbit<span class="terminal-prompt__at">@</span>automaton <span class="terminal-prompt__dir">~</span> <span class="terminal-prompt__arrow">❯</span></span>
+          <input type="text" class="terminal-input" id="terminal-input" placeholder="Komut yazın (örn: access, cat 00, status)..." autocomplete="off" spellcheck="false" />
+        </div>
+      </div>
+
+      <!-- SYSTEM EVENT LOG STREAMER -->
+      <div class="system-event-log">
+        <div class="system-event-log__title">
+          <span style="color:var(--neon-cyan);">●</span> LIVE SYSTEM EVENT TICKER
+        </div>
+        <div class="system-event-log__list" id="system-event-log-list">
+          <!-- Dynamically populated by initSystemEventLog in app.js -->
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- ═══ FOOTER ═══ -->
+  <footer class="footer">
+    <span>Orbit Automaton &copy; 2026</span>
+    <span class="footer__sep">&middot;</span>
+    <span>Dark Zenith Theme</span>
+    <span class="footer__sep">&middot;</span>
+    <span id="clock"></span>
+  </footer>
+
+  <script src="app.js"></script>
+</body>
+</html>

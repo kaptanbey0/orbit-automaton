@@ -1,0 +1,444 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+<title>MORPHOGENESIS</title>
+<style>
+*{margin:0;padding:0}
+html,body{width:100%;height:100%;overflow:hidden;background:#020204}
+canvas{display:block;width:100%;height:100%}
+#label{position:fixed;bottom:5vh;left:50%;transform:translateX(-50%);
+font-family:'Segoe UI',Helvetica,sans-serif;font-size:.5rem;font-weight:300;
+letter-spacing:1em;text-transform:uppercase;color:rgba(200,190,170,.1);
+pointer-events:none;z-index:1;white-space:nowrap}
+</style>
+</head>
+<body>
+<canvas id="c"></canvas>
+<div id="label">morphogenesis</div>
+<script>
+"use strict";
+
+/* ═══════════════════════════════════════════════════════════
+   MORPHOGENESIS
+   A living computational organism rendered entirely in GLSL.
+   No libraries. No polygons. Pure mathematics becoming matter.
+   ═══════════════════════════════════════════════════════════ */
+
+const canvas = document.getElementById('c');
+const gl = canvas.getContext('webgl2', { antialias: false, alpha: false });
+if (!gl) { document.body.innerHTML = '<p style="color:#888;text-align:center;margin-top:40vh">WebGL 2 required</p>'; throw 'No WebGL2'; }
+
+/* ─── Shaders ─── */
+const VS = `#version 300 es
+in vec2 a;
+void main(){gl_Position=vec4(a,0,1);}`;
+
+const FS = `#version 300 es
+precision highp float;
+out vec4 O;
+uniform vec2 R;  // resolution
+uniform float T;  // time
+uniform float P;  // phase (slow evolution cycle)
+
+/* ────────── CONSTANTS ────────── */
+#define PI 3.141592653589
+#define TAU 6.283185307
+#define MAX_STEPS 120
+#define MAX_DIST 60.0
+#define SURF_DIST 0.001
+#define EPS 0.001
+
+/* ────────── ROTATION ────────── */
+mat2 rot(float a){float c=cos(a),s=sin(a);return mat2(c,-s,s,c);}
+mat3 rotX(float a){float c=cos(a),s=sin(a);return mat3(1,0,0,0,c,-s,0,s,c);}
+mat3 rotY(float a){float c=cos(a),s=sin(a);return mat3(c,0,s,0,1,0,-s,0,c);}
+
+/* ────────── SDF PRIMITIVES ────────── */
+float sdSphere(vec3 p,float r){return length(p)-r;}
+float sdBox(vec3 p,vec3 b){vec3 d=abs(p)-b;return min(max(d.x,max(d.y,d.z)),0.)+length(max(d,0.));}
+float sdTorus(vec3 p,vec2 t){return length(vec2(length(p.xz)-t.x,p.y))-t.y;}
+
+/* ────────── SDF OPERATIONS ────────── */
+float opSU(float a,float b,float k){float h=clamp(.5+.5*(b-a)/k,0.,1.);return mix(b,a,h)-k*h*(1.-h);}
+float opSS(float a,float b,float k){float h=clamp(.5-.5*(b+a)/k,0.,1.);return mix(a,-b,h)+k*h*(1.-h);}
+
+/* ────────── NOISE ────────── */
+float hash(vec3 p){return fract(sin(dot(p,vec3(127.1,311.7,74.7)))*43758.5453);}
+float noise3(vec3 p){
+  vec3 i=floor(p),f=fract(p);f=f*f*(3.-2.*f);
+  return mix(mix(mix(hash(i),hash(i+vec3(1,0,0)),f.x),
+                 mix(hash(i+vec3(0,1,0)),hash(i+vec3(1,1,0)),f.x),f.y),
+             mix(mix(hash(i+vec3(0,0,1)),hash(i+vec3(1,0,1)),f.x),
+                 mix(hash(i+vec3(0,1,1)),hash(i+vec3(1,1,1)),f.x),f.y),f.z);
+}
+float fbm(vec3 p){float v=0.,a=.5;for(int i=0;i<4;i++){v+=a*noise3(p);p*=2.03;a*=.5;}return v;}
+
+/* ══════════════════════════════════════════════════════
+   THE ORGANISM — Evolving Kaleidoscopic IFS Fractal
+   Every parameter breathes with time. Nothing repeats.
+   ══════════════════════════════════════════════════════ */
+
+// Orbit trap distances for coloring
+vec4 trap;
+
+float organism(vec3 p){
+  // Slow macro evolution
+  float cycle = P; // 0-1 over ~90 seconds
+  float breath = sin(T * 0.4) * 0.5 + 0.5;
+  float pulse  = sin(T * 0.7) * 0.3 + 0.5;
+
+  // Pre-transform: the organism slowly tumbles
+  p *= rotY(T * 0.05);
+  p *= rotX(sin(T * 0.03) * 0.4);
+
+  // Initial scale and fold parameters — EVOLVING
+  float scale = 1.8 + sin(cycle * TAU) * 0.3 + breath * 0.15;
+  vec3 offset = vec3(
+    1.0 + sin(cycle * TAU * 2.0 + 1.0) * 0.4,
+    0.8 + cos(cycle * TAU * 1.5) * 0.3,
+    1.0 + sin(cycle * TAU + 2.0) * 0.35
+  );
+
+  // Folding angles that continuously shift
+  float foldA = T * 0.08 + sin(T * 0.05) * 0.5;
+  float foldB = T * 0.06 + cos(T * 0.04) * 0.4;
+
+  trap = vec4(1e10);
+  float d = sdBox(p, vec3(2.0));
+
+  // Iterative fractal construction
+  for(int i = 0; i < 8; i++){
+    float fi = float(i);
+
+    // DIMENSIONAL FOLDING — the organism's skeleton
+    // Each fold creates a new axis of symmetry
+    p = abs(p);
+
+    // Conditional folds that change which planes are active
+    // This creates genuinely different topology each cycle
+    if(p.x - p.y < 0.0) p.xy = p.yx;
+    if(p.x - p.z < 0.0) p.xz = p.zx;
+    if(p.y - p.z < 0.0) p.yz = p.zy;
+
+    // Evolving rotation between folds — this is what
+    // makes the geometry continuously reconstruct
+    p.xy *= rot(foldA + fi * 0.3);
+    p.yz *= rot(foldB + fi * 0.25);
+
+    // Scale and translate — the "growth" operation
+    p = p * scale - offset * (scale - 1.0);
+
+    // CHROMATIC STRATA — record orbit trap distances
+    // These create the color layers inside the structure
+    trap.x = min(trap.x, abs(dot(p, vec3(1,0,0))));
+    trap.y = min(trap.y, abs(dot(p, vec3(0,1,0))));
+    trap.z = min(trap.z, length(p.xz));
+    trap.w = min(trap.w, length(p));
+
+    // Evolving boolean operations
+    // Sometimes carves, sometimes adds — unpredictable
+    float carve = sdSphere(p, 2.0 + pulse * 3.0);
+    float morph = mix(0.3, -0.3, sin(cycle * TAU + fi * 0.7) * 0.5 + 0.5);
+    d = mix(opSU(d, carve, 0.5), opSS(d, carve, 0.5), step(0.0, morph));
+  }
+
+  // Final scale correction
+  d /= pow(scale, 8.0);
+
+  // Organic perturbation — geometry "breathes"
+  d += sin(p.x * 4.0 + T) * sin(p.y * 4.0 + T * 0.7) * sin(p.z * 4.0 + T * 0.5) * 0.002;
+
+  return d;
+}
+
+/* ────────── SCENE MAP ────────── */
+float map(vec3 p){
+  return organism(p);
+}
+
+/* ────────── NORMAL ────────── */
+vec3 calcNormal(vec3 p){
+  vec2 e=vec2(EPS,0);
+  return normalize(vec3(
+    map(p+e.xyy)-map(p-e.xyy),
+    map(p+e.yxy)-map(p-e.yxy),
+    map(p+e.yyx)-map(p-e.yyx)
+  ));
+}
+
+/* ────────── AMBIENT OCCLUSION ────────── */
+float calcAO(vec3 p,vec3 n){
+  float ao=0.,s=1.;
+  for(int i=1;i<=5;i++){
+    float d=0.05*float(i);
+    ao+=(d-map(p+n*d))*s;
+    s*=0.5;
+  }
+  return clamp(1.-1.5*ao,0.,1.);
+}
+
+/* ────────── SOFT SHADOW ────────── */
+float softShadow(vec3 ro,vec3 rd,float mint,float maxt,float k){
+  float res=1.;
+  float t=mint;
+  for(int i=0;i<40;i++){
+    float h=map(ro+rd*t);
+    res=min(res,k*h/t);
+    t+=clamp(h,.01,.5);
+    if(h<0.001||t>maxt)break;
+  }
+  return clamp(res,0.,1.);
+}
+
+/* ══════════════════════════════════════════════════════
+   COLORING — CHROMATIC TECTONICS
+   Colors emerge from within, like geological strata
+   exposed by the organism's continuous restructuring.
+   No neon. No cyber. Mineral. Astronomical. Alive.
+   ══════════════════════════════════════════════════════ */
+vec3 palette(float t, float cycle){
+  // Evolving palette — continuously shifts through
+  // mineral/astronomical color spaces
+  vec3 a = vec3(0.50, 0.45, 0.40); // warm base
+  vec3 b = vec3(0.40, 0.35, 0.30);
+  vec3 c = vec3(1.00, 0.80, 0.60);
+  vec3 d = vec3(0.00, 0.15, 0.25);
+
+  // Rotate through different palettes over time
+  a += vec3(sin(cycle*TAU)*.15, cos(cycle*TAU*1.3)*.1, sin(cycle*TAU*.7)*.2);
+  d += vec3(cos(cycle*TAU*.5)*.1, sin(cycle*TAU*.8)*.15, cos(cycle*TAU*1.1)*.1);
+
+  return a + b * cos(TAU * (c * t + d));
+}
+
+vec3 colorize(vec3 p, vec3 n, float ao, float cycle){
+  // STRATA — mineral layers revealed by orbit traps
+  float layer1 = trap.x * 0.3;
+  float layer2 = trap.y * 0.25;
+  float layer3 = trap.z * 0.15;
+  float depth  = trap.w * 0.1;
+
+  vec3 col = palette(layer1 + layer2, cycle);
+
+  // Deep internal glow — like magma beneath stone
+  float innerGlow = exp(-depth * 2.0);
+  vec3 magma = vec3(0.85, 0.35, 0.08) * innerGlow * 0.6;
+  magma = mix(magma, vec3(0.30, 0.10, 0.45), sin(cycle * TAU) * 0.5 + 0.5);
+
+  col += magma;
+
+  // Surface iridescence — subtle, like oil on obsidian
+  float fresnel = pow(1.0 - max(dot(n, -normalize(p)), 0.0), 3.0);
+  vec3 irid = vec3(
+    sin(layer3 * 8.0 + T * 0.2) * 0.5 + 0.5,
+    sin(layer3 * 8.0 + T * 0.2 + 2.094) * 0.5 + 0.5,
+    sin(layer3 * 8.0 + T * 0.2 + 4.189) * 0.5 + 0.5
+  );
+  col += irid * fresnel * 0.15;
+
+  // Apply AO — the organism's crevices darken naturally
+  col *= ao;
+
+  return col;
+}
+
+/* ────────── CAMERA PATH ────────── */
+vec3 cameraPos(float t){
+  float orbit = t * 0.15;
+  float breath = sin(t * 0.1) * 0.5 + 0.5;
+  float dive = sin(t * 0.07);
+
+  // Distance oscillates — approaches, retreats, dives close
+  float dist = 4.0 + sin(t * 0.12) * 2.0 + breath * 1.5;
+
+  // Orbit with vertical exploration
+  return vec3(
+    sin(orbit) * dist * cos(dive * 0.3),
+    sin(dive * 0.4) * dist * 0.5 + cos(t * 0.09) * 1.5,
+    cos(orbit) * dist * cos(dive * 0.3)
+  );
+}
+
+/* ══════════════════════════════════════════════════════
+   MAIN — RAYMARCHING ENGINE
+   ══════════════════════════════════════════════════════ */
+void main(){
+  vec2 uv = (gl_FragCoord.xy - R * 0.5) / R.y;
+  float cycle = fract(T / 90.0); // 90-second evolution cycle
+
+  // Camera
+  vec3 ro = cameraPos(T);
+  vec3 target = vec3(sin(T*0.02)*0.3, cos(T*0.03)*0.2, 0.0);
+  vec3 fwd = normalize(target - ro);
+  vec3 right = normalize(cross(vec3(0,1,0), fwd));
+  vec3 up = cross(fwd, right);
+
+  // Subtle lens distortion — organic, not mechanical
+  float lens = 1.5 + sin(T * 0.08) * 0.15;
+  vec3 rd = normalize(uv.x * right + uv.y * up + lens * fwd);
+
+  // ── RAYMARCH ──
+  float t = 0.0;
+  float d;
+  vec3 p;
+  bool hit = false;
+
+  for(int i = 0; i < MAX_STEPS; i++){
+    p = ro + rd * t;
+    d = map(p);
+    if(abs(d) < SURF_DIST){hit = true; break;}
+    if(t > MAX_DIST) break;
+    t += d * 0.7; // slightly conservative for quality
+  }
+
+  // ── BACKGROUND — Not a void. A living atmosphere. ──
+  vec3 col;
+
+  if(!hit){
+    // Atmosphere: subtle, warm, alive
+    float sky = pow(max(dot(rd, vec3(0,1,0)), 0.0), 2.0);
+    float horizon = exp(-abs(rd.y) * 3.0);
+
+    col = vec3(0.012, 0.010, 0.018); // deep space, slightly warm
+    col += vec3(0.04, 0.02, 0.01) * horizon; // warm horizon
+    col += vec3(0.01, 0.012, 0.02) * sky; // cool zenith
+
+    // Subtle atmospheric nebula
+    vec3 nebP = rd * 3.0 + vec3(T * 0.01);
+    float neb = fbm(nebP) * 0.04;
+    col += vec3(neb * 0.8, neb * 0.4, neb * 1.2);
+  } else {
+    // ── SURFACE RENDERING ──
+    vec3 n = calcNormal(p);
+    float ao = calcAO(p, n);
+
+    // Evolving light positions — not fixed, not predictable
+    vec3 lightDir1 = normalize(vec3(
+      sin(T * 0.13) * 2.0,
+      1.5 + cos(T * 0.09) * 0.5,
+      cos(T * 0.11) * 2.0
+    ));
+    vec3 lightDir2 = normalize(vec3(
+      -cos(T * 0.1),
+      -0.5,
+      sin(T * 0.15)
+    ));
+
+    // Diffuse — warm key light
+    float diff1 = max(dot(n, lightDir1), 0.0);
+    float diff2 = max(dot(n, lightDir2), 0.0) * 0.3;
+
+    // Soft shadows
+    float sh = softShadow(p + n * 0.02, lightDir1, 0.02, 8.0, 8.0);
+
+    // Specular — obsidian-like
+    vec3 h1 = normalize(lightDir1 - rd);
+    float spec = pow(max(dot(n, h1), 0.0), 60.0) * 0.4;
+
+    // Subsurface scattering approximation
+    float sss = max(dot(-n, rd), 0.0);
+    sss = pow(sss, 2.0) * 0.15;
+
+    // Get mineral coloring from orbit traps
+    col = colorize(p, n, ao, cycle);
+
+    // Apply lighting
+    vec3 lightCol1 = vec3(1.0, 0.85, 0.65); // warm amber light
+    vec3 lightCol2 = vec3(0.4, 0.45, 0.65); // cool fill
+
+    col *= (diff1 * sh * lightCol1 + diff2 * lightCol2 + vec3(0.02, 0.018, 0.025));
+    col += spec * lightCol1 * sh;
+    col += sss * vec3(0.6, 0.25, 0.1) * (1.0 - ao);
+
+    // Fog — organic distance fog, not linear
+    float fog = 1.0 - exp(-t * t * 0.003);
+    vec3 fogCol = vec3(0.015, 0.012, 0.022);
+    col = mix(col, fogCol, fog);
+  }
+
+  // ── POST-PROCESSING (in-shader) ──
+
+  // Tone mapping — ACES filmic
+  col = col * (2.51 * col + 0.03) / (col * (2.43 * col + 0.59) + 0.14);
+
+  // Subtle vignette — organic falloff
+  vec2 vigUv = gl_FragCoord.xy / R;
+  float vig = 1.0 - length(vigUv - 0.5) * 1.1;
+  vig = smoothstep(0.0, 0.8, vig);
+  col *= vig;
+
+  // Film grain — barely perceptible, adds texture
+  float grain = hash(vec3(gl_FragCoord.xy, fract(T))) * 0.03;
+  col += grain - 0.015;
+
+  // Gamma
+  col = pow(clamp(col, 0.0, 1.0), vec3(0.4545));
+
+  O = vec4(col, 1.0);
+}
+`;
+
+/* ─── WebGL Setup ─── */
+function compile(src, type) {
+  const s = gl.createShader(type);
+  gl.shaderSource(s, src);
+  gl.compileShader(s);
+  if (!gl.getShaderParameter(s, gl.COMPILE_STATUS)) {
+    console.error(gl.getShaderInfoLog(s));
+    return null;
+  }
+  return s;
+}
+
+const vs = compile(VS, gl.VERTEX_SHADER);
+const fs = compile(FS, gl.FRAGMENT_SHADER);
+const prog = gl.createProgram();
+gl.attachShader(prog, vs);
+gl.attachShader(prog, fs);
+gl.linkProgram(prog);
+if (!gl.getProgramParameter(prog, gl.LINK_STATUS)) {
+  console.error(gl.getProgramInfoLog(prog));
+}
+gl.useProgram(prog);
+
+// Full-screen quad
+const buf = gl.createBuffer();
+gl.bindBuffer(gl.ARRAY_BUFFER, buf);
+gl.bufferData(gl.ARRAY_BUFFER, new Float32Array([-1,-1,1,-1,-1,1,1,1]), gl.STATIC_DRAW);
+const aLoc = gl.getAttribLocation(prog, 'a');
+gl.enableVertexAttribArray(aLoc);
+gl.vertexAttribPointer(aLoc, 2, gl.FLOAT, false, 0, 0);
+
+// Uniforms
+const uR = gl.getUniformLocation(prog, 'R');
+const uT = gl.getUniformLocation(prog, 'T');
+const uP = gl.getUniformLocation(prog, 'P');
+
+/* ─── Resize ─── */
+function resize() {
+  const dpr = Math.min(devicePixelRatio, 1.5); // cap for performance
+  canvas.width = innerWidth * dpr;
+  canvas.height = innerHeight * dpr;
+  gl.viewport(0, 0, canvas.width, canvas.height);
+}
+resize();
+addEventListener('resize', resize);
+
+/* ─── Render Loop ─── */
+const startTime = performance.now();
+
+function frame() {
+  const t = (performance.now() - startTime) * 0.001;
+  gl.uniform2f(uR, canvas.width, canvas.height);
+  gl.uniform1f(uT, t);
+  gl.uniform1f(uP, (t % 90.0) / 90.0);
+  gl.drawArrays(gl.TRIANGLE_STRIP, 0, 4);
+  requestAnimationFrame(frame);
+}
+
+frame();
+</script>
+</body>
+</html>

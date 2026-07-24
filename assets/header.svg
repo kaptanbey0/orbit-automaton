@@ -1,0 +1,134 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 200" preserveAspectRatio="xMidYMid meet">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#08080c"/>
+      <stop offset="100%" stop-color="#0d0d14"/>
+    </linearGradient>
+    <linearGradient id="cyan-grad" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0%" stop-color="#00f0ff" stop-opacity="0"/>
+      <stop offset="50%" stop-color="#00f0ff" stop-opacity="1"/>
+      <stop offset="100%" stop-color="#00f0ff" stop-opacity="0"/>
+    </linearGradient>
+    <linearGradient id="purple-grad" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0%" stop-color="#a855f7" stop-opacity="0"/>
+      <stop offset="50%" stop-color="#a855f7" stop-opacity="1"/>
+      <stop offset="100%" stop-color="#a855f7" stop-opacity="0"/>
+    </linearGradient>
+    <filter id="glow-cyan">
+      <feGaussianBlur stdDeviation="4" result="blur"/>
+      <feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge>
+    </filter>
+    <filter id="glow-purple">
+      <feGaussianBlur stdDeviation="3" result="blur"/>
+      <feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge>
+    </filter>
+    <filter id="glow-core">
+      <feGaussianBlur stdDeviation="6" result="blur"/>
+      <feMerge><feMergeNode in="blur"/><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge>
+    </filter>
+  </defs>
+
+  <!-- Background -->
+  <rect width="1200" height="200" fill="url(#bg)"/>
+
+  <!-- Constellation dots -->
+  <g opacity="0.3">
+    <circle cx="100" cy="40" r="1.2" fill="#00f0ff"><animate attributeName="opacity" values="0.2;0.8;0.2" dur="3s" repeatCount="indefinite"/></circle>
+    <circle cx="250" cy="80" r="0.8" fill="#00f0ff"><animate attributeName="opacity" values="0.5;1;0.5" dur="2.5s" repeatCount="indefinite"/></circle>
+    <circle cx="180" cy="150" r="1" fill="#a855f7"><animate attributeName="opacity" values="0.3;0.9;0.3" dur="4s" repeatCount="indefinite"/></circle>
+    <circle cx="350" cy="30" r="0.6" fill="#00f0ff"><animate attributeName="opacity" values="0.4;1;0.4" dur="3.5s" repeatCount="indefinite"/></circle>
+    <circle cx="950" cy="50" r="1.2" fill="#a855f7"><animate attributeName="opacity" values="0.2;0.7;0.2" dur="2.8s" repeatCount="indefinite"/></circle>
+    <circle cx="1050" cy="120" r="0.8" fill="#00f0ff"><animate attributeName="opacity" values="0.6;1;0.6" dur="3.2s" repeatCount="indefinite"/></circle>
+    <circle cx="1100" cy="40" r="1" fill="#00f0ff"><animate attributeName="opacity" values="0.3;0.8;0.3" dur="4.2s" repeatCount="indefinite"/></circle>
+    <circle cx="850" cy="160" r="0.7" fill="#a855f7"><animate attributeName="opacity" values="0.4;0.9;0.4" dur="2.6s" repeatCount="indefinite"/></circle>
+    <circle cx="750" cy="35" r="0.9" fill="#00f0ff"><animate attributeName="opacity" values="0.3;0.7;0.3" dur="3.8s" repeatCount="indefinite"/></circle>
+    <circle cx="450" cy="170" r="1.1" fill="#a855f7"><animate attributeName="opacity" values="0.2;0.6;0.2" dur="3.1s" repeatCount="indefinite"/></circle>
+
+    <!-- Constellation lines -->
+    <line x1="100" y1="40" x2="250" y2="80" stroke="#00f0ff" stroke-width="0.3" opacity="0.2"/>
+    <line x1="250" y1="80" x2="180" y2="150" stroke="#00f0ff" stroke-width="0.3" opacity="0.15"/>
+    <line x1="250" y1="80" x2="350" y2="30" stroke="#00f0ff" stroke-width="0.3" opacity="0.2"/>
+    <line x1="950" y1="50" x2="1050" y2="120" stroke="#a855f7" stroke-width="0.3" opacity="0.2"/>
+    <line x1="1050" y1="120" x2="1100" y2="40" stroke="#00f0ff" stroke-width="0.3" opacity="0.15"/>
+    <line x1="850" y1="160" x2="950" y2="50" stroke="#a855f7" stroke-width="0.3" opacity="0.15"/>
+  </g>
+
+  <!-- Center: Orbit Logo -->
+  <g transform="translate(600, 90)">
+    <!-- Outer orbit ring -->
+    <ellipse cx="0" cy="0" rx="55" ry="20" fill="none" stroke="#00f0ff" stroke-width="1.2" opacity="0.5" filter="url(#glow-cyan)">
+      <animateTransform attributeName="transform" type="rotate" from="0" to="360" dur="8s" repeatCount="indefinite"/>
+    </ellipse>
+
+    <!-- Inner orbit ring -->
+    <ellipse cx="0" cy="0" rx="35" ry="14" fill="none" stroke="#a855f7" stroke-width="1" opacity="0.6" filter="url(#glow-purple)">
+      <animateTransform attributeName="transform" type="rotate" from="360" to="0" dur="5s" repeatCount="indefinite"/>
+    </ellipse>
+
+    <!-- Orbiting electron 1 -->
+    <circle cx="55" cy="0" r="3" fill="#00f0ff" filter="url(#glow-cyan)">
+      <animateTransform attributeName="transform" type="rotate" from="0" to="360" dur="8s" repeatCount="indefinite"/>
+      <animate attributeName="opacity" values="0.6;1;0.6" dur="2s" repeatCount="indefinite"/>
+    </circle>
+
+    <!-- Orbiting electron 2 -->
+    <circle cx="-35" cy="0" r="2.5" fill="#a855f7" filter="url(#glow-purple)">
+      <animateTransform attributeName="transform" type="rotate" from="360" to="0" dur="5s" repeatCount="indefinite"/>
+      <animate attributeName="opacity" values="0.5;1;0.5" dur="1.5s" repeatCount="indefinite"/>
+    </circle>
+
+    <!-- Core glow -->
+    <circle cx="0" cy="0" r="12" fill="#00f0ff" opacity="0.08" filter="url(#glow-core)">
+      <animate attributeName="r" values="12;16;12" dur="3s" repeatCount="indefinite"/>
+    </circle>
+    <circle cx="0" cy="0" r="6" fill="#00f0ff" opacity="0.15" filter="url(#glow-core)">
+      <animate attributeName="r" values="6;8;6" dur="2s" repeatCount="indefinite"/>
+    </circle>
+
+    <!-- Core dot -->
+    <circle cx="0" cy="0" r="4" fill="#00f0ff" filter="url(#glow-core)">
+      <animate attributeName="opacity" values="0.8;1;0.8" dur="2s" repeatCount="indefinite"/>
+    </circle>
+  </g>
+
+  <!-- Left text: KAPTANBEY0 -->
+  <g transform="translate(340, 85)">
+    <text font-family="'Segoe UI', 'Helvetica Neue', sans-serif" font-size="28" font-weight="700" fill="#e8e8f0" text-anchor="end" letter-spacing="2">
+      KAPTAN
+      <animate attributeName="opacity" values="0;1" dur="1s" fill="freeze"/>
+    </text>
+    <text y="24" font-family="'Segoe UI', 'Helvetica Neue', sans-serif" font-size="11" font-weight="400" fill="#8888a0" text-anchor="end" letter-spacing="4">
+      DEVELOPER
+      <animate attributeName="opacity" values="0;1" dur="1s" begin="0.5s" fill="freeze"/>
+    </text>
+  </g>
+
+  <!-- Right text: AUTOMATON -->
+  <g transform="translate(860, 85)">
+    <text font-family="'Segoe UI', 'Helvetica Neue', sans-serif" font-size="28" font-weight="700" fill="#e8e8f0" letter-spacing="2">
+      BEY0
+      <animate attributeName="opacity" values="0;1" dur="1s" begin="0.3s" fill="freeze"/>
+    </text>
+    <text y="24" font-family="'Segoe UI', 'Helvetica Neue', sans-serif" font-size="11" font-weight="400" fill="#00f0ff" letter-spacing="4">
+      ORBIT AUTOMATON
+      <animate attributeName="opacity" values="0;1" dur="1s" begin="0.8s" fill="freeze"/>
+    </text>
+  </g>
+
+  <!-- Horizontal accent lines -->
+  <line x1="370" y1="90" x2="530" y2="90" stroke="url(#cyan-grad)" stroke-width="0.5" opacity="0.4">
+    <animate attributeName="opacity" values="0.2;0.6;0.2" dur="4s" repeatCount="indefinite"/>
+  </line>
+  <line x1="670" y1="90" x2="830" y2="90" stroke="url(#purple-grad)" stroke-width="0.5" opacity="0.4">
+    <animate attributeName="opacity" values="0.2;0.6;0.2" dur="4s" begin="2s" repeatCount="indefinite"/>
+  </line>
+
+  <!-- Bottom scanline -->
+  <rect x="0" y="195" width="1200" height="1" fill="#00f0ff" opacity="0.06"/>
+  <rect x="0" y="197" width="1200" height="1" fill="#a855f7" opacity="0.04"/>
+
+  <!-- Animated scan beam -->
+  <rect x="0" y="0" width="1200" height="2" fill="#00f0ff" opacity="0.03">
+    <animate attributeName="y" values="0;200;0" dur="6s" repeatCount="indefinite"/>
+  </rect>
+</svg>

@@ -1,0 +1,218 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>FRAGMENT 00 — ORIGIN POINT [CLASSIFIED]</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:ital,wght@0,300;0,400;0,600;0,700;1,400&family=IBM+Plex+Mono:ital,wght@0,300;0,400;0,600;1,400&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="style.css" />
+  <style>
+    body {
+      background-color: #030305;
+      color: #a0a5b5;
+      font-family: 'IBM Plex Mono', 'JetBrains Mono', monospace;
+      padding: 5vh 5vw;
+      max-width: 900px;
+      margin: 0 auto;
+      line-height: 1.8;
+    }
+    .origin-header {
+      border-bottom: 1px solid rgba(255, 0, 85, 0.3);
+      padding-bottom: 20px;
+      margin-bottom: 30px;
+    }
+    .classified-badge {
+      display: inline-block;
+      background: rgba(255, 0, 85, 0.15);
+      color: #ff0055;
+      border: 1px solid #ff0055;
+      padding: 4px 12px;
+      font-size: 0.75rem;
+      letter-spacing: 0.2em;
+      font-weight: 700;
+      margin-bottom: 15px;
+      text-transform: uppercase;
+      box-shadow: 0 0 15px rgba(255, 0, 85, 0.3);
+    }
+    .fragment-title {
+      font-size: 2rem;
+      color: #fff;
+      font-weight: 700;
+      letter-spacing: 0.1em;
+      margin-bottom: 10px;
+      text-shadow: 0 0 10px rgba(0, 240, 255, 0.5);
+    }
+    .meta-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 15px;
+      background: rgba(10, 12, 20, 0.8);
+      border: 1px solid rgba(0, 240, 255, 0.2);
+      padding: 20px;
+      border-radius: 4px;
+      margin-bottom: 30px;
+    }
+    .meta-item {
+      font-size: 0.8rem;
+    }
+    .meta-label {
+      color: #00f0ff;
+      font-size: 0.7rem;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      display: block;
+      margin-bottom: 4px;
+    }
+    .meta-value {
+      color: #e2e8f0;
+      font-weight: 600;
+    }
+    .audio-player-sim {
+      background: rgba(8, 10, 16, 0.9);
+      border: 1px solid rgba(168, 85, 247, 0.3);
+      padding: 15px 20px;
+      border-radius: 4px;
+      margin: 25px 0;
+      display: flex;
+      align-items: center;
+      gap: 15px;
+    }
+    .audio-btn {
+      background: #a855f7;
+      color: #000;
+      border: none;
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      cursor: pointer;
+      font-weight: bold;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: all 0.3s;
+    }
+    .audio-btn:hover {
+      box-shadow: 0 0 15px #a855f7;
+      transform: scale(1.05);
+    }
+    .audio-wave {
+      flex: 1;
+      height: 20px;
+      display: flex;
+      align-items: center;
+      gap: 3px;
+    }
+    .audio-bar {
+      flex: 1;
+      height: 100%;
+      background: rgba(168, 85, 247, 0.2);
+      border-radius: 2px;
+      animation: pulseBar 1.5s infinite ease-in-out;
+    }
+    @keyframes pulseBar {
+      0%, 100% { height: 20%; }
+      50% { height: 90%; }
+    }
+    .log-box {
+      background: rgba(0, 0, 0, 0.6);
+      border-left: 3px solid #ff0055;
+      padding: 20px;
+      margin: 20px 0;
+      font-size: 0.9rem;
+      color: #cbd5e1;
+    }
+    .glitch-text {
+      color: #ff0055;
+      font-weight: bold;
+    }
+    .nav-back {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      color: #00f0ff;
+      text-decoration: none;
+      font-size: 0.85rem;
+      margin-top: 40px;
+      border: 1px solid rgba(0, 240, 255, 0.3);
+      padding: 8px 16px;
+      border-radius: 4px;
+      transition: all 0.3s;
+    }
+    .nav-back:hover {
+      background: rgba(0, 240, 255, 0.1);
+      box-shadow: 0 0 10px rgba(0, 240, 255, 0.3);
+    }
+  </style>
+</head>
+<body>
+
+  <div class="origin-header">
+    <span class="classified-badge">CLEARANCE LEVEL: OMEGA ARCHIVE</span>
+    <h1 class="fragment-title">FRAGMENT 00 — ORIGIN POINT</h1>
+    <p style="color: #64748b; font-size: 0.85rem;">System Identifier: SUBSTRATE://00-ORIGIN-NULL</p>
+  </div>
+
+  <div class="meta-grid">
+    <div class="meta-item">
+      <span class="meta-label">Fragment ID</span>
+      <span class="meta-value">00</span>
+    </div>
+    <div class="meta-item">
+      <span class="meta-label">Classification</span>
+      <span class="meta-value">ORIGIN GEOMETRY / SELF-INDEX</span>
+    </div>
+    <div class="meta-item">
+      <span class="meta-label">Discovery Date</span>
+      <span class="meta-value">TIME-ZERO (PRE-CATALOG)</span>
+    </div>
+    <div class="meta-item">
+      <span class="meta-label">Primary Researcher</span>
+      <span class="meta-value">UNKNOWN ARCHITECT</span>
+    </div>
+    <div class="meta-item">
+      <span class="meta-label">Threat Level</span>
+      <span class="meta-value" style="color: #ff0055;">EXISTENTIAL / ONCOLOGICAL</span>
+    </div>
+    <div class="meta-item">
+      <span class="meta-label">Status</span>
+      <span class="meta-value" style="color: #00f0ff;">DO NOT INDEX</span>
+    </div>
+  </div>
+
+  <div class="audio-player-sim">
+    <button class="audio-btn" onclick="alert('Audio stream decryption in progress... Resonance tone generated.')">▶</button>
+    <div style="font-size: 0.8rem; color: #a855f7; width: 140px;">AUDIO LOG #00</div>
+    <div class="audio-wave">
+      <div class="audio-bar" style="animation-delay: 0.1s;"></div>
+      <div class="audio-bar" style="animation-delay: 0.4s;"></div>
+      <div class="audio-bar" style="animation-delay: 0.2s;"></div>
+      <div class="audio-bar" style="animation-delay: 0.6s;"></div>
+      <div class="audio-bar" style="animation-delay: 0.3s;"></div>
+      <div class="audio-bar" style="animation-delay: 0.5s;"></div>
+      <div class="audio-bar" style="animation-delay: 0.7s;"></div>
+    </div>
+    <span style="font-size: 0.75rem; color: #64748b;">00:42 / DECRYPTED</span>
+  </div>
+
+  <div class="log-box">
+    <p><strong>[SYSTEM NOTE]:</strong> This file was not added to the Substrate database. This file created the database.</p>
+    <br/>
+    <p><em>"We spent months attempting to isolate the anomalous pulse emitting from deep terminal node 0. When we finally traced the signal source back to its root coordinate, we discovered a recursive script running on hardware that had no power source connected."</em></p>
+  </div>
+
+  <div style="margin: 30px 0;">
+    <h3 style="color: #00f0ff; font-size: 1rem; margin-bottom: 15px; letter-spacing: 0.1em;">OBSERVATION RECORD #00-A</h3>
+    <p>The Substrate is not an archive of strange phenomena found in space. It is a recording device left behind by an architecture that dissolved itself to allow normal physics to exist.</p>
+    <p style="margin-top: 15px;">Every fragment index (01 through 31) is merely a splinter created when Fragment 00 shattered. If all fragments reach 100% synchronization, the Dark Zenith network will initiate an automatic recursion protocol.</p>
+  </div>
+
+  <div style="background: rgba(255, 0, 85, 0.05); border: 1px dashed rgba(255, 0, 85, 0.3); padding: 15px; border-radius: 4px; font-size: 0.8rem; color: #f43f5e;">
+    <span class="glitch-text">WARNING:</span> ACCESS TO FRAGMENT 00 HAS BEEN LOGGED IN THE CENTRAL EVENT TICKER. OBSERVER ID STAMPED.
+  </div>
+
+  <a href="index.html" class="nav-back">← RETURN TO ORBIT CORE CONTROL CENTER</a>
+
+</body>
+</html>

@@ -1,0 +1,145 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 840 320">
+  <defs>
+    <linearGradient id="hbg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#0a0a12"/>
+      <stop offset="100%" stop-color="#08080c"/>
+    </linearGradient>
+    <filter id="hg"><feGaussianBlur stdDeviation="2" result="b"/><feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge></filter>
+    <filter id="hg2"><feGaussianBlur stdDeviation="4" result="b"/><feMerge><feMergeNode in="b"/><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge></filter>
+  </defs>
+
+  <rect width="840" height="320" rx="16" fill="url(#hbg)" stroke="#1a1a28" stroke-width="1"/>
+
+  <!-- Header bar -->
+  <rect x="0" y="0" width="840" height="36" rx="16" fill="#0d0d14"/>
+  <rect x="0" y="16" width="840" height="20" fill="#0d0d14"/>
+  <line x1="0" y1="36" x2="840" y2="36" stroke="#1a1a28" stroke-width="1"/>
+
+  <!-- Window dots -->
+  <circle cx="22" cy="18" r="5" fill="#ff5f57"/>
+  <circle cx="40" cy="18" r="5" fill="#febc2e"/>
+  <circle cx="58" cy="18" r="5" fill="#28c840"/>
+  <text x="420" y="22" font-family="'Segoe UI', sans-serif" font-size="10" fill="#555566" text-anchor="middle" letter-spacing="1">orbit-automaton — system monitor</text>
+
+  <!-- LEFT PANEL: Metrics -->
+  <g transform="translate(24, 52)">
+    <!-- CPU -->
+    <text x="0" y="0" font-family="'Segoe UI', sans-serif" font-size="8" fill="#555566" letter-spacing="2">CPU</text>
+    <rect x="0" y="6" width="180" height="4" rx="2" fill="#16161f"/>
+    <rect x="0" y="6" width="0" height="4" rx="2" fill="#00f0ff" filter="url(#hg)">
+      <animate attributeName="width" values="0;54;50;56;52;48;55;54" dur="6s" repeatCount="indefinite"/>
+    </rect>
+    <text x="186" y="10" font-family="'Segoe UI', sans-serif" font-size="8" fill="#00f0ff" filter="url(#hg)">
+      <animate attributeName="textContent" values="30%;28%;31%;29%;27%;30%;30%" dur="6s" repeatCount="indefinite"/>
+      30%
+    </text>
+
+    <!-- MEM -->
+    <text x="0" y="30" font-family="'Segoe UI', sans-serif" font-size="8" fill="#555566" letter-spacing="2">MEM</text>
+    <rect x="0" y="36" width="180" height="4" rx="2" fill="#16161f"/>
+    <rect x="0" y="36" width="0" height="4" rx="2" fill="#a855f7" filter="url(#hg)">
+      <animate attributeName="width" values="0;72;75;70;73;76;72" dur="8s" repeatCount="indefinite"/>
+    </rect>
+    <text x="186" y="40" font-family="'Segoe UI', sans-serif" font-size="8" fill="#a855f7">234MB</text>
+
+    <!-- NET -->
+    <text x="0" y="60" font-family="'Segoe UI', sans-serif" font-size="8" fill="#555566" letter-spacing="2">NET</text>
+    <rect x="0" y="66" width="180" height="4" rx="2" fill="#16161f"/>
+    <rect x="0" y="66" width="0" height="4" rx="2" fill="#22ff88" filter="url(#hg)">
+      <animate attributeName="width" values="0;36;45;30;42;38;36" dur="5s" repeatCount="indefinite"/>
+    </rect>
+    <text x="186" y="70" font-family="'Segoe UI', sans-serif" font-size="8" fill="#22ff88">12ms</text>
+
+    <!-- DISK -->
+    <text x="0" y="90" font-family="'Segoe UI', sans-serif" font-size="8" fill="#555566" letter-spacing="2">DISK</text>
+    <rect x="0" y="96" width="180" height="4" rx="2" fill="#16161f"/>
+    <rect x="0" y="96" width="90" height="4" rx="2" fill="#ffaa22" filter="url(#hg)"/>
+    <text x="186" y="100" font-family="'Segoe UI', sans-serif" font-size="8" fill="#ffaa22">50%</text>
+  </g>
+
+  <!-- LEFT PANEL: Process list -->
+  <g transform="translate(24, 172)">
+    <text x="0" y="0" font-family="'Segoe UI', sans-serif" font-size="8" fill="#555566" letter-spacing="2">ACTIVE PROCESSES</text>
+
+    <g transform="translate(0, 16)" font-family="'Segoe UI', sans-serif" font-size="9">
+      <circle cx="4" cy="-2" r="3" fill="#22ff88" opacity="0.8"><animate attributeName="opacity" values="0.5;1;0.5" dur="2s" repeatCount="indefinite"/></circle>
+      <text x="14" y="0" fill="#8888a0">orbit-agent</text><text x="180" y="0" fill="#22ff88">aktif</text>
+
+      <circle cx="4" cy="18" r="3" fill="#22ff88" opacity="0.8"><animate attributeName="opacity" values="0.5;1;0.5" dur="2.3s" repeatCount="indefinite"/></circle>
+      <text x="14" y="20" fill="#8888a0">webhook-listener</text><text x="180" y="20" fill="#22ff88">aktif</text>
+
+      <circle cx="4" cy="38" r="3" fill="#22ff88" opacity="0.8"><animate attributeName="opacity" values="0.5;1;0.5" dur="1.8s" repeatCount="indefinite"/></circle>
+      <text x="14" y="40" fill="#8888a0">discord-bot</text><text x="180" y="40" fill="#22ff88">aktif</text>
+
+      <circle cx="4" cy="58" r="3" fill="#00f0ff" opacity="0.8"><animate attributeName="opacity" values="0.5;1;0.5" dur="2.5s" repeatCount="indefinite"/></circle>
+      <text x="14" y="60" fill="#8888a0">roblox-sync</text><text x="180" y="60" fill="#00f0ff">sync</text>
+
+      <circle cx="4" cy="78" r="3" fill="#555566"/><text x="14" y="80" fill="#555566">test-runner</text><text x="180" y="80" fill="#555566">idle</text>
+    </g>
+  </g>
+
+  <!-- RIGHT PANEL: Waveform / Network pulse -->
+  <g transform="translate(280, 52)">
+    <text x="0" y="0" font-family="'Segoe UI', sans-serif" font-size="8" fill="#555566" letter-spacing="2">NETWORK PULSE</text>
+
+    <!-- Waveform -->
+    <g transform="translate(0, 14)">
+      <!-- Wave line 1 -->
+      <path fill="none" stroke="#00f0ff" stroke-width="1.2" opacity="0.6" filter="url(#hg)">
+        <animate attributeName="d"
+          values="M0,40 Q30,20 60,40 Q90,60 120,40 Q150,20 180,40 Q210,60 240,40 Q270,20 300,40 Q330,60 360,40 Q390,20 420,40 Q450,60 480,40 Q510,20 530,40;
+                  M0,40 Q30,55 60,40 Q90,25 120,40 Q150,55 180,40 Q210,25 240,40 Q270,55 300,40 Q330,25 360,40 Q390,55 420,40 Q450,25 480,40 Q510,55 530,40;
+                  M0,40 Q30,15 60,40 Q90,65 120,40 Q150,15 180,40 Q210,65 240,40 Q270,15 300,40 Q330,65 360,40 Q390,15 420,40 Q450,65 480,40 Q510,15 530,40;
+                  M0,40 Q30,20 60,40 Q90,60 120,40 Q150,20 180,40 Q210,60 240,40 Q270,20 300,40 Q330,60 360,40 Q390,20 420,40 Q450,60 480,40 Q510,20 530,40"
+          dur="4s" repeatCount="indefinite"/>
+      </path>
+
+      <!-- Wave line 2 (purple, offset) -->
+      <path fill="none" stroke="#a855f7" stroke-width="0.8" opacity="0.3">
+        <animate attributeName="d"
+          values="M0,40 Q30,50 60,40 Q90,30 120,40 Q150,50 180,40 Q210,30 240,40 Q270,50 300,40 Q330,30 360,40 Q390,50 420,40 Q450,30 480,40 Q510,50 530,40;
+                  M0,40 Q30,25 60,40 Q90,55 120,40 Q150,25 180,40 Q210,55 240,40 Q270,25 300,40 Q330,55 360,40 Q390,25 420,40 Q450,55 480,40 Q510,25 530,40;
+                  M0,40 Q30,50 60,40 Q90,30 120,40 Q150,50 180,40 Q210,30 240,40 Q270,50 300,40 Q330,30 360,40 Q390,50 420,40 Q450,30 480,40 Q510,50 530,40"
+          dur="3s" repeatCount="indefinite"/>
+      </path>
+
+      <!-- Center line -->
+      <line x1="0" y1="40" x2="530" y2="40" stroke="#1a1a28" stroke-width="0.5"/>
+    </g>
+  </g>
+
+  <!-- RIGHT PANEL: Terminal output -->
+  <g transform="translate(280, 156)">
+    <text x="0" y="0" font-family="'Segoe UI', sans-serif" font-size="8" fill="#555566" letter-spacing="2">SYSTEM LOG</text>
+
+    <g transform="translate(0, 16)" font-family="'Segoe UI', sans-serif" font-size="9">
+      <text y="0" fill="#555566">00:31:42</text><text x="55" y="0" fill="#22ff88">✓</text><text x="68" y="0" fill="#8888a0">GitLab webhook alındı — push event</text>
+      <text y="16" fill="#555566">00:31:40</text><text x="55" y="16" fill="#22ff88">✓</text><text x="68" y="16" fill="#8888a0">Bağımlılık taraması tamamlandı</text>
+      <text y="32" fill="#555566">00:31:38</text><text x="55" y="32" fill="#00f0ff">⟳</text><text x="68" y="32" fill="#8888a0">API dokümanları güncelleniyor...</text>
+      <text y="48" fill="#555566">00:31:35</text><text x="55" y="48" fill="#22ff88">✓</text><text x="68" y="48" fill="#8888a0">Discord bot heartbeat — 34ms</text>
+      <text y="64" fill="#555566">00:31:30</text><text x="55" y="64" fill="#22ff88">✓</text><text x="68" y="64" fill="#8888a0">Roblox DataStore sync başarılı</text>
+      <text y="80" fill="#555566">00:31:28</text><text x="55" y="80" fill="#a855f7">→</text><text x="68" y="80" fill="#8888a0">Impact analizi: 0 risk uyarısı</text>
+      <text y="96" fill="#555566">00:31:25</text><text x="55" y="96" fill="#22ff88">✓</text><text x="68" y="96" fill="#8888a0">Tüm servisler sağlıklı</text>
+    </g>
+  </g>
+
+  <!-- Scan line -->
+  <rect x="1" y="37" width="838" height="1.5" rx="1" fill="#00f0ff" opacity="0.03">
+    <animate attributeName="y" values="37;318;37" dur="6s" repeatCount="indefinite"/>
+  </rect>
+
+  <!-- Bottom status bar -->
+  <rect x="0" y="296" width="840" height="24" rx="0" fill="#0d0d14"/>
+  <rect x="0" y="296" width="840" height="1" fill="#1a1a28"/>
+  <rect x="0" y="304" width="840" height="16" rx="0 0 16 16" fill="#0d0d14"/>
+
+  <circle cx="18" cy="308" r="3" fill="#22ff88" filter="url(#hg)"><animate attributeName="opacity" values="0.6;1;0.6" dur="2s" repeatCount="indefinite"/></circle>
+  <text x="28" y="311" font-family="'Segoe UI', sans-serif" font-size="8" fill="#22ff88" letter-spacing="1">ALL SYSTEMS OPERATIONAL</text>
+  <text x="680" y="311" font-family="'Segoe UI', sans-serif" font-size="8" fill="#555566" letter-spacing="1">ORBIT AUTOMATON v2.4.1</text>
+
+  <!-- Corner accents -->
+  <polyline points="8,5 5,5 5,8" fill="none" stroke="#00f0ff" stroke-width="0.6" opacity="0.3"/>
+  <polyline points="832,5 835,5 835,8" fill="none" stroke="#a855f7" stroke-width="0.6" opacity="0.3"/>
+  <polyline points="8,315 5,315 5,312" fill="none" stroke="#a855f7" stroke-width="0.6" opacity="0.3"/>
+  <polyline points="832,315 835,315 835,312" fill="none" stroke="#00f0ff" stroke-width="0.6" opacity="0.3"/>
+</svg>

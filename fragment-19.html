@@ -1,0 +1,404 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+<title>Recovered Fragment 19</title>
+<!-- 01000011 01000001 01010101 01010011 01000001 01001100 00100000 01000110 01000001 01001001 01001100 01010101 01010010 01000101 -->
+<style>
+@import url('https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@300;400&family=Cormorant+Garamond:ital,wght@0,300;1,300&display=swap');
+*{margin:0;padding:0}
+html,body{width:100%;height:100%;overflow:hidden;background:#000}
+canvas{display:block;position:fixed;inset:0;opacity:0;transition:opacity 2.5s}
+canvas.on{opacity:1}
+
+#gate{position:fixed;inset:0;z-index:50;display:flex;align-items:center;justify-content:center;
+cursor:pointer;background:#000}
+#gate .inner{text-align:center}
+#gate .brand{font-family:'IBM Plex Mono',monospace;font-size:clamp(.32rem,.8vw,.42rem);
+font-weight:300;letter-spacing:1.2em;text-transform:uppercase;color:rgba(100,90,75,.1);margin-bottom:6vh}
+#gate .begin{font-family:'IBM Plex Mono',monospace;font-size:clamp(.28rem,.65vw,.35rem);
+font-weight:300;letter-spacing:.6em;text-transform:uppercase;color:rgba(130,120,105,.15);
+border:1px solid rgba(130,120,105,.06);padding:1.2vh 3vw;transition:all .8s}
+#gate .begin:hover{color:rgba(160,145,120,.3);border-color:rgba(130,120,105,.12)}
+#gate.gone{opacity:0;pointer-events:none;transition:opacity 1.5s}
+
+#archive{position:fixed;inset:0;z-index:10;display:flex;align-items:center;justify-content:center;pointer-events:none}
+.t{font-family:'IBM Plex Mono',monospace;color:rgba(0,0,0,0);transition:color 2s;
+line-height:2.4;white-space:pre;position:absolute;text-align:center}
+.t.on{color:rgba(130,120,105,.3)}
+.t.hi{color:rgba(170,155,135,.45)}
+.t.lo{color:rgba(90,80,65,.08)}
+.t.off{color:rgba(0,0,0,0)}
+.head{font-size:clamp(.38rem,1.1vw,.6rem);letter-spacing:.5em;font-weight:300;text-transform:uppercase}
+.name{font-family:'Cormorant Garamond',Georgia,serif;font-size:clamp(1rem,3.5vw,2.4rem);
+font-weight:300;font-style:italic;letter-spacing:.15em}
+.note{font-size:clamp(.3rem,.8vw,.42rem);letter-spacing:.5em;font-weight:300;text-transform:uppercase}
+.sub{font-family:'Cormorant Garamond',Georgia,serif;font-size:clamp(.32rem,.9vw,.5rem);
+font-weight:300;font-style:italic;letter-spacing:.25em}
+
+#scan{position:fixed;inset:0;z-index:5;pointer-events:none;
+background:repeating-linear-gradient(0deg,transparent,transparent 2px,rgba(0,0,0,.03) 2px,rgba(0,0,0,.03) 4px)}
+
+#substrate{position:fixed;top:3vh;left:50%;transform:translateX(-50%);z-index:8;pointer-events:none;
+font-family:'IBM Plex Mono',monospace;font-size:clamp(.22rem,.5vw,.28rem);font-weight:300;
+letter-spacing:1.5em;text-transform:uppercase;color:rgba(0,0,0,0);transition:color 3s}
+#substrate.on{color:rgba(80,72,60,.06)}
+</style>
+</head>
+<body>
+<!-- SUBSTRATE COMPUTATIONAL ANOMALY ARCHIVE — RESEARCH TERMINAL 04 — NODE 7.2 -->
+<!-- CLEARANCE: LEVEL 3 — RESEARCHER IX — SESSION 0x9B11 -->
+<!-- LOG NOTE: Impact acoustics detected 3.2s prior to structural collision. -->
+
+<div id="gate">
+  <div class="inner">
+    <div class="brand">Substrate Archive</div>
+    <div class="begin">Begin observation</div>
+  </div>
+</div>
+
+<div id="substrate">Substrate</div>
+<div id="scan"></div>
+<canvas id="c"></canvas>
+
+<div id="archive">
+  <div id="t0" class="t head">
+Recovered Fragment 19
+
+Archive Date: ████-██-14
+Origin: Computational Substrate
+Classification: Hazardous
+Researcher: IX
+
+Research Notes:
+Fragment 07 was referenced during extraction.
+Original sample no longer stable.</div>
+
+  <div id="t1" class="t name" style="opacity:0">Causal Inversion</div>
+
+  <div id="t2" class="t sub" style="opacity:0">
+Observation:
+Effects preceded their causes by 3.2 seconds.
+This should not be recordable.</div>
+  <div id="t3" class="t note" style="opacity:0">Containment: FAILED</div>
+</div>
+
+<script>
+"use strict";
+/* ═══════════════════════════════════════════
+   RECOVERED FRAGMENT 19 — CAUSAL INVERSION
+   Substrate Computational Anomaly Archive
+   Researcher IX — Extraction Session 0x9B11
+
+   SOUND ENGINE — Pre-causal reverse audio synthesis
+   ═══════════════════════════════════════════ */
+
+const canvas=document.getElementById('c');
+const gl=canvas.getContext('webgl2',{antialias:false});
+if(!gl){document.body.innerHTML='<p style="color:#333;text-align:center;margin-top:45vh;font-family:monospace;font-size:.5rem">WebGL 2 required</p>';throw 0}
+
+const PH={
+  textIn:0,textOut:4.5,silence:6,
+  shapeIn:7,normalEnd:15,
+  preEcho:15,accumulate:18,fullInversion:26,
+  frozen:34,fadeOut:40,
+  nameIn:44,endNote:49,end:55,
+};
+
+/* ─── Procedural Audio Engine ─── */
+let actx,masterGain;
+let subOsc,subGain;
+let reverseClickGain,reverseClickFilter;
+let warpOsc,warpGain;
+let soundReady=false;
+
+function initSound(){
+  actx=new(window.AudioContext||window.webkitAudioContext)();
+  masterGain=actx.createGain();masterGain.gain.value=0;masterGain.connect(actx.destination);
+
+  // Sub bass pitch shifter (reverses frequency ramp)
+  subGain=actx.createGain();subGain.gain.value=0;subGain.connect(masterGain);
+  subOsc=actx.createOscillator();subOsc.type='sine';subOsc.frequency.value=35;
+  subOsc.connect(subGain);subOsc.start();
+
+  // Reverse click filter
+  reverseClickGain=actx.createGain();reverseClickGain.gain.value=0;reverseClickGain.connect(masterGain);
+  reverseClickFilter=actx.createBiquadFilter();reverseClickFilter.type='highpass';reverseClickFilter.frequency.value=1200;
+  reverseClickFilter.connect(reverseClickGain);
+
+  // Time warp resonance
+  warpGain=actx.createGain();warpGain.gain.value=0;warpGain.connect(masterGain);
+  warpOsc=actx.createOscillator();warpOsc.type='sawtooth';warpOsc.frequency.value=110;
+  const warpFilt=actx.createBiquadFilter();warpFilt.type='bandpass';warpFilt.frequency.value=440;warpFilt.Q.value=15;
+  warpOsc.connect(warpFilt);warpFilt.connect(warpGain);warpOsc.start();
+
+  masterGain.gain.setValueAtTime(0,actx.currentTime);
+  masterGain.gain.linearRampToValueAtTime(0.5,actx.currentTime+1);
+  soundReady=true;
+}
+
+// Pre-causal impact tick (occurs BEFORE visual event)
+function triggerPreImpact(){
+  if(!soundReady)return;
+  const now=actx.currentTime;
+  const osc=actx.createOscillator();
+  const gain=actx.createGain();
+  osc.type='sine';
+  osc.frequency.setValueAtTime(600,now);
+  osc.frequency.exponentialRampToValueAtTime(80,now+0.12);
+  gain.gain.setValueAtTime(0.001,now);
+  gain.gain.linearRampToValueAtTime(0.08,now+0.04);
+  gain.gain.exponentialRampToValueAtTime(0.0001,now+0.12);
+  osc.connect(gain);gain.connect(masterGain);
+  osc.start(now);osc.stop(now+0.13);
+}
+
+function driveSound(t){
+  if(!soundReady)return;
+  const now=actx.currentTime;
+  const ss=(a,b,v)=>{v=Math.max(0,Math.min(1,(v-a)/(b-a)));return v*v*(3-2*v)};
+
+  let subLvl=0;
+  if(t>=PH.shapeIn&&t<PH.fadeOut){
+    subLvl=ss(PH.shapeIn,PH.shapeIn+4,t)*0.08;
+    if(t>=PH.preEcho) subLvl=0.08+ss(PH.preEcho,PH.fullInversion,t)*0.12;
+    if(t>=PH.frozen) subLvl=0.2;
+    if(t>PH.fadeOut-3) subLvl*=ss(PH.fadeOut,PH.fadeOut-3,t);
+  }
+  subGain.gain.setTargetAtTime(subLvl,now,0.3);
+
+  // Frequency slides down as inversion deepens
+  const pitch=t>=PH.preEcho?35-ss(PH.preEcho,PH.fullInversion,t)*12:35;
+  subOsc.frequency.setTargetAtTime(pitch,now,0.5);
+
+  let warpLvl=0;
+  if(t>=PH.preEcho&&t<PH.fadeOut){
+    warpLvl=ss(PH.preEcho,PH.fullInversion,t)*0.04;
+    if(t>PH.fadeOut-3) warpLvl*=ss(PH.fadeOut,PH.fadeOut-3,t);
+  }
+  warpGain.gain.setTargetAtTime(warpLvl,now,0.4);
+
+  // Trigger pre-impact sounds BEFORE visual pre-echoes appear
+  if(t>=PH.preEcho-3.2&&t<PH.fullInversion){
+    if(Math.floor(t*1.5)>Math.floor((t-0.016)*1.5)&&Math.random()>0.5){
+      triggerPreImpact();
+    }
+  }
+
+  if(t>=PH.fadeOut+1){
+    masterGain.gain.setTargetAtTime(0,now,1);
+  }
+}
+
+/* ─── Shader ─── */
+const VS=`#version 300 es
+in vec2 a;void main(){gl_Position=vec4(a,0,1);}`;
+
+const FS=`#version 300 es
+precision highp float;
+out vec4 O;
+uniform vec2 R;
+uniform float T;
+uniform float uInversion;
+uniform float uPreCount;
+uniform float uFrozen;
+uniform float uOpacity;
+
+#define STEPS 80
+#define FAR 20.0
+#define EPS 0.001
+
+mat2 rot(float a){float c=cos(a),s=sin(a);return mat2(c,-s,s,c);}
+
+float torusKnot(vec3 p,float time){
+  p.xy*=rot(time*0.08);p.yz*=rot(time*0.05);
+  float r1=1.0,r2=0.35;
+  float a=atan(p.z,p.x);
+  vec3 q=vec3(length(p.xz)-r1,p.y,0.0);
+  q.xy*=rot(a*1.5+time*0.15);
+  return length(q)-r2;
+}
+
+float preDistortion(vec3 p,float futureTime,float age){
+  float futureEntity=torusKnot(p,futureTime);
+  return abs(futureEntity)-0.04-age*0.02;
+}
+
+vec3 scarTrap;
+#define PH_FROZEN_T 34.0
+
+float map(vec3 p){
+  float moveTime=T;
+  if(uFrozen>0.5)moveTime=mix(T,PH_FROZEN_T,uFrozen);
+  float d=torusKnot(p,moveTime);
+  scarTrap=vec3(0.0);
+
+  if(uInversion>0.01){
+    for(int i=1;i<=4;i++){
+      if(float(i)>uPreCount)break;
+      float futureOffset=float(i)*3.2;
+      float futureT=moveTime+futureOffset;
+      float scar=preDistortion(p,futureT,float(i));
+      float strength=uInversion*(1.0-float(i)*0.15);
+
+      if(scar<0.1){
+        if(i==1)scarTrap.x=exp(-scar*15.0)*strength;
+        if(i==2)scarTrap.y=exp(-scar*15.0)*strength;
+        if(i>=3)scarTrap.z=max(scarTrap.z,exp(-scar*15.0)*strength);
+      }
+
+      float k=0.15;
+      float h=clamp(0.5-0.5*(d+scar)/k,0.,1.);
+      d=mix(d,-scar,h*strength*0.3)+k*h*(1.-h)*strength;
+    }
+  }
+  return d;
+}
+
+vec3 calcN(vec3 p){vec2 e=vec2(EPS,0);return normalize(vec3(map(p+e.xyy)-map(p-e.xyy),map(p+e.yxy)-map(p-e.yxy),map(p+e.yyx)-map(p-e.yyx)));}
+float calcAO(vec3 p,vec3 n){float ao=0.,s=1.;for(int i=1;i<=4;i++){float d=0.08*float(i);ao+=(d-map(p+n*d))*s;s*=.4;}return clamp(1.-2.5*ao,0.,1.);}
+
+void main(){
+  vec2 uv=(gl_FragCoord.xy-R*0.5)/R.y;
+  float camAngle=T*0.04;
+  float camDist=3.8+sin(T*0.06)*0.6;
+  vec3 ro=vec3(sin(camAngle)*camDist,sin(T*0.025)*0.5+0.3,cos(camAngle)*camDist);
+  vec3 ta=vec3(0,sin(T*0.02)*0.1,0);
+  vec3 fwd=normalize(ta-ro),rgt=normalize(cross(vec3(0,1,0),fwd)),up=cross(fwd,rgt);
+  vec3 rd=normalize(uv.x*rgt+uv.y*up+1.5*fwd);
+
+  float t=0.0;bool hit=false;vec3 p;
+  for(int i=0;i<STEPS;i++){p=ro+rd*t;float d=map(p);if(abs(d)<EPS){hit=true;break;}if(t>FAR)break;t+=d*0.8;}
+
+  vec3 col=vec3(0.007,0.005,0.009);
+
+  if(hit){
+    vec3 n=calcN(p);float ao=calcAO(p,n);
+    col=vec3(0.11,0.09,0.08);
+    col+=vec3(0.35,0.08,0.03)*scarTrap.x;
+    col+=vec3(0.15,0.04,0.18)*scarTrap.y;
+    col+=vec3(0.05,0.12,0.10)*scarTrap.z;
+
+    float scarTotal=scarTrap.x+scarTrap.y+scarTrap.z;
+    if(scarTotal>0.1){
+      float interference=sin(p.x*20.0+p.y*15.0)*sin(p.z*18.0)*0.04*scarTotal;
+      col+=vec3(interference,interference*0.5,interference*0.3);
+    }
+
+    vec3 ld=normalize(vec3(1.2,1.8,0.8));
+    float diff=max(dot(n,ld),0.0)*0.5+0.12;
+    float spec=pow(max(dot(reflect(-ld,n),-rd),0.0),30.0)*0.12;
+    col=col*diff*ao+spec*vec3(0.5,0.4,0.35);
+
+    float fog=1.0-exp(-t*t*0.01);
+    col=mix(col,vec3(0.007,0.005,0.009),fog);
+  } else {
+    if(uInversion>0.3){
+      float bgScar=torusKnot(ro+rd*4.0,T+6.4);
+      float bgGhost=exp(-abs(bgScar)*12.0)*uInversion*0.015;
+      col+=vec3(bgGhost*0.8,bgGhost*0.2,bgGhost*0.1);
+    }
+  }
+
+  col=col*(2.51*col+0.03)/(col*(2.43*col+0.59)+0.14);
+  float vig=1.0-length(uv)*0.9;col*=smoothstep(0.0,0.8,vig);col*=uOpacity;
+  float grain=fract(sin(dot(gl_FragCoord.xy,vec2(12.9898,78.233))+fract(T))*43758.5453);
+  col+=(grain-0.5)*0.015;
+  col=pow(clamp(col,0.,1.),vec3(0.4545));
+  O=vec4(col,1);
+}
+`;
+
+/* ─── GL ─── */
+function sh(s,t){const o=gl.createShader(t);gl.shaderSource(o,s);gl.compileShader(o);
+if(!gl.getShaderParameter(o,gl.COMPILE_STATUS))console.error(gl.getShaderInfoLog(o));return o}
+const prog=gl.createProgram();
+gl.attachShader(prog,sh(VS,gl.VERTEX_SHADER));
+gl.attachShader(prog,sh(FS,gl.FRAGMENT_SHADER));
+gl.linkProgram(prog);gl.useProgram(prog);
+const bf=gl.createBuffer();gl.bindBuffer(gl.ARRAY_BUFFER,bf);
+gl.bufferData(gl.ARRAY_BUFFER,new Float32Array([-1,-1,1,-1,-1,1,1,1]),gl.STATIC_DRAW);
+const al=gl.getAttribLocation(prog,'a');gl.enableVertexAttribArray(al);gl.vertexAttribPointer(al,2,gl.FLOAT,false,0,0);
+const uR=gl.getUniformLocation(prog,'R'),uT=gl.getUniformLocation(prog,'T');
+const uInv=gl.getUniformLocation(prog,'uInversion');
+const uPre=gl.getUniformLocation(prog,'uPreCount');
+const uFrz=gl.getUniformLocation(prog,'uFrozen');
+const uOp=gl.getUniformLocation(prog,'uOpacity');
+
+function resize(){const d=Math.min(devicePixelRatio,1.5);canvas.width=innerWidth*d;canvas.height=innerHeight*d;gl.viewport(0,0,canvas.width,canvas.height)}
+resize();addEventListener('resize',resize);
+
+/* ─── Director ─── */
+const el=n=>document.getElementById(n);
+const ss=(a,b,t)=>{t=Math.max(0,Math.min(1,(t-a)/(b-a)));return t*t*(3-2*t)};
+
+function direct(t){
+  let inv=0,pre=0,frz=0,op=0;
+
+  if(t>0.3&&t<PH.textOut){el('t0').classList.add('on');el('t0').classList.add('hi')}
+  else if(t>=PH.textOut){el('t0').classList.remove('hi');el('t0').classList.add('off')}
+
+  if(t>=PH.shapeIn&&t<PH.fadeOut){
+    canvas.classList.add('on');op=ss(PH.shapeIn,PH.shapeIn+3,t);
+    if(t>PH.fadeOut-3)op*=ss(PH.fadeOut,PH.fadeOut-3,t);
+  }
+
+  if(t>=PH.preEcho){
+    inv=ss(PH.preEcho,PH.fullInversion,t);
+    pre=ss(PH.preEcho,PH.preEcho+2,t)+ss(PH.accumulate,PH.accumulate+3,t)*2+ss(PH.fullInversion,PH.fullInversion+4,t);
+  }
+
+  if(t>=PH.frozen)frz=ss(PH.frozen,PH.frozen+2,t);
+  if(t>=PH.fadeOut){canvas.classList.remove('on');op=0}
+
+  if(t>=PH.nameIn){el('t1').style.opacity='1';el('t1').classList.add('on');el('t1').classList.add('hi')}
+  if(t>=PH.endNote){
+    el('t2').style.opacity='1';el('t2').classList.add('on');
+    el('t3').style.opacity='1';el('t3').classList.add('on');
+    el('t1').classList.remove('hi');el('t1').classList.add('lo');
+  }
+
+  if(t>PH.shapeIn&&t<PH.fadeOut)el('substrate').classList.add('on');
+  else el('substrate').classList.remove('on');
+
+  return{inv,pre:Math.min(pre,4),frz,op};
+}
+
+/* ─── Gate ─── */
+let started=false;
+document.getElementById('gate').addEventListener('click',()=>{
+  if(started)return;started=true;
+  document.getElementById('gate').classList.add('gone');
+  initSound();
+  startExperience();
+});
+
+function startExperience(){
+  try{
+    let v=JSON.parse(localStorage.getItem('SUBSTRATE_VISITED')||'[]');
+    if(!v.includes('19')){v.push('19');localStorage.setItem('SUBSTRATE_VISITED',JSON.stringify(v));}
+  }catch(e){}
+
+  const t0=performance.now();
+  (function frame(){
+    const t=(performance.now()-t0)*0.001;
+    const s=direct(t);
+    driveSound(t);
+
+    if(s.op>0.005){
+      gl.uniform2f(uR,canvas.width,canvas.height);
+      gl.uniform1f(uT,t);
+      gl.uniform1f(uInv,s.inv);
+      gl.uniform1f(uPre,s.pre);
+      gl.uniform1f(uFrz,s.frz);
+      gl.uniform1f(uOp,s.op);
+      gl.drawArrays(gl.TRIANGLE_STRIP,0,4);
+    }
+    if(t>PH.end+2)location.reload();
+    requestAnimationFrame(frame);
+  })();
+}
+</script>
+</body>
+</html>
