@@ -19,6 +19,7 @@ document.addEventListener('DOMContentLoaded', () => {
   initDatabaseMenu();
   initLanguageSystem();
   initAudioSynth();
+  initLiveGitHubRepos();
 });
 
 /* ─── STARFIELD ─── */
@@ -720,5 +721,23 @@ function initAudioSynth() {
     }
   });
 }
+
+/* ─── LIVE GITHUB REPOS FETCHER ─── */
+async function initLiveGitHubRepos() {
+  try {
+    const res = await fetch('https://api.github.com/users/kaptanbey0/repos?sort=updated&per_page=6');
+    if (!res.ok) return;
+    const repos = await res.json();
+    if (!Array.isArray(repos) || repos.length === 0) return;
+
+    const apisEl = document.getElementById('apis-value');
+    if (apisEl) {
+      apisEl.textContent = repos.length;
+    }
+  } catch (e) {
+    // Silent API fallback
+  }
+}
+
 
 
