@@ -17,6 +17,8 @@ document.addEventListener('DOMContentLoaded', () => {
   initObserverID();
   initSystemEventLog();
   initDatabaseMenu();
+  initLanguageSystem();
+  initAudioSynth();
 });
 
 /* ─── STARFIELD ─── */
@@ -640,4 +642,83 @@ function initDatabaseMenu() {
     }
   });
 }
+
+/* ─── DUAL LANGUAGE SYSTEM (TR / EN) ─── */
+function initLanguageSystem() {
+  const toggleBtn = document.getElementById('lang-toggle-btn');
+  const toggleText = document.getElementById('lang-toggle-text');
+  
+  // Detect browser language or saved preference
+  let currentLang = localStorage.getItem('orbit_lang') || (navigator.language.startsWith('tr') ? 'tr' : 'en');
+
+  function applyLanguage(lang) {
+    currentLang = lang;
+    localStorage.setItem('orbit_lang', lang);
+    document.documentElement.lang = lang;
+
+    if (toggleText) {
+      toggleText.textContent = lang === 'tr' ? '🌐 TR (Türkçe)' : '🌐 EN (English)';
+    }
+
+    // Update all elements with data-tr and data-en attributes
+    const elements = document.querySelectorAll('[data-tr][data-en]');
+    elements.forEach(el => {
+      const text = el.getAttribute(`data-${lang}`);
+      if (text) {
+        if (el.children.length === 0 || el.tagName === 'SPAN' || el.tagName === 'P' || el.tagName === 'H1' || el.tagName === 'H2' || el.tagName === 'BUTTON') {
+          el.textContent = text;
+        }
+      }
+    });
+  }
+
+  applyLanguage(currentLang);
+
+  if (toggleBtn) {
+    toggleBtn.addEventListener('click', () => {
+      const newLang = currentLang === 'tr' ? 'en' : 'tr';
+      applyLanguage(newLang);
+      if (window.orbitSynthBeep) window.orbitSynthBeep(880, 0.05);
+    });
+  }
+}
+
+/* ─── WEB AUDIO SCI-FI SYNTHESIZER ─── */
+function initAudioSynth() {
+  let audioCtx = null;
+
+  window.orbitSynthBeep = function(freq = 600, duration = 0.04) {
+    try {
+      if (!audioCtx) {
+        const AudioContext = window.AudioContext || window.webkitAudioContext;
+        if (AudioContext) audioCtx = new AudioContext();
+      }
+      if (audioCtx && audioCtx.state === 'suspended') {
+        audioCtx.resume();
+      }
+      if (!audioCtx) return;
+
+      const osc = audioCtx.createOscillator();
+      const gain = audioCtx.createGain();
+      osc.type = 'sine';
+      osc.frequency.setValueAtTime(freq, audioCtx.currentTime);
+      gain.gain.setValueAtTime(0.04, audioCtx.currentTime);
+      gain.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + duration);
+      osc.connect(gain);
+      gain.connect(audioCtx.destination);
+      osc.start();
+      osc.stop(audioCtx.currentTime + duration);
+    } catch (e) {
+      // Audio fallback silent
+    }
+  };
+
+  // Add click sound effects to interactive buttons
+  document.addEventListener('click', (e) => {
+    if (e.target.closest('button') || e.target.closest('.database-menu-item') || e.target.closest('.topbar__link')) {
+      if (window.orbitSynthBeep) window.orbitSynthBeep(700, 0.04);
+    }
+  });
+}
+
 
