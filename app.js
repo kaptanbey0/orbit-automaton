@@ -647,30 +647,143 @@ function initDatabaseMenu() {
 }
 
 /* ─── MULTI-LANGUAGE SYSTEM (TR, EN, DE, FR, ES, RU, JA) ─── */
+const I18N = {
+  tr: {
+    nav_db: "> VERİTABANI ERİŞİMİ",
+    status_online: "Çevrimiçi",
+    dash_title: "Kontrol Merkezi",
+    dash_sub: "KaptanBey0 agent durumu ve sistem metrikleri",
+    warning: "⚠️ UYARI: Fragment 14 senkronizasyon dalgası kararsız.",
+    proj_title: "Canlı Projeler & Düğümler",
+    proj_sub: "GitHub API ile otomatik eşlenen projeler & otomasyon sistemleri",
+    lang_title: "Dil & Otomasyon Zekası",
+    lang_sub: "Ultra-hassas JavaScript & Luau desteği · Discord & Roblox otomasyonu",
+    term_title: "Terminal",
+    term_sub: "KaptanBey0 Automaton komut satırı arayüzü"
+  },
+  en: {
+    nav_db: "> ACCESS DATABASE",
+    status_online: "Online",
+    dash_title: "Control Center",
+    dash_sub: "KaptanBey0 agent status and system metrics",
+    warning: "⚠️ WARNING: Fragment 14 synchronization wave unstable.",
+    proj_title: "Live Projects & Nodes",
+    proj_sub: "Real-time synced repositories via GitHub API & automation tools",
+    lang_title: "Language & Automation Intelligence",
+    lang_sub: "Ultra-precise JavaScript & Luau support · Discord & Roblox automation",
+    term_title: "Terminal",
+    term_sub: "KaptanBey0 Automaton command line interface"
+  },
+  de: {
+    nav_db: "> DATENBANK ZUGRIFF",
+    status_online: "Online",
+    dash_title: "Kontrollzentrum",
+    dash_sub: "KaptanBey0 Agentenstatus und Systemmetriken",
+    warning: "⚠️ WARNUNG: Fragment 14 Synchronisationswelle instabil.",
+    proj_title: "Live-Projekte & Knoten",
+    proj_sub: "Echtzeit-synchronisierte Repositorien über GitHub API",
+    lang_title: "Sprach- & Automatisierungsintelligenz",
+    lang_sub: "Präzise JavaScript & Luau Unterstützung",
+    term_title: "Terminal",
+    term_sub: "KaptanBey0 Automaton Befehlszeile"
+  },
+  fr: {
+    nav_db: "> ACCÈS BASE DE DONNÉES",
+    status_online: "En Ligne",
+    dash_title: "Centre de Contrôle",
+    dash_sub: "Statut de l'agent KaptanBey0 et métriques système",
+    warning: "⚠️ ATTENTION: Vague de synchronisation du Fragment 14 instable.",
+    proj_title: "Projets en Direct & Nœuds",
+    proj_sub: "Projets synchronisés en temps réel via l'API GitHub",
+    lang_title: "Intelligence de Langage & Automation",
+    lang_sub: "Support ultra-précis JavaScript et Luau",
+    term_title: "Terminal",
+    term_sub: "Interface de ligne de commande KaptanBey0 Automaton"
+  },
+  es: {
+    nav_db: "> ACCESO A BASE DE DATOS",
+    status_online: "En Línea",
+    dash_title: "Centro de Control",
+    dash_sub: "Estado del agente KaptanBey0 y métricas del sistema",
+    warning: "⚠️ ADVERTENCIA: Onda de sincronización del Fragmento 14 inestable.",
+    proj_title: "Proyectos en Vivo y Nodos",
+    proj_sub: "Proyectos sincronizados en tiempo real mediante la API de GitHub",
+    lang_title: "Inteligencia de Lenguaje y Automatización",
+    lang_sub: "Soporte ultrapreciso para JavaScript y Luau",
+    term_title: "Terminal",
+    term_sub: "Interfaz de línea de comandos KaptanBey0 Automaton"
+  },
+  ru: {
+    nav_db: "> ДОСТУП К БАЗЕ ДАННЫХ",
+    status_online: "В сети",
+    dash_title: "Центр Управления",
+    dash_sub: "Статус агента KaptanBey0 и системные метрики",
+    warning: "⚠️ ПРЕДУПРЕЖДЕНИЕ: Волна синхронизации Фрагмента 14 нестабильна.",
+    proj_title: "Живые Проекты и Узлы",
+    proj_sub: "Синхронизированные в реальном времени репозитории через GitHub API",
+    lang_title: "Язык и Интеллект Автоматизации",
+    lang_sub: "Сверхточная поддержка JavaScript и Luau",
+    term_title: "Терминал",
+    term_sub: "Командная строка KaptanBey0 Automaton"
+  },
+  ja: {
+    nav_db: "> データベースアクセス",
+    status_online: "オンライン",
+    dash_title: "コントロールセンター",
+    dash_sub: "KaptanBey0 エージェントステータスとメトリクス",
+    warning: "⚠️ 警告: フラグメント 14 の同期波が不安定です。",
+    proj_title: "ライブプロジェクトとノード",
+    proj_sub: "GitHub API 経由でリアルタイム同期されるリポジトリ",
+    lang_title: "言語と自動化のインテリジェンス",
+    lang_sub: "超精密な JavaScript および Luau サポート",
+    term_title: "ターミナル",
+    term_sub: "KaptanBey0 Automaton コマンドライン"
+  }
+};
+
 function initLanguageSystem() {
   const selectEl = document.getElementById('lang-select');
-  
   let currentLang = localStorage.getItem('orbit_lang') || (navigator.language.startsWith('tr') ? 'tr' : 'en');
 
   function applyLanguage(lang) {
+    if (!I18N[lang]) lang = 'en';
     currentLang = lang;
     localStorage.setItem('orbit_lang', lang);
     document.documentElement.lang = lang;
 
-    if (selectEl) {
-      selectEl.value = lang;
-    }
+    if (selectEl) selectEl.value = lang;
 
-    const elements = document.querySelectorAll('[data-tr][data-en]');
-    elements.forEach(el => {
-      let text = el.getAttribute(`data-${lang}`);
-      if (!text) text = el.getAttribute('data-en') || el.getAttribute('data-tr');
-      if (text) {
-        if (el.children.length === 0 || el.tagName === 'SPAN' || el.tagName === 'P' || el.tagName === 'H1' || el.tagName === 'H2' || el.tagName === 'BUTTON') {
-          el.textContent = text;
-        }
-      }
-    });
+    const dict = I18N[lang];
+    const navBtn = document.getElementById('nav-db-btn');
+    if (navBtn) navBtn.innerHTML = `<span>${dict.nav_db}</span>`;
+
+    const statusBeacon = document.querySelector('.status-beacon__label');
+    if (statusBeacon) statusBeacon.textContent = dict.status_online;
+
+    // Update section headers dynamically
+    const dashTitle = document.querySelector('#dashboard .glitch-title');
+    if (dashTitle) { dashTitle.textContent = dict.dash_title; dashTitle.setAttribute('data-text', dict.dash_title); }
+    
+    const dashSub = document.querySelector('#dashboard .section__subtitle');
+    if (dashSub) dashSub.textContent = dict.dash_sub;
+
+    const projTitle = document.querySelector('#projects .glitch-title');
+    if (projTitle) { projTitle.textContent = dict.proj_title; projTitle.setAttribute('data-text', dict.proj_title); }
+
+    const projSub = document.querySelector('#projects .section__subtitle');
+    if (projSub) projSub.textContent = dict.proj_sub;
+
+    const langTitle = document.querySelector('#languages .glitch-title');
+    if (langTitle) { langTitle.textContent = dict.lang_title; langTitle.setAttribute('data-text', dict.lang_title); }
+
+    const langSub = document.querySelector('#languages .section__subtitle');
+    if (langSub) langSub.textContent = dict.lang_sub;
+
+    const termTitle = document.querySelector('#terminal .glitch-title');
+    if (termTitle) { termTitle.textContent = dict.term_title; termTitle.setAttribute('data-text', dict.term_title); }
+
+    const termSub = document.querySelector('#terminal .section__subtitle');
+    if (termSub) termSub.textContent = dict.term_sub;
   }
 
   applyLanguage(currentLang);
@@ -683,65 +796,122 @@ function initLanguageSystem() {
   }
 }
 
-/* ─── LIVE GITHUB REPOS FETCHER & DYNAMIC SHOWCASE ─── */
+/* ─── LIVE GITHUB REPOS FETCHER & SHOWCASE ─── */
 async function initLiveGitHubRepos() {
   const container = document.getElementById('github-projects-grid');
+  if (!container) return;
+
+  const defaultProjects = [
+    {
+      name: "orbit-automaton",
+      tag: "⚡ NODE 01 — AUTOMATON CORE",
+      desc: "KaptanBey0 Automaton — Dark Zenith temalı, Substrate lore zekası ve GitLab/GitHub otomasyon portalı.",
+      url: "https://github.com/kaptanbey0/orbit-automaton",
+      lang: "JavaScript / HTML / CSS",
+      stars: 12
+    },
+    {
+      name: "discord-bot-framework",
+      tag: "🤖 NODE 02 — DISCORD BOT",
+      desc: "Discord.js v14 ile geliştirilmiş ölçeklenebilir bot altyapısı ve gelişmiş komut yöneticisi.",
+      url: "https://github.com/kaptanbey0",
+      lang: "JavaScript / Node.js",
+      stars: 8
+    },
+    {
+      name: "roblox-luau-systems",
+      tag: "🎮 NODE 03 — ROBLOX SCRIPTING",
+      desc: "Luau mimarisi ile oyun içi otomasyon, DataStore kaydı ve gerçek zamanlı sunucu event yönetimi.",
+      url: "https://github.com/kaptanbey0",
+      lang: "Luau",
+      stars: 15
+    },
+    {
+      name: "python-automation-suite",
+      tag: "🛠️ NODE 04 — PYTHON AUTOMATION",
+      desc: "Python tabanlı veri işleme modülleri, REST API entegrasyonları ve otomatik sistem araçları.",
+      url: "https://github.com/kaptanbey0",
+      lang: "Python",
+      stars: 6
+    }
+  ];
+
+  function renderProjects(items) {
+    container.innerHTML = '';
+    items.forEach((item) => {
+      const card = document.createElement('div');
+      card.className = 'project-card';
+      card.innerHTML = `
+        <span class="project-card__tag">${item.tag || '⚡ GITHUB NODE'}</span>
+        <h3>${item.name}</h3>
+        <p>${item.desc || item.description || 'KaptanBey0 otomasyon reposu ve yazılım düğümü.'}</p>
+        <div class="project-card__footer">
+          <span style="color:var(--neon-cyan);">★ ${item.stars || item.stargazers_count || 0} STAR &middot; ${item.lang || item.language || 'JS/Luau'}</span>
+          <a href="${item.url || item.html_url || 'https://github.com/kaptanbey0'}" target="_blank" style="color:var(--neon-green); text-decoration:underline;">GitHub Node →</a>
+        </div>
+      `;
+      container.appendChild(card);
+    });
+  }
+
+  // Initial render with default showcase projects
+  renderProjects(defaultProjects);
+
+  // Fetch live repos from GitHub API
   try {
     const res = await fetch('https://api.github.com/users/kaptanbey0/repos?sort=updated&per_page=6');
-    if (!res.ok) return;
-    const repos = await res.json();
-    if (!Array.isArray(repos) || repos.length === 0) return;
+    if (res.ok) {
+      const repos = await res.json();
+      if (Array.isArray(repos) && repos.length > 0) {
+        const apisEl = document.getElementById('apis-value');
+        if (apisEl) apisEl.textContent = repos.length;
 
-    const apisEl = document.getElementById('apis-value');
-    if (apisEl) {
-      apisEl.textContent = repos.length;
+        const liveMapped = repos.map((r, i) => ({
+          name: r.name,
+          tag: `⚡ GITHUB NODE 0${i + 1}`,
+          desc: r.description || 'KaptanBey0 kamuya açık GitHub reposu.',
+          url: r.html_url,
+          lang: r.language || 'JavaScript',
+          stars: r.stargazers_count
+        }));
+        renderProjects(liveMapped);
+      }
     }
+  } catch (e) {
+    // Keep fallback showcase
+  }
+}
 
-    if (container) {
-      container.innerHTML = '';
-      repos.forEach((repo, idx) => {
-        const card = document.createElement('div');
-        card.className = 'project-card';
-        card.innerHTML = `
-          <span class="project-card__tag">⚡ REPO DÜĞÜM 0${idx + 1}</span>
-          <h3>${repo.name}</h3>
-          <p>${repo.description || 'Orbit Automaton modülü ve otomasyon reposu.'}</p>
-          <div class="project-card__footer">
-            <span style="color:var(--neon-cyan);">★ ${repo.stargazers_count || 0} STAR &middot; ${repo.language || 'JS/Lua'}</span>
-            <a href="${repo.html_url}" target="_blank" style="color:var(--neon-green); text-decoration:underline;">GitHub Node →</a>
-          </div>
-        `;
-        container.appendChild(card);
-      });
 /* ─── CINEMATIC BOOT LOADER ─── */
 function initBootLoader() {
   const loader = document.getElementById('boot-loader');
   const fill = document.getElementById('boot-progress-fill');
   const status = document.getElementById('boot-status');
-  if (!loader || !fill || !status) return;
+  if (!loader) return;
 
   const steps = [
-    { p: 25, txt: 'MOUNTING SUBSTRATE ARCHIVE... 25%' },
-    { p: 55, txt: 'AUTHENTICATING KAPTANBEY0 CORE... 55%' },
-    { p: 85, txt: 'SYNCHRONIZING REPOSITORY NODES... 85%' },
+    { p: 30, txt: 'MOUNTING SUBSTRATE ARCHIVE... 30%' },
+    { p: 65, txt: 'AUTHENTICATING KAPTANBEY0 CORE... 65%' },
     { p: 100, txt: 'KAPTANBEY0 AUTOMATON READY 100%' }
   ];
 
-  let currentStep = 0;
-  const interval = setInterval(() => {
-    if (currentStep < steps.length) {
-      fill.style.width = steps[currentStep].p + '%';
-      status.textContent = steps[currentStep].txt;
-      if (window.orbitSynthBeep) window.orbitSynthBeep(500 + currentStep * 150, 0.03);
-      currentStep++;
+  let stepIdx = 0;
+  const timer = setInterval(() => {
+    if (stepIdx < steps.length) {
+      if (fill) fill.style.width = steps[stepIdx].p + '%';
+      if (status) status.textContent = steps[stepIdx].txt;
+      if (window.orbitSynthBeep) window.orbitSynthBeep(400 + stepIdx * 200, 0.03);
+      stepIdx++;
     } else {
-      clearInterval(interval);
+      clearInterval(timer);
       setTimeout(() => {
         loader.classList.add('loaded');
-        if (window.orbitSynthBeep) window.orbitSynthBeep(1200, 0.08);
-      }, 300);
+        setTimeout(() => {
+          loader.style.display = 'none';
+        }, 600);
+      }, 200);
     }
-  }, 350);
+  }, 250);
 }
 
 /* ─── DISCORD NICK COPY BUTTON (kaptanbey01) ─── */
@@ -764,7 +934,6 @@ function initDiscordCopyBtn() {
         btn.style.color = '';
       }, 2500);
 
-      // Open Discord user URL or app fallback
       setTimeout(() => {
         window.open('https://discord.com/users/' + nick, '_blank');
       }, 600);
@@ -773,6 +942,7 @@ function initDiscordCopyBtn() {
     });
   });
 }
+
 
 
 
