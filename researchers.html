@@ -1,9 +1,9 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="tr">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Researcher Database — Substrate Personnel Records</title>
+  <title>ARAŞTIRMACI VERİTABANI — KaptanBey0 Automaton</title>
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@300;400;600;700&family=IBM+Plex+Mono:ital,wght@0,300;0,400;0,600;1,400&display=swap" rel="stylesheet" />
@@ -11,27 +11,28 @@
   <style>
     body {
       background-color: #050508;
-      color: #94a3b8;
+      color: #e2e8f0;
       font-family: 'IBM Plex Mono', 'JetBrains Mono', monospace;
-      padding: 6vh 6vw;
-      max-width: 860px;
+      padding: 40px 6vw;
+      max-width: 900px;
       margin: 0 auto;
-      line-height: 2;
+      line-height: 1.8;
+      font-size: 0.95rem;
     }
     .header-box {
-      border-bottom: 1px solid rgba(0, 240, 255, 0.2);
+      border-bottom: 1px solid rgba(0, 240, 255, 0.3);
       padding-bottom: 20px;
       margin-bottom: 30px;
     }
     .title-sub {
       font-size: 0.75rem;
-      letter-spacing: 0.25em;
+      letter-spacing: 0.2em;
       color: var(--neon-purple);
       text-transform: uppercase;
     }
     .main-head {
       font-size: 1.8rem;
-      color: #f8fafc;
+      color: #fff;
       font-weight: 700;
       letter-spacing: 0.1em;
     }
@@ -39,35 +40,33 @@
       display: flex;
       gap: 15px;
       margin-bottom: 30px;
-      font-size: 0.8rem;
     }
-    .nav-bar-sub a {
+    .nav-btn {
       color: var(--neon-cyan);
       text-decoration: none;
-      border: 1px solid rgba(0, 240, 255, 0.2);
-      padding: 4px 12px;
+      border: 1px solid rgba(0, 240, 255, 0.3);
+      background: rgba(0, 240, 255, 0.08);
+      padding: 8px 16px;
       border-radius: 4px;
+      font-weight: 600;
+      font-size: 0.85rem;
       transition: all 0.3s;
     }
-    .nav-bar-sub a:hover {
-      background: rgba(0, 240, 255, 0.1);
-      box-shadow: 0 0 10px rgba(0, 240, 255, 0.2);
+    .nav-btn:hover {
+      background: rgba(0, 240, 255, 0.2);
+      box-shadow: 0 0 15px rgba(0, 240, 255, 0.3);
+      transform: translateX(-3px);
     }
     .personnel-card {
-      background: rgba(13, 13, 20, 0.7);
-      border: 1px solid rgba(255, 255, 255, 0.08);
-      border-left: 3px solid var(--neon-cyan);
+      background: rgba(13, 13, 20, 0.9);
+      border: 1px solid rgba(0, 240, 255, 0.2);
+      border-left: 4px solid var(--neon-cyan);
       padding: 24px;
       margin: 24px 0;
-      border-radius: 4px;
-      position: relative;
+      border-radius: 6px;
     }
-    .personnel-card--missing {
-      border-left-color: var(--neon-red);
-    }
-    .personnel-card--omega {
-      border-left-color: var(--neon-purple);
-    }
+    .personnel-card--missing { border-left-color: var(--neon-red); }
+    .personnel-card--omega { border-left-color: var(--neon-purple); }
     .card-header {
       display: flex;
       justify-content: space-between;
@@ -77,15 +76,15 @@
     .researcher-name {
       font-size: 1.1rem;
       font-weight: 700;
-      color: #f1f5f9;
+      color: #fff;
       letter-spacing: 0.1em;
     }
     .status-tag {
-      font-size: 0.7rem;
-      padding: 2px 8px;
-      border-radius: 3px;
-      letter-spacing: 0.15em;
-      font-weight: 600;
+      font-size: 0.75rem;
+      padding: 3px 10px;
+      border-radius: 4px;
+      letter-spacing: 0.1em;
+      font-weight: 700;
     }
     .status-tag--missing { background: rgba(255, 68, 102, 0.15); color: var(--neon-red); border: 1px solid var(--neon-red); }
     .status-tag--active { background: rgba(34, 255, 136, 0.15); color: var(--neon-green); border: 1px solid var(--neon-green); }
@@ -93,41 +92,42 @@
     .status-tag--omega { background: rgba(168, 85, 247, 0.15); color: var(--neon-purple); border: 1px solid var(--neon-purple); }
     .quote-box {
       font-style: italic;
-      color: #e2e8f0;
-      border-left: 2px solid var(--neon-purple);
-      padding-left: 15px;
+      color: #f1f5f9;
+      border-left: 3px solid var(--neon-purple);
+      padding: 12px 18px;
       margin: 15px 0;
-      background: rgba(168, 85, 247, 0.05);
-      padding: 10px 15px;
+      background: rgba(168, 85, 247, 0.08);
+      border-radius: 0 4px 4px 0;
     }
   </style>
 </head>
 <body>
 
-  <div class="header-box">
-    <div class="title-sub">SUBSTRATE PERSONNEL DATABASE // RESTRICTED FILE</div>
-    <h1 class="main-head">RESEARCHER DATABASE</h1>
+  <div class="nav-bar-sub">
+    <a href="index.html" class="nav-btn">← KaptanBey0 Core Ana Sayfa</a>
+    <a href="archive.html" class="nav-btn">Substrate Arşivi →</a>
   </div>
 
-  <div class="nav-bar-sub">
-    <a href="index.html">← Orbit Core Control Center</a>
-    <a href="archive.html">← Substrate Archive</a>
+  <div class="header-box">
+    <div class="title-sub">SUBSTRATE PERSONEL KAYITLARI // RESTRICTED DATABASE</div>
+    <h1 class="main-head">ARAŞTIRMACI VERİTABANI</h1>
   </div>
 
   <!-- RESEARCHER A-07 -->
   <div class="personnel-card personnel-card--missing">
     <div class="card-header">
       <span class="researcher-name">RESEARCHER A-07</span>
-      <span class="status-tag status-tag--missing">STATUS: MISSING</span>
+      <span class="status-tag status-tag--missing">DURUM: KAYIP (MISSING)</span>
     </div>
     <div>
-      <strong>Clearance:</strong> LEVEL 5 (OMEGA)<br/>
-      <strong>Assigned Fragments:</strong> 01, 02, 11, 14, 00 [CLASSIFIED]<br/>
-      <strong>Last Known Transmission:</strong>
+      <strong>Yetki Seviyesi:</strong> LEVEL 5 (OMEGA)<br/>
+      <strong>Atanan Fragment'lar:</strong> 01, 02, 11, 14, 00 [RESTRICTED]<br/>
+      <strong>Son İletilen Mesaj:</strong>
       <div class="quote-box">
-        "I found the original orbit. It was not created. It was remembered."
+        "Orijinal yörüngeyi buldum. O yaratılmadı. O hatırlandı."<br/>
+        <em>("I found the original orbit. It was not created. It was remembered.")</em>
       </div>
-      <strong>Notes:</strong> Disappeared during the extraction attempt of Fragment 14. Logs written after disappearance display severe temporal echo resonance.
+      <strong>Notlar:</strong> Fragment 14 çıkarma girişimi sırasında kayboldu. Disparition sonrasında yazılan loglar kronolojik titreşim gösteriyor.
     </div>
   </div>
 
@@ -135,22 +135,22 @@
   <div class="personnel-card">
     <div class="card-header">
       <span class="researcher-name">RESEARCHER IX</span>
-      <span class="status-tag status-tag--corrupted">STATUS: DATA CORRUPTED</span>
+      <span class="status-tag status-tag--corrupted">DURUM: VERİ BOZULMUŞ</span>
     </div>
     <div>
-      <strong>Clearance:</strong> LEVEL 3<br/>
-      <strong>Assigned Fragments:</strong> 19, 22, 23<br/>
-      <strong>Recovery Progress:</strong>
-      <div class="recovery-progress">
+      <strong>Yetki Seviyesi:</strong> LEVEL 3<br/>
+      <strong>Atanan Fragment'lar:</strong> 19, 22, 23<br/>
+      <strong>Kurtarma İlerlemesi:</strong>
+      <div class="recovery-progress" style="margin-top: 10px;">
         <div class="recovery-progress__bar-bg">
           <div class="recovery-progress__bar-fill"></div>
         </div>
-        <span style="font-size: 0.75rem; color: var(--neon-red);">17% RECOVERED</span>
+        <span style="font-size: 0.75rem; color: var(--neon-red); font-weight: bold;">%17 KURTARILDI</span>
       </div>
       <div class="quote-box">
-        "I heard the impact sound before I entered the deck. I am writing this note 3 hours ago. Do not let A-07 open the door."
+        "Gözlem güvertesine girmeden önce darbe sesini duydum. Bu notu 3 saat önce yazıyorum. A-07'nin kapıyı açmasına izin vermeyin."
       </div>
-      <strong>Notes:</strong> Affected by temporal proximity during Fragment 19 extraction. System is reconstructing lost log fragments.
+      <strong>Notlar:</strong> Fragment 19 çıkarma işleminde zamansal yakınlıktan etkilendi.
     </div>
   </div>
 
@@ -158,16 +158,16 @@
   <div class="personnel-card">
     <div class="card-header">
       <span class="researcher-name">RESEARCHER EM</span>
-      <span class="status-tag status-tag--active">STATUS: ACTIVE / SYSTEMATIC</span>
+      <span class="status-tag status-tag--active">DURUM: AKTİF / SİSTEMATİK</span>
     </div>
     <div>
-      <strong>Clearance:</strong> LEVEL 3<br/>
-      <strong>Assigned Fragments:</strong> 03, 07<br/>
-      <strong>Log Style:</strong> Cold, mathematical, strictly objective.<br/>
+      <strong>Yetki Seviyesi:</strong> LEVEL 3<br/>
+      <strong>Atanan Fragment'lar:</strong> 03, 07<br/>
+      <strong>Log Tarzı:</strong> Soğuk, matematiksel ve kesinlikle objektif.<br/>
       <div class="quote-box">
-        "Fragment 07 geometry exhibits non-reconstructable memory cycles. Recommend archiving without physical probing."
+        "Fragment 07 geometrisi yeniden oluşturulamaz bellek döngüleri sergiliyor. Fiziksel müdahale olmadan arşivlenmesini öneriyorum."
       </div>
-      <strong>Notes:</strong> Authored initial containment specifications for Echo Topology.
+      <strong>Notlar:</strong> Echo Topolojisi için ilk muhafaza şartnamesini kaleme aldı.
     </div>
   </div>
 
@@ -175,21 +175,21 @@
   <div class="personnel-card personnel-card--omega">
     <div class="card-header">
       <span class="researcher-name">RESEARCHER Ω</span>
-      <span class="status-tag status-tag--omega">STATUS: UNCONTACTABLE (NODE 7.2)</span>
+      <span class="status-tag status-tag--omega">DURUM: ULAŞILAMIYOR (NODE 7.2)</span>
     </div>
     <div>
-      <strong>Clearance:</strong> LEVEL 4<br/>
-      <strong>Assigned Fragments:</strong> 31, 00<br/>
-      <strong>Log Style:</strong> Archaeological, solemn, philosophical.<br/>
+      <strong>Yetki Seviyesi:</strong> LEVEL 4<br/>
+      <strong>Atanan Fragment'lar:</strong> 31, 00<br/>
+      <strong>Log Tarzı:</strong> Arkeolojik, vakur, felsefi.<br/>
       <div class="quote-box">
-        "We are not discovering new laws. We are digging up the corpses of physical laws that died before this universe was constructed."
+        "Yeni yasalar keşfetmiyoruz. Bu evren inşa edilmeden önce ölen fizik yasalarının cesetlerini kazıyoruz."
       </div>
-      <strong>Notes:</strong> Specializes in extinct geometry and space scars. Remaining logs suggest deep solitude in terminal node 7.2.
+      <strong>Notlar:</strong> Yok olmuş geometri ve uzay izleri uzmanı. Derin terminal düğümünde yalnız olduğu düşünülüyor.
     </div>
   </div>
 
-  <p style="text-align:center; font-size: 0.7rem; color: #475569; margin-top: 50px; letter-spacing: 0.2em;">
-    SUBSTRATE PERSONNEL DATABASE &middot; DO NOT ALTER RECORD HISTORY
+  <p style="text-align:center; font-size: 0.75rem; color: #64748b; margin-top: 50px; letter-spacing: 0.2em;">
+    KAPTANBEY0 AUTOMATON PERSONNEL DATABASE &middot; DO NOT ALTER RECORD HISTORY
   </p>
 
 </body>

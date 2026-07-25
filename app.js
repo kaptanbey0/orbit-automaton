@@ -22,6 +22,7 @@ document.addEventListener('DOMContentLoaded', () => {
   initLanguageSystem();
   initAudioSynth();
   initLiveGitHubRepos();
+  initAudioAmbientSynth();
 });
 
 /* ─── STARFIELD ─── */
@@ -889,9 +890,17 @@ function initBootLoader() {
   const status = document.getElementById('boot-status');
   if (!loader) return;
 
+  // Auto hide immediately after 600ms to guarantee no freeze
+  setTimeout(() => {
+    loader.classList.add('loaded');
+    setTimeout(() => {
+      loader.style.display = 'none';
+    }, 400);
+  }, 600);
+
   const steps = [
-    { p: 30, txt: 'MOUNTING SUBSTRATE ARCHIVE... 30%' },
-    { p: 65, txt: 'AUTHENTICATING KAPTANBEY0 CORE... 65%' },
+    { p: 40, txt: 'MOUNTING SUBSTRATE ARCHIVE... 40%' },
+    { p: 80, txt: 'AUTHENTICATING KAPTANBEY0 CORE... 80%' },
     { p: 100, txt: 'KAPTANBEY0 AUTOMATON READY 100%' }
   ];
 
@@ -904,14 +913,8 @@ function initBootLoader() {
       stepIdx++;
     } else {
       clearInterval(timer);
-      setTimeout(() => {
-        loader.classList.add('loaded');
-        setTimeout(() => {
-          loader.style.display = 'none';
-        }, 600);
-      }, 200);
     }
-  }, 250);
+  }, 150);
 }
 
 /* ─── DISCORD NICK COPY BUTTON (kaptanbey01) ─── */
@@ -942,6 +945,66 @@ function initDiscordCopyBtn() {
     });
   });
 }
+
+/* ─── AMBIENT SCI-FI SYNTH MUSIC GENERATOR ─── */
+function initAudioAmbientSynth() {
+  const btn = document.getElementById('ambient-music-btn');
+  if (!btn) return;
+
+  let isPlaying = false;
+  let audioCtx = null;
+  let osc1 = null, osc2 = null, gainNode = null;
+
+  btn.addEventListener('click', () => {
+    if (!isPlaying) {
+      try {
+        const AudioContext = window.AudioContext || window.webkitAudioContext;
+        if (!audioCtx) audioCtx = new AudioContext();
+        if (audioCtx.state === 'suspended') audioCtx.resume();
+
+        osc1 = audioCtx.createOscillator();
+        osc2 = audioCtx.createOscillator();
+        gainNode = audioCtx.createGain();
+
+        osc1.type = 'triangle';
+        osc2.type = 'sine';
+
+        osc1.frequency.setValueAtTime(110, audioCtx.currentTime); // A2 chord
+        osc2.frequency.setValueAtTime(164.81, audioCtx.currentTime); // E3 chord
+
+        gainNode.gain.setValueAtTime(0.01, audioCtx.currentTime);
+        gainNode.gain.exponentialRampToValueAtTime(0.05, audioCtx.currentTime + 2);
+
+        osc1.connect(gainNode);
+        osc2.connect(gainNode);
+        gainNode.connect(audioCtx.destination);
+
+        osc1.start();
+        osc2.start();
+
+        isPlaying = true;
+        btn.innerHTML = '<span>🎵 AMBIENT: ON</span>';
+        btn.style.borderColor = 'var(--neon-purple)';
+        btn.style.color = 'var(--neon-purple)';
+      } catch (e) {
+        // Fallback
+      }
+    } else {
+      if (gainNode && audioCtx) {
+        gainNode.gain.exponentialRampToValueAtTime(0.0001, audioCtx.currentTime + 1);
+        setTimeout(() => {
+          if (osc1) osc1.stop();
+          if (osc2) osc2.stop();
+        }, 1000);
+      }
+      isPlaying = false;
+      btn.innerHTML = '<span>🎵 AMBIENT: OFF</span>';
+      btn.style.borderColor = '';
+      btn.style.color = '';
+    }
+  });
+}
+
 
 
 
