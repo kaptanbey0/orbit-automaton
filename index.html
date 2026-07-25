@@ -3,31 +3,71 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <meta name="description" content="KaptanBey0 Automaton — Dark Zenith teması, JavaScript/Luau otomasyon zekası ve anomali arşivi." />
-  <title>KaptanBey0 Automaton — Dark Zenith</title>
+  <meta name="description" content="KaptanBey0 Automaton — Dark Zenith temalı modern otomasyon, Discord bot mimarisi, Roblox Luau ve anomali portföyü." />
+  <title>KaptanBey0 Automaton — Dark Zenith Portfolio</title>
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@300;400;500;600;700&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
   <link rel="stylesheet" href="style.css" />
+  <style>
+    .hero-section {
+      padding: 40px 0 60px;
+      text-align: center;
+      position: relative;
+    }
+    .hero-banner-container {
+      margin-bottom: 30px;
+      border-radius: 12px;
+      overflow: hidden;
+      border: 1px solid rgba(0, 240, 255, 0.3);
+      box-shadow: 0 0 35px rgba(0, 240, 255, 0.25);
+    }
+    .hero-title-box {
+      margin: 20px 0;
+    }
+    .hero-avatar-logo {
+      width: 100px;
+      height: 100px;
+      border-radius: 50%;
+      border: 3px solid var(--neon-cyan);
+      box-shadow: 0 0 25px var(--neon-cyan);
+      margin-bottom: 15px;
+      object-fit: cover;
+    }
+    .visual-cards-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+      gap: 24px;
+      margin: 40px 0;
+    }
+    .visual-card-item {
+      background: rgba(13, 13, 20, 0.85);
+      border: 1px solid rgba(0, 240, 255, 0.2);
+      border-radius: var(--radius-md);
+      padding: 20px;
+      backdrop-filter: blur(10px);
+      transition: all 0.35s var(--ease-spring);
+    }
+    .visual-card-item:hover {
+      transform: translateY(-6px);
+      border-color: var(--neon-purple);
+      box-shadow: 0 0 30px rgba(168, 85, 247, 0.3);
+    }
+    .visual-card-item img {
+      width: 100%;
+      height: auto;
+      border-radius: 6px;
+    }
+    .kaptan-logo-img {
+      width: 32px;
+      height: 32px;
+      border-radius: 50%;
+      border: 1px solid var(--neon-cyan);
+      margin-right: 10px;
+    }
+  </style>
 </head>
 <body>
-
-  <!-- ═══ HIGH-TECH CINEMATIC BOOT LOADER ═══ -->
-  <div id="boot-loader">
-    <div class="boot-content">
-      <div class="boot-logo">
-        <div class="boot-ring boot-ring-1"></div>
-        <div class="boot-ring boot-ring-2"></div>
-        <div class="boot-core"></div>
-      </div>
-      <h1 class="boot-title">KAPTANBEY0 <span>AUTOMATON</span></h1>
-      <p class="boot-sub">Dark Zenith Core System Initializing...</p>
-      <div class="boot-progress-bar">
-        <div class="boot-progress-fill" id="boot-progress-fill"></div>
-      </div>
-      <div class="boot-status" id="boot-status">MOUNTING SUBSTRATE ARCHIVE... 0%</div>
-    </div>
-  </div>
 
   <!-- ═══ STARFIELD CANVAS ═══ -->
   <canvas id="starfield"></canvas>
@@ -38,21 +78,17 @@
   <!-- ═══ HEADER / NAVBAR ═══ -->
   <header class="topbar" id="topbar">
     <div class="topbar__left">
-      <div class="orbit-logo" id="orbit-logo" title="Click 3x to decrypt secret fragment">
-        <div class="orbit-ring orbit-ring--outer"></div>
-        <div class="orbit-ring orbit-ring--inner"></div>
-        <div class="orbit-core"></div>
-      </div>
+      <img src="assets/logo.png" alt="KaptanBey0 Logo" class="kaptan-logo-img" id="orbit-logo" title="Click 3x for secret fragment" />
       <div class="topbar__title">
         <span class="topbar__name">KaptanBey0 Automaton</span>
         <span class="topbar__version">v2.4.1 &middot; Dark Zenith</span>
       </div>
     </div>
     <nav class="topbar__nav">
-      <a href="#dashboard" class="topbar__link active" data-section="dashboard">Dashboard</a>
+      <a href="#hero" class="topbar__link active" data-section="hero">Ana Sayfa</a>
+      <a href="#dashboard" class="topbar__link" data-section="dashboard">Kontrol</a>
       <a href="#projects" class="topbar__link" data-section="projects">Projeler</a>
       <a href="#languages" class="topbar__link" data-section="languages">Diller</a>
-      <a href="#vision" class="topbar__link" data-section="vision">Vizyon</a>
       <a href="#terminal" class="topbar__link" data-section="terminal">Terminal</a>
     </nav>
     <div class="topbar__right">
@@ -78,12 +114,12 @@
           <option value="ja">JA (日本語)</option>
         </select>
       </div>
-      <button class="nav-database-btn" id="nav-db-btn" data-tr="&gt; VERİTABANI ERİŞİMİ" data-en="&gt; ACCESS DATABASE">
+      <button class="nav-database-btn" id="nav-db-btn">
         <span>&gt; ACCESS DATABASE</span>
       </button>
       <div class="status-beacon status-beacon--online" id="status-beacon" style="margin-left: 8px;">
         <span class="status-beacon__dot"></span>
-        <span class="status-beacon__label" data-tr="Çevrimiçi" data-en="Online">Çevrimiçi</span>
+        <span class="status-beacon__label">Çevrimiçi</span>
       </div>
     </div>
   </header>
@@ -92,17 +128,16 @@
   <div class="database-menu-modal" id="database-modal">
     <div class="database-menu-card">
       <div class="database-menu-card__title">
-        <span>&gt; ORBIT ARCHIVE DATABASE</span>
+        <span>&gt; KAPTANBEY0 ARCHIVE DATABASE</span>
         <button id="close-db-modal" style="background:none; border:none; color:var(--neon-red); cursor:pointer; font-family:var(--font-mono); font-size:1.1rem;">[X]</button>
       </div>
       <div class="database-menu-card__list">
-        <a href="index.html" class="database-menu-item"><span class="database-menu-item__num">01.</span> Orbit Control Dashboard <span>[ACTIVE]</span></a>
-        <a href="archive.html" class="database-menu-item"><span class="database-menu-item__num">02.</span> Substrate Archive <span>[INDEXED]</span></a>
+        <a href="index.html" class="database-menu-item"><span class="database-menu-item__num">01.</span> KaptanBey0 Control Center <span>[ACTIVE]</span></a>
+        <a href="archive.html" class="database-menu-item"><span class="database-menu-item__num">02.</span> Substrate Anomaly Archive <span>[INDEXED]</span></a>
         <a href="researchers.html" class="database-menu-item"><span class="database-menu-item__num">03.</span> Researchers Database <span>[RESTRICTED]</span></a>
-        <a href="phenomena.html" class="database-menu-item"><span class="database-menu-item__num">04.</span> Phenomena Catalog <span>[31 ITEMS]</span></a>
+        <a href="phenomena.html" class="database-menu-item"><span class="database-menu-item__num">04.</span> Phenomena 3D Catalog <span>[ACTIVE]</span></a>
         <a href="impossibilia.html" class="database-menu-item"><span class="database-menu-item__num">05.</span> Impossible Objects Vault <span>[CONTAINED]</span></a>
-        <a href="antigravity.html" class="database-menu-item"><span class="database-menu-item__num">06.</span> Antigravity Research Files <span>[ONLINE]</span></a>
-        <a href="github-universe.html" class="database-menu-item"><span class="database-menu-item__num">07.</span> GitHub External Node <span>[CONNECTED]</span></a>
+        <a href="github-universe.html" class="database-menu-item"><span class="database-menu-item__num">06.</span> GitHub External 3D Node <span>[CONNECTED]</span></a>
         <a href="fragment-00.html" class="database-menu-item" style="border-color: rgba(255,0,85,0.4); background: rgba(255,0,85,0.05);"><span class="database-menu-item__num" style="color:#ff0055;">00.</span> Fragment 00 (Origin Point) <span style="color:#ff0055;">[CLASSIFIED]</span></a>
       </div>
     </div>
@@ -111,14 +146,43 @@
   <!-- ═══ MAIN CONTENT ═══ -->
   <main class="main">
 
-    <!-- ── SECTION: DASHBOARD ── -->
+    <!-- ── SECTION 0: HERO SHOWCASE ── -->
+    <section class="section section--hero hero-section" id="hero">
+      <div class="hero-banner-container">
+        <img src="assets/header.svg" alt="KaptanBey0 Automaton Header" style="width: 100%; display: block;" />
+      </div>
+
+      <img src="assets/logo.png" alt="KaptanBey0 Avatar" class="hero-avatar-logo" />
+      <h1 class="glitch-title" data-text="KAPTANBEY0 — DARK ZENITH" style="font-size: 2.2rem; color: #fff;">KAPTANBEY0 — DARK ZENITH</h1>
+      <p style="font-family: var(--font-mono); color: var(--neon-cyan); font-size: 0.95rem; margin-top: 8px;">
+        🤖 Discord Bot Mimarisi &middot; 🎮 Roblox Luau Scripting &middot; 🛠️ Otonom Sistemler
+      </p>
+
+      <!-- VISUAL CARDS GRID SHOWCASE -->
+      <div class="visual-cards-grid">
+        <div class="visual-card-item">
+          <h3 style="font-family: var(--font-mono); color: var(--neon-purple); font-size: 0.9rem; margin-bottom: 12px;">📊 PROFİL KARTI</h3>
+          <img src="assets/profile-card.svg" alt="KaptanBey0 Profile Card" />
+        </div>
+        <div class="visual-card-item">
+          <h3 style="font-family: var(--font-mono); color: var(--neon-cyan); font-size: 0.9rem; margin-bottom: 12px;">🎯 YETENEK RADARI</h3>
+          <img src="assets/skill-radar.svg" alt="KaptanBey0 Skill Radar" />
+        </div>
+        <div class="visual-card-item">
+          <h3 style="font-family: var(--font-mono); color: var(--neon-green); font-size: 0.9rem; margin-bottom: 12px;">🖥️ SİSTEM MONİTÖRÜ</h3>
+          <img src="assets/system-monitor.svg" alt="System Monitor" />
+        </div>
+      </div>
+    </section>
+
+    <!-- ── SECTION 1: DASHBOARD / KONTROL MERKEZİ ── -->
     <section class="section section--dashboard" id="dashboard">
       
       <!-- ORBIT CORE BANNER -->
       <div class="orbit-core-banner">
         <div class="orbit-core-banner__header">
           <div class="orbit-core-banner__title">
-            <span style="color:var(--neon-purple);">DARK ZENITH</span> // ORBIT CORE
+            <span style="color:var(--neon-purple);">DARK ZENITH</span> // KAPTANBEY0 CORE
           </div>
           <div class="anomaly-index-box">
             <span class="anomaly-index__label">ANOMALY INDEX: 82%</span>
@@ -193,7 +257,19 @@
       </div>
     </section>
 
-    <!-- ── SECTION: KAPTANBEY0 NETWORK ── -->
+    <!-- ── SECTION 2: CANLI PROJELER SHOWCASE ── -->
+    <section class="section section--projects" id="projects">
+      <div class="section__header">
+        <h2 class="glitch-title" data-i18n="proj_section_title" data-text="Canlı Projeler & Düğümler">Canlı Projeler & Düğümler</h2>
+        <p class="section__subtitle" data-i18n="proj_section_sub">GitHub API ile otomatik eşlenen projeler &amp; otomasyon sistemleri</p>
+      </div>
+
+      <div class="projects-grid" id="github-projects-grid">
+        <!-- Dynamically rendered or fallback -->
+      </div>
+    </section>
+
+    <!-- ── SECTION 3: KAPTANBEY0 AĞ BAĞLANTISI ── -->
     <section class="section section--orbit" id="orbit">
       <div class="section__header">
         <h2 class="glitch-title" data-text="KaptanBey0 Ağ Bağlantısı">KaptanBey0 Ağ Bağlantısı</h2>
@@ -221,17 +297,15 @@
           <span class="panel-header__dot"></span>
           <span>Son Değişiklik Etki Analizi</span>
         </div>
-        <div class="dep-items" id="dep-items">
-          <!-- Populated by JS -->
-        </div>
+        <div class="dep-items" id="dep-items"></div>
       </div>
     </section>
 
-    <!-- ── SECTION: LANGUAGES ── -->
+    <!-- ── SECTION 4: DİLLER ── -->
     <section class="section section--languages" id="languages">
       <div class="section__header">
-        <h2 class="glitch-title" data-text="Dil & Otomasyon Zekası">Dil & Otomasyon Zekası</h2>
-        <p class="section__subtitle">Ultra-hassas JavaScript &amp; Lua desteği &middot; Discord &amp; Roblox otomasyonu</p>
+        <h2 class="glitch-title" data-i18n="lang_section_title" data-text="Dil & Otomasyon Zekası">Dil & Otomasyon Zekası</h2>
+        <p class="section__subtitle" data-i18n="lang_section_sub">Ultra-hassas JavaScript &amp; Luau desteği &middot; Discord &amp; Roblox otomasyonu</p>
       </div>
 
       <div class="lang-cards">
@@ -244,22 +318,12 @@
             </div>
           </div>
           <div class="lang-card__code">
-            <pre><code><span class="kw">const</span> <span class="fn">bot</span> = <span class="kw">new</span> <span class="cl">Client</span>({
-  <span class="pr">intents</span>: [
-    GatewayIntentBits.<span class="cn">Guilds</span>,
-    GatewayIntentBits.<span class="cn">GuildMessages</span>
-  ]
-});
-
-bot.<span class="fn">on</span>(<span class="st">'ready'</span>, () => {
-  <span class="cm">// Orbit Automaton hazır ⚡</span>
-  console.<span class="fn">log</span>(<span class="st">`Logged in as </span><span class="vr">${bot.user.tag}</span><span class="st">`</span>);
-});</code></pre>
+            <pre><code><span class="kw">const</span> <span class="fn">bot</span> = <span class="kw">new</span> <span class="cl">Client</span>({ <span class="pr">intents</span>: [GatewayIntentBits.<span class="cn">Guilds</span>] });
+bot.<span class="fn">on</span>(<span class="st">'ready'</span>, () => console.<span class="fn">log</span>(<span class="st">`KaptanBey0 Automaton Ready ⚡`</span>));</code></pre>
           </div>
           <div class="lang-card__features">
             <span>Discord.js v14</span>
             <span>Node.js 20+</span>
-            <span>ESM</span>
             <span>TypeScript</span>
           </div>
         </div>
@@ -268,120 +332,28 @@ bot.<span class="fn">on</span>(<span class="st">'ready'</span>, () => {
           <div class="lang-card__header">
             <div class="lang-card__icon lang-card__icon--lua">Lua</div>
             <div>
-              <h3>Lua</h3>
+              <h3>Luau</h3>
               <span class="lang-card__badge lang-card__badge--lua">Birincil</span>
             </div>
           </div>
           <div class="lang-card__code">
             <pre><code><span class="kw">local</span> Players = game:GetService(<span class="st">"Players"</span>)
-
-Players.<span class="fn">PlayerAdded</span>:Connect(<span class="kw">function</span>(player)
-  <span class="kw">local</span> leaderstats = Instance.<span class="fn">new</span>(<span class="st">"Folder"</span>)
-  leaderstats.Name = <span class="st">"leaderstats"</span>
-  leaderstats.Parent = player
-
-  <span class="cm">-- Orbit Automaton: auto-stat 🎮</span>
-  <span class="kw">local</span> coins = Instance.<span class="fn">new</span>(<span class="st">"IntValue"</span>)
-  coins.Name = <span class="st">"Coins"</span>
-  coins.Parent = leaderstats
-<span class="kw">end</span>)</code></pre>
+Players.<span class="fn">PlayerAdded</span>:Connect(<span class="kw">function</span>(p) print(<span class="st">"KaptanBey0 Auto-Stat 🎮"</span>) <span class="kw">end</span>)</code></pre>
           </div>
           <div class="lang-card__features">
             <span>Roblox Studio</span>
             <span>Luau</span>
-            <span>RemoteEvents</span>
             <span>DataStore</span>
           </div>
         </div>
       </div>
-
-      <div class="automation-status">
-        <div class="panel-header">
-          <span class="panel-header__dot"></span>
-          <span data-tr="Otomasyon Durumu" data-en="Automation Pipeline Status">Otomasyon Durumu</span>
-        </div>
-        <div class="auto-grid" id="auto-grid">
-          <!-- Populated by JS -->
-        </div>
-      </div>
     </section>
 
-    <!-- ── SECTION: LIVE PROJECTS SHOWCASE ── -->
-    <section class="section section--projects" id="projects">
-      <div class="section__header">
-        <h2 class="glitch-title" data-text="Canlı Projeler & Düğümler" data-tr="Canlı Projeler & Düğümler" data-en="Live Projects & Repositories">Canlı Projeler & Düğümler</h2>
-        <p class="section__subtitle" data-tr="GitHub API ile otomatik eşlenen projeler &amp; bot sistemleri" data-en="Real-time synced repositories via GitHub API">GitHub API ile otomatik eşlenen projeler &amp; bot sistemleri</p>
-      </div>
-
-      <div class="projects-grid" id="github-projects-grid">
-        <!-- Dynamically populated by JS initLiveGitHubRepos -->
-        <div class="project-card-skeleton">
-          <span class="project-card__tag">⚡ DÜĞÜM 01</span>
-          <h3>orbit-automaton</h3>
-          <p>Dark Zenith temalı, GitLab/GitHub otomasyonu ve Substrate lore zekası.</p>
-          <div class="project-card__footer">
-            <span style="color:var(--neon-cyan);">★ LIVE NODE</span>
-            <a href="https://github.com/kaptanbey0/orbit-automaton" target="_blank" style="color:var(--neon-green); text-decoration:underline;">Repoyu İncele →</a>
-          </div>
-        </div>
-      </div>
-    </section>
-
-    <!-- ── SECTION: VISION ── -->
-    <section class="section section--vision" id="vision">
-      <div class="section__header">
-        <h2 class="glitch-title" data-text="Genişletilmiş Vizyon">Genişletilmiş Vizyon</h2>
-        <p class="section__subtitle">Esnek öğrenme modu &middot; Yeni teknolojilere anında adaptasyon</p>
-      </div>
-
-      <div class="vision-grid">
-        <div class="vision-node" data-status="active">
-          <div class="vision-node__pulse"></div>
-          <div class="vision-node__icon">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M12 2L2 7l10 5 10-5-10-5z"/><path d="M2 17l10 5 10-5"/><path d="M2 12l10 5 10-5"/></svg>
-          </div>
-          <h3>Python & AI</h3>
-          <p>Yapay zeka modülleri, ML pipeline'ları, TensorFlow / PyTorch entegrasyonu</p>
-          <span class="vision-node__status">Hazır</span>
-        </div>
-
-        <div class="vision-node" data-status="active">
-          <div class="vision-node__pulse"></div>
-          <div class="vision-node__icon">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="12" cy="12" r="3"/><path d="M12 1v6m0 6v6m-7-7h6m6 0h6"/><path d="M5.6 5.6l4.3 4.3m4.2 4.2l4.3 4.3M5.6 18.4l4.3-4.3m4.2-4.2l4.3-4.3"/></svg>
-          </div>
-          <h3>Mikro-Servisler</h3>
-          <p>Docker, Kubernetes, gRPC, event-driven mimari, API gateway yönetimi</p>
-          <span class="vision-node__status">Hazır</span>
-        </div>
-
-        <div class="vision-node" data-status="active">
-          <div class="vision-node__pulse"></div>
-          <div class="vision-node__icon">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/></svg>
-          </div>
-          <h3>Web3 & Blockchain</h3>
-          <p>Solidity, smart contract geliştirme, DApp frontend entegrasyonu</p>
-          <span class="vision-node__status">Hazır</span>
-        </div>
-
-        <div class="vision-node" data-status="active">
-          <div class="vision-node__pulse"></div>
-          <div class="vision-node__icon">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="4" y="4" width="16" height="16" rx="2"/><rect x="9" y="9" width="6" height="6"/><line x1="9" y1="1" x2="9" y2="4"/><line x1="15" y1="1" x2="15" y2="4"/><line x1="9" y1="20" x2="9" y2="23"/><line x1="15" y1="20" x2="15" y2="23"/><line x1="20" y1="9" x2="23" y2="9"/><line x1="20" y1="14" x2="23" y2="14"/><line x1="1" y1="9" x2="4" y2="9"/><line x1="1" y1="14" x2="4" y2="14"/></svg>
-          </div>
-          <h3>IoT & Embedded</h3>
-          <p>Arduino, Raspberry Pi, MQTT protokolü, gerçek zamanlı veri akışı</p>
-          <span class="vision-node__status">Hazır</span>
-        </div>
-      </div>
-    </section>
-
-    <!-- ── SECTION: TERMINAL ── -->
+    <!-- ── SECTION 5: TERMINAL ── -->
     <section class="section section--terminal" id="terminal">
       <div class="section__header">
-        <h2 class="glitch-title" data-text="Terminal">Terminal</h2>
-        <p class="section__subtitle">KaptanBey0 Automaton komut satırı arayüzü</p>
+        <h2 class="glitch-title" data-i18n="term_section_title" data-text="Terminal">Terminal</h2>
+        <p class="section__subtitle" data-i18n="term_section_sub">KaptanBey0 Automaton komut satırı arayüzü</p>
       </div>
 
       <div class="terminal-window" id="terminal-window">
@@ -400,18 +372,6 @@ Players.<span class="fn">PlayerAdded</span>:Connect(<span class="kw">function</s
             <span class="terminal-line__prefix">✓</span>
             <span>KaptanBey0 Ağ Bağlantısı kuruldu</span>
           </div>
-          <div class="terminal-line terminal-line--success">
-            <span class="terminal-line__prefix">✓</span>
-            <span>47 webhook &amp; Discord bot modülü dinleniyor</span>
-          </div>
-          <div class="terminal-line terminal-line--success">
-            <span class="terminal-line__prefix">✓</span>
-            <span>JavaScript &amp; Luau motorları yüklendi</span>
-          </div>
-          <div class="terminal-line terminal-line--info">
-            <span class="terminal-line__prefix">info</span>
-            <span>Dark Zenith teması aktif &middot; Developer: kaptanbey01</span>
-          </div>
           <div class="terminal-line terminal-line--ready">
             <span class="terminal-line__prefix">⚡</span>
             <span>Agent hazır. Komut bekleniyor...</span>
@@ -428,9 +388,7 @@ Players.<span class="fn">PlayerAdded</span>:Connect(<span class="kw">function</s
         <div class="system-event-log__title">
           <span style="color:var(--neon-cyan);">●</span> LIVE SYSTEM EVENT TICKER
         </div>
-        <div class="system-event-log__list" id="system-event-log-list">
-          <!-- Dynamically populated by initSystemEventLog in app.js -->
-        </div>
+        <div class="system-event-log__list" id="system-event-log-list"></div>
       </div>
     </section>
 
