@@ -4,6 +4,7 @@
 <meta charset="UTF-8"/>
 <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
 <title>ANTIGRAVITY — Cinematic Experience</title>
+<link rel="icon" type="image/png" href="assets/logo.png" />
 <style>
   *{margin:0;padding:0;box-sizing:border-box}
   html,body{width:100%;height:100%;overflow:hidden;background:#000;font-family:'Inter','Segoe UI',sans-serif}
@@ -59,7 +60,21 @@
 <div class="cine-bar cine-bar--bot"></div>
 
 <div id="ui">
-  <div class="ui-corner ui-tl">ANTIGRAVITY v1.0<br/><span id="ui-fps">60 FPS</span></div>
+  <div class="ui-corner ui-tl" style="pointer-events:auto; display:flex; gap:15px; align-items:center;">
+    <a href="index.html" style="color:var(--neon-cyan, #00f0ff); text-decoration:none; background:rgba(0,240,255,0.1); border:1px solid rgba(0,240,255,0.3); padding:4px 10px; border-radius:4px;" data-i18n="back_to_control">← Kontrol Merkezine Dön</a>
+    <div style="display:inline-flex; align-items:center; gap:6px; background:rgba(10,10,20,0.8); border:1px solid rgba(0,240,255,0.3); padding:2px 8px; border-radius:4px;">
+      <span style="font-size: 0.7rem;">🌐</span>
+      <select class="lang-select-box" id="lang-select" style="background:transparent; color:#00f0ff; border:none; font-family:monospace; font-size:0.75rem; cursor:pointer;">
+        <option value="tr">TR</option>
+        <option value="en">EN</option>
+        <option value="de">DE</option>
+        <option value="fr">FR</option>
+        <option value="es">ES</option>
+        <option value="ru">RU</option>
+        <option value="ja">JA</option>
+      </select>
+    </div>
+  </div>
   <div class="ui-corner ui-tr">ORBIT AUTOMATON<br/>DARK ZENITH</div>
   <div class="ui-corner ui-bl"><span id="ui-time">00:00:00</span><br/>CINEMATIC MODE</div>
   <div class="ui-corner ui-br"><span id="ui-objects">0</span> OBJECTS<br/><span id="ui-particles">0</span> PARTICLES</div>
@@ -1120,5 +1135,6 @@ async function init() {
 
 init();
 </script>
+<script src="i18n.js"></script>
 </body>
 </html>

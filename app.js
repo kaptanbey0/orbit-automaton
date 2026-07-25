@@ -25,6 +25,27 @@ document.addEventListener('DOMContentLoaded', () => {
   initAudioAmbientSynth();
 });
 
+/* ─── AUDIO SYNTH BEEP (used by boot loader & UI feedback) ─── */
+function initAudioSynth() {
+  window.orbitSynthBeep = function(freq, vol) {
+    try {
+      const AudioCtx = window.AudioContext || window.webkitAudioContext;
+      if (!AudioCtx) return;
+      const ctx = new AudioCtx();
+      const osc = ctx.createOscillator();
+      const gain = ctx.createGain();
+      osc.type = 'sine';
+      osc.frequency.setValueAtTime(freq || 440, ctx.currentTime);
+      gain.gain.setValueAtTime(vol || 0.03, ctx.currentTime);
+      gain.gain.exponentialRampToValueAtTime(0.0001, ctx.currentTime + 0.15);
+      osc.connect(gain);
+      gain.connect(ctx.destination);
+      osc.start();
+      osc.stop(ctx.currentTime + 0.16);
+    } catch(e) { /* silent fail */ }
+  };
+}
+
 /* ─── STARFIELD ─── */
 function initStarfield() {
   const canvas = document.getElementById('starfield');
@@ -324,8 +345,10 @@ function initTerminal() {
         { type: 'system', prefix: '  ', text: 'status     — Orbit & Anomali durumunu göster' },
         { type: 'system', prefix: '  ', text: 'scan       — Substrate düğüm taraması başlat' },
         { type: 'system', prefix: '  ', text: 'researchers— Araştırmacı Veritabanına Git' },
+        { type: 'system', prefix: '  ', text: 'archive    — Substrate Fragment Arşivini Aç' },
         { type: 'system', prefix: '  ', text: 'cat 00     — [GİZLİ] Fragment 00 Origin Point oku' },
         { type: 'system', prefix: '  ', text: 'deploy     — Deploy ve pipeline durumu' },
+        { type: 'system', prefix: '  ', text: 'ping       — Bağlantı hızı testi' },
         { type: 'system', prefix: '  ', text: 'clear      — Terminali temizle' },
         { type: 'system', prefix: '  ', text: 'version    — Orbit Automaton sürümü' },
       ]
@@ -376,6 +399,27 @@ function initTerminal() {
         { type: 'ready', prefix: '⚡', text: 'Tüm bağlantılar sağlıklı' },
       ]
     },
+    whoami: {
+      response: [
+        { type: 'info', prefix: '👤', text: 'OBSERVER ID: ' + (sessionStorage.getItem('orbit_observer_id') || 'OBSERVER-XXXX-OMEGA') },
+        { type: 'system', prefix: '  ', text: 'Clearance Level: 3 — Standard Observer' },
+        { type: 'system', prefix: '  ', text: 'Session: Active' },
+        { type: 'system', prefix: '  ', text: 'Protocol: Dark Zenith v2.4.1' },
+      ]
+    },
+    date: {
+      response: [
+        { type: 'info', prefix: '📅', text: new Date().toLocaleDateString('tr-TR', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' }) },
+        { type: 'system', prefix: '  ', text: new Date().toLocaleTimeString('tr-TR') + ' UTC+3' },
+      ]
+    },
+    uptime: {
+      response: [
+        { type: 'success', prefix: '⏱', text: 'Sistem Uptime: 99.97% (Son 30 gün)' },
+        { type: 'system', prefix: '  ', text: 'Son yeniden başlatma: 72 saat önce' },
+        { type: 'system', prefix: '  ', text: 'Active webhooks: 47 — Active endpoints: 128' },
+      ]
+    },
   };
 
   input.addEventListener('keydown', (e) => {
@@ -408,6 +452,11 @@ function initTerminal() {
 
     if (cmd === 'researchers') {
       window.location.href = 'researchers.html';
+      return;
+    }
+
+    if (cmd === 'archive') {
+      window.location.href = 'archive.html';
       return;
     }
 
@@ -625,175 +674,52 @@ function initDatabaseMenu() {
   const modal = document.getElementById('database-modal');
   const openBtn = document.getElementById('nav-db-btn');
   const closeBtn = document.getElementById('close-db-modal');
+  const searchInput = document.getElementById('db-modal-search');
 
   if (!modal) return;
 
-  if (openBtn) {
-    openBtn.addEventListener('click', () => {
-      modal.classList.add('active');
+  function openModal() {
+    modal.classList.add('active');
+    if (searchInput) {
+      setTimeout(() => searchInput.focus(), 150);
+    }
+  }
+
+  function closeModal() {
+    modal.classList.remove('active');
+    if (searchInput) {
+      searchInput.value = '';
+      filterItems('');
+    }
+  }
+
+  function filterItems(query) {
+    const q = query.toLowerCase().trim();
+    const items = modal.querySelectorAll('.database-menu-item');
+    items.forEach(item => {
+      const text = item.textContent.toLowerCase();
+      item.style.display = text.includes(q) ? 'flex' : 'none';
     });
   }
 
-  if (closeBtn) {
-    closeBtn.addEventListener('click', () => {
-      modal.classList.remove('active');
-    });
-  }
+  if (openBtn) openBtn.addEventListener('click', openModal);
+  if (closeBtn) closeBtn.addEventListener('click', closeModal);
 
   modal.addEventListener('click', (e) => {
-    if (e.target === modal) {
-      modal.classList.remove('active');
-    }
+    if (e.target === modal) closeModal();
   });
+
+  if (searchInput) {
+    searchInput.addEventListener('input', (e) => {
+      filterItems(e.target.value);
+    });
+  }
 }
 
 /* ─── MULTI-LANGUAGE SYSTEM (TR, EN, DE, FR, ES, RU, JA) ─── */
-const I18N = {
-  tr: {
-    nav_db: "> VERİTABANI ERİŞİMİ",
-    status_online: "Çevrimiçi",
-    dash_title: "Kontrol Merkezi",
-    dash_sub: "KaptanBey0 agent durumu ve sistem metrikleri",
-    warning: "⚠️ UYARI: Fragment 14 senkronizasyon dalgası kararsız.",
-    proj_title: "Canlı Projeler & Düğümler",
-    proj_sub: "GitHub API ile otomatik eşlenen projeler & otomasyon sistemleri",
-    lang_title: "Dil & Otomasyon Zekası",
-    lang_sub: "Ultra-hassas JavaScript & Luau desteği · Discord & Roblox otomasyonu",
-    term_title: "Terminal",
-    term_sub: "KaptanBey0 Automaton komut satırı arayüzü"
-  },
-  en: {
-    nav_db: "> ACCESS DATABASE",
-    status_online: "Online",
-    dash_title: "Control Center",
-    dash_sub: "KaptanBey0 agent status and system metrics",
-    warning: "⚠️ WARNING: Fragment 14 synchronization wave unstable.",
-    proj_title: "Live Projects & Nodes",
-    proj_sub: "Real-time synced repositories via GitHub API & automation tools",
-    lang_title: "Language & Automation Intelligence",
-    lang_sub: "Ultra-precise JavaScript & Luau support · Discord & Roblox automation",
-    term_title: "Terminal",
-    term_sub: "KaptanBey0 Automaton command line interface"
-  },
-  de: {
-    nav_db: "> DATENBANK ZUGRIFF",
-    status_online: "Online",
-    dash_title: "Kontrollzentrum",
-    dash_sub: "KaptanBey0 Agentenstatus und Systemmetriken",
-    warning: "⚠️ WARNUNG: Fragment 14 Synchronisationswelle instabil.",
-    proj_title: "Live-Projekte & Knoten",
-    proj_sub: "Echtzeit-synchronisierte Repositorien über GitHub API",
-    lang_title: "Sprach- & Automatisierungsintelligenz",
-    lang_sub: "Präzise JavaScript & Luau Unterstützung",
-    term_title: "Terminal",
-    term_sub: "KaptanBey0 Automaton Befehlszeile"
-  },
-  fr: {
-    nav_db: "> ACCÈS BASE DE DONNÉES",
-    status_online: "En Ligne",
-    dash_title: "Centre de Contrôle",
-    dash_sub: "Statut de l'agent KaptanBey0 et métriques système",
-    warning: "⚠️ ATTENTION: Vague de synchronisation du Fragment 14 instable.",
-    proj_title: "Projets en Direct & Nœuds",
-    proj_sub: "Projets synchronisés en temps réel via l'API GitHub",
-    lang_title: "Intelligence de Langage & Automation",
-    lang_sub: "Support ultra-précis JavaScript et Luau",
-    term_title: "Terminal",
-    term_sub: "Interface de ligne de commande KaptanBey0 Automaton"
-  },
-  es: {
-    nav_db: "> ACCESO A BASE DE DATOS",
-    status_online: "En Línea",
-    dash_title: "Centro de Control",
-    dash_sub: "Estado del agente KaptanBey0 y métricas del sistema",
-    warning: "⚠️ ADVERTENCIA: Onda de sincronización del Fragmento 14 inestable.",
-    proj_title: "Proyectos en Vivo y Nodos",
-    proj_sub: "Proyectos sincronizados en tiempo real mediante la API de GitHub",
-    lang_title: "Inteligencia de Lenguaje y Automatización",
-    lang_sub: "Soporte ultrapreciso para JavaScript y Luau",
-    term_title: "Terminal",
-    term_sub: "Interfaz de línea de comandos KaptanBey0 Automaton"
-  },
-  ru: {
-    nav_db: "> ДОСТУП К БАЗЕ ДАННЫХ",
-    status_online: "В сети",
-    dash_title: "Центр Управления",
-    dash_sub: "Статус агента KaptanBey0 и системные метрики",
-    warning: "⚠️ ПРЕДУПРЕЖДЕНИЕ: Волна синхронизации Фрагмента 14 нестабильна.",
-    proj_title: "Живые Проекты и Узлы",
-    proj_sub: "Синхронизированные в реальном времени репозитории через GitHub API",
-    lang_title: "Язык и Интеллект Автоматизации",
-    lang_sub: "Сверхточная поддержка JavaScript и Luau",
-    term_title: "Терминал",
-    term_sub: "Командная строка KaptanBey0 Automaton"
-  },
-  ja: {
-    nav_db: "> データベースアクセス",
-    status_online: "オンライン",
-    dash_title: "コントロールセンター",
-    dash_sub: "KaptanBey0 エージェントステータスとメトリクス",
-    warning: "⚠️ 警告: フラグメント 14 の同期波が不安定です。",
-    proj_title: "ライブプロジェクトとノード",
-    proj_sub: "GitHub API 経由でリアルタイム同期されるリポジトリ",
-    lang_title: "言語と自動化のインテリジェンス",
-    lang_sub: "超精密な JavaScript および Luau サポート",
-    term_title: "ターミナル",
-    term_sub: "KaptanBey0 Automaton コマンドライン"
-  }
-};
-
 function initLanguageSystem() {
-  const selectEl = document.getElementById('lang-select');
-  let currentLang = localStorage.getItem('orbit_lang') || (navigator.language.startsWith('tr') ? 'tr' : 'en');
-
-  function applyLanguage(lang) {
-    if (!I18N[lang]) lang = 'en';
-    currentLang = lang;
-    localStorage.setItem('orbit_lang', lang);
-    document.documentElement.lang = lang;
-
-    if (selectEl) selectEl.value = lang;
-
-    const dict = I18N[lang];
-    const navBtn = document.getElementById('nav-db-btn');
-    if (navBtn) navBtn.innerHTML = `<span>${dict.nav_db}</span>`;
-
-    const statusBeacon = document.querySelector('.status-beacon__label');
-    if (statusBeacon) statusBeacon.textContent = dict.status_online;
-
-    // Update section headers dynamically
-    const dashTitle = document.querySelector('#dashboard .glitch-title');
-    if (dashTitle) { dashTitle.textContent = dict.dash_title; dashTitle.setAttribute('data-text', dict.dash_title); }
-    
-    const dashSub = document.querySelector('#dashboard .section__subtitle');
-    if (dashSub) dashSub.textContent = dict.dash_sub;
-
-    const projTitle = document.querySelector('#projects .glitch-title');
-    if (projTitle) { projTitle.textContent = dict.proj_title; projTitle.setAttribute('data-text', dict.proj_title); }
-
-    const projSub = document.querySelector('#projects .section__subtitle');
-    if (projSub) projSub.textContent = dict.proj_sub;
-
-    const langTitle = document.querySelector('#languages .glitch-title');
-    if (langTitle) { langTitle.textContent = dict.lang_title; langTitle.setAttribute('data-text', dict.lang_title); }
-
-    const langSub = document.querySelector('#languages .section__subtitle');
-    if (langSub) langSub.textContent = dict.lang_sub;
-
-    const termTitle = document.querySelector('#terminal .glitch-title');
-    if (termTitle) { termTitle.textContent = dict.term_title; termTitle.setAttribute('data-text', dict.term_title); }
-
-    const termSub = document.querySelector('#terminal .section__subtitle');
-    if (termSub) termSub.textContent = dict.term_sub;
-  }
-
-  applyLanguage(currentLang);
-
-  if (selectEl) {
-    selectEl.addEventListener('change', (e) => {
-      applyLanguage(e.target.value);
-      if (window.orbitSynthBeep) window.orbitSynthBeep(880, 0.05);
-    });
+  if (window.i18nEngine) {
+    window.i18nEngine.init();
   }
 }
 
@@ -1026,9 +952,72 @@ function initAudioAmbientSynth() {
   });
 }
 
+/* ─── KEYBOARD SHORTCUTS ─── */
+function initKeyboardShortcuts() {
+  document.addEventListener('keydown', (e) => {
+    // Escape — close any active modal
+    if (e.key === 'Escape') {
+      const modal = document.getElementById('database-modal');
+      if (modal && modal.classList.contains('active')) {
+        modal.classList.remove('active');
+        e.preventDefault();
+        return;
+      }
+    }
 
+    // Ctrl+K or Cmd+K — open database
+    if ((e.ctrlKey || e.metaKey) && e.key === 'k') {
+      e.preventDefault();
+      const modal = document.getElementById('database-modal');
+      if (modal) modal.classList.toggle('active');
+      return;
+    }
 
+    // "/" — focus terminal (when not typing)
+    if (e.key === '/' && !['INPUT', 'TEXTAREA', 'SELECT'].includes(document.activeElement.tagName)) {
+      e.preventDefault();
+      const termInput = document.getElementById('terminal-input');
+      if (termInput) {
+        const termSection = document.getElementById('terminal');
+        if (termSection) termSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        setTimeout(() => termInput.focus(), 400);
+      }
+    }
+  });
+}
 
+/* ─── SECTION ENTRANCE ANIMATIONS ─── */
+function initEntranceAnimations() {
+  const cards = document.querySelectorAll('.stat-card, .project-card, .lang-card, .visual-card-item');
+  
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach((entry, index) => {
+      if (entry.isIntersecting) {
+        entry.target.style.transitionDelay = `${index * 60}ms`;
+        entry.target.classList.add('entrance-visible');
+        observer.unobserve(entry.target);
+      }
+    });
+  }, { threshold: 0.1 });
+
+  cards.forEach(card => {
+    card.style.opacity = '0';
+    card.style.transform = 'translateY(20px)';
+    card.style.transition = 'opacity 0.6s var(--ease-out), transform 0.6s var(--ease-out)';
+    observer.observe(card);
+  });
+}
+
+// Apply entrance-visible
+document.addEventListener('DOMContentLoaded', () => {
+  // Add the CSS class dynamically
+  const style = document.createElement('style');
+  style.textContent = `.entrance-visible { opacity: 1 !important; transform: translateY(0) !important; }`;
+  document.head.appendChild(style);
+
+  initKeyboardShortcuts();
+  initEntranceAnimations();
+});
 
 
 

@@ -4,6 +4,7 @@
   <meta charset="UTF-8"/>
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Substrate Archive — KaptanBey0 Automaton</title>
+  <link rel="icon" type="image/png" href="assets/logo.png" />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@300;400;600;700&family=IBM+Plex+Mono:ital,wght@0,300;0,400;0,600;1,400&display=swap" rel="stylesheet" />
@@ -95,9 +96,20 @@
 </head>
 <body>
 
-  <div class="back-nav-bar">
-    <a href="index.html" class="back-btn">← KaptanBey0 Core Ana Sayfa</a>
-    <a href="researchers.html" class="back-btn">Araştırmacı Veritabanı →</a>
+  <div class="back-nav-bar" style="display:flex; justify-content:space-between; align-items:center;">
+    <a href="index.html" class="back-btn" data-i18n="back_to_control">← Kontrol Merkezine Dön</a>
+    <div class="lang-select-wrapper" style="display:inline-flex; align-items:center; gap:6px; background:rgba(13,13,20,0.8); border:1px solid rgba(0,240,255,0.3); padding:4px 10px; border-radius:4px;">
+      <span style="font-size: 0.75rem;">🌐</span>
+      <select class="lang-select-box" id="lang-select" style="background:transparent; color:var(--neon-cyan); border:none; font-family:var(--font-mono); font-size:0.8rem; cursor:pointer;">
+        <option value="tr">TR (Türkçe)</option>
+        <option value="en">EN (English)</option>
+        <option value="de">DE (Deutsch)</option>
+        <option value="fr">FR (Français)</option>
+        <option value="es">ES (Español)</option>
+        <option value="ru">RU (Русский)</option>
+        <option value="ja">JA (日本語)</option>
+      </select>
+    </div>
   </div>
 
   <div class="archive-header">
@@ -160,7 +172,7 @@
       </tr>
       <tr>
         <td style="color: var(--neon-cyan); font-weight: bold;">19</td>
-        <td>Fragment 19 — Chrono Shift</td>
+        <td>Fragment 19 — Causal Inversion</td>
         <td>Researcher IX</td>
         <td>2026.06.22</td>
         <td><span class="status-badge status-badge--warning">BOZULMUŞ</span></td>
@@ -174,6 +186,14 @@
         <td><span class="status-badge status-badge--active">GÖZLEMDE</span></td>
         <td><a href="fragment-31.html" style="color: var(--neon-cyan); text-decoration: underline;">[OKU]</a></td>
       </tr>
+      <tr>
+        <td style="color: var(--neon-cyan); font-weight: bold;">22</td>
+        <td>Fragment 22 — Impossible Signal</td>
+        <td>Researcher IX</td>
+        <td>2026.07.18</td>
+        <td><span class="status-badge status-badge--warning">BOZULMUŞ</span></td>
+        <td><a href="fragment-22.html" style="color: var(--neon-amber); text-decoration: underline;">[INSPECT]</a></td>
+      </tr>
     </tbody>
   </table>
 
@@ -181,5 +201,6 @@
     <strong>[SİSTEM NOTU]:</strong> Substrate arşivi KaptanBey0 Automaton motoru tarafından taranmakta ve canlı tutulmaktadır.
   </div>
 
+  <script src="i18n.js"></script>
 </body>
 </html>

@@ -12,6 +12,8 @@ const TRANSLATIONS = {
     nav_languages: "Diller",
     nav_terminal: "Terminal",
     nav_db: "> VERİTABANI ERİŞİMİ",
+    discord_copy_title: "Discord Nickini Kopyala (kaptanbey01)",
+    ambient_music_title: "Ortam Müziği Aç/Kapat",
     status_online: "Çevrimiçi",
     core_banner_title: "DARK ZENITH // KAPTANBEY0 CORE",
     anomaly_index: "ANOMALİ İNDEKSİ: %82",

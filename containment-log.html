@@ -4,6 +4,7 @@
 <meta charset="UTF-8"/>
 <meta name="viewport" content="width=device-width,initial-scale=1.0"/>
 <title>Containment Log</title>
+<link rel="icon" type="image/png" href="assets/logo.png" />
 <style>
 @import url('https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@300;400&display=swap');
 *{margin:0;padding:0;box-sizing:border-box}
@@ -24,8 +25,24 @@ text-transform:uppercase;color:rgba(100,90,75,.15);margin-bottom:4vh}
 a{color:rgba(120,110,95,.25);text-decoration:none}
 a:hover{color:rgba(160,140,110,.35)}
 </style>
+<link rel="stylesheet" href="style.css" />
 </head>
 <body>
+<div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:3vh;">
+  <a href="index.html" style="color:rgba(0,240,255,0.7); text-decoration:none; font-size:0.8rem;" data-i18n="back_to_control">← Kontrol Merkezine Dön</a>
+  <div style="display:inline-flex; align-items:center; gap:6px; background:rgba(20,20,30,0.6); border:1px solid rgba(0,240,255,0.2); padding:2px 8px; border-radius:4px;">
+    <span style="font-size: 0.75rem;">🌐</span>
+    <select class="lang-select-box" id="lang-select" style="background:transparent; color:rgba(0,240,255,0.8); border:none; font-family:'IBM Plex Mono',monospace; font-size:0.75rem; cursor:pointer;">
+      <option value="tr">TR</option>
+      <option value="en">EN</option>
+      <option value="de">DE</option>
+      <option value="fr">FR</option>
+      <option value="es">ES</option>
+      <option value="ru">RU</option>
+      <option value="ja">JA</option>
+    </select>
+  </div>
+</div>
 
 <h1>Containment Notes — LOG-001</h1>
 <div class="date">Compiled from research terminal RESEARCH-04</div>
@@ -128,5 +145,6 @@ This is the last entry.
 END OF LOG — NO FURTHER ENTRIES RECORDED
 </div>
 
+<script src="i18n.js"></script>
 </body>
 </html>

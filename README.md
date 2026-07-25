@@ -1,30 +1,28 @@
 <!-- ═══════════════════════════════════════════════════════════════ -->
-<!--                    KAPTANBEY0 — DARK ZENITH                   -->
-<!--              GitHub Profile README · Orbit Automaton           -->
+<!--        ORBIT AUTOMATON — DARK ZENITH & SUBSTRATE ARCHIVE       -->
 <!-- ═══════════════════════════════════════════════════════════════ -->
 
-<!-- ANIMATED HEADER -->
 <div align="center">
-  <img src="./assets/header.svg" width="100%" alt="kaptanbey0 — Orbit Automaton" />
+  <img src="./assets/header.svg" width="100%" alt="Orbit Automaton — Dark Zenith Core" />
 </div>
 
-<!-- TYPING ANIMATION -->
 <div align="center">
   <a href="https://git.io/typing-svg">
-    <img src="https://readme-typing-svg.demolab.com?font=JetBrains+Mono&weight=600&size=22&duration=3000&pause=1000&color=00F0FF&center=true&vCenter=true&multiline=true&repeat=true&random=false&width=600&height=70&lines=%E2%9A%A1+Orbit+Automaton+%C3%87evrimi%C3%A7i;%F0%9F%8E%AE+Roblox+%7C+%F0%9F%A4%96+Discord+%7C+%F0%9F%94%A7+Otomasyon;%F0%9F%8C%91+Dark+Zenith+Theme+Aktif" alt="Typing SVG" />
+    <img src="https://readme-typing-svg.demolab.com?font=JetBrains+Mono&weight=600&size=22&duration=3000&pause=1000&color=00F0FF&center=true&vCenter=true&multiline=true&repeat=true&random=false&width=620&height=70&lines=%E2%9A%A1+Orbit+Automaton+v2.4.1+%7C+Dark+Zenith+Engine;%F0%9F%AA%90+Substrate+Anomaly+Archive+%7C+Node+7.2+Active;%F0%9F%A4%96+Discord+v14+%7C+Luau+Automation+%7C+WebGL+3D" alt="Typing SVG" />
   </a>
 </div>
 
 <br/>
 
-<!-- STATUS BADGES -->
 <div align="center">
-  
-  ![Profile Views](https://komarev.com/ghpvc/?username=kaptanbey0&style=for-the-badge&color=00f0ff&labelColor=08080c&label=GÖRÜNTÜLENME)
-  &nbsp;
-  ![Followers](https://img.shields.io/github/followers/kaptanbey0?style=for-the-badge&color=a855f7&labelColor=08080c&label=TAKİPÇİ&logo=github)
-  &nbsp;
-  ![Stars](https://img.shields.io/github/stars/kaptanbey0?style=for-the-badge&color=22ff88&labelColor=08080c&label=YILDIZ&logo=github)
+
+[![Live Demo](https://img.shields.io/badge/LIVE_DEMO-GITHUB_PAGES-00f0ff?style=for-the-badge&logo=githubpages&logoColor=08080c)](https://kaptanbey0.github.io/orbit-automaton/)
+&nbsp;
+[![Version](https://img.shields.io/badge/VERSION-v2.4.1_ZENITH-a855f7?style=for-the-badge&logo=semver&logoColor=white)](https://github.com/kaptanbey0/orbit-automaton)
+&nbsp;
+[![License](https://img.shields.io/badge/LICENSE-MIT-22ff88?style=for-the-badge&logo=mit&logoColor=08080c)](./LICENSE)
+&nbsp;
+[![Status](https://img.shields.io/badge/STATUS-ONLINE-00f0ff?style=for-the-badge&logo=statuspage&logoColor=08080c)](https://kaptanbey0.github.io/orbit-automaton/)
 
 </div>
 
@@ -32,180 +30,156 @@
 
 <!-- ANIMATED PROFILE CARD -->
 <div align="center">
-  <img src="./assets/profile-card.svg" width="100%" alt="kaptanbey0 profile card" />
+  <img src="./assets/profile-card.svg" width="100%" alt="Orbit Automaton Profile HUD" />
 </div>
 
 <br/>
 
-<!-- WAVE DIVIDER -->
 <img src="./assets/wave.svg" width="100%" alt="" />
 
-<!-- ═══ ABOUT ME ═══ -->
+---
 
-## <img src="https://raw.githubusercontent.com/Tarikul-Islam-Anik/Animated-Fluent-Emojis/master/Emojis/Objects/Satellite.png" width="28" /> &nbsp; Hakkımda
+## 🌑 Overview
 
-```js
-const kaptanbey0 = {
-    konum: "Türkiye 🇹🇷",
-    odak: ["Discord Bot Geliştirme", "Roblox Scripting", "Otomasyon"],
-    diller: ["JavaScript", "Lua", "Python"],
-    tema: "Dark Zenith 🌑",
-    motto: "Kodun yörüngesini kontrol et. 🛸"
-};
+**Orbit Automaton** is an ultra-futuristic, dual-layered sci-fi control dashboard and anomaly archive engine. Built with vanilla modern HTML5, CSS3, JavaScript (ES6+), WebGL, and Three.js, it bridges high-performance developer automation with an immersive narrative ecosystem (*SUBSTRATE*).
+
+### 🌌 Dual-Layer Architecture:
+1. **Dark Zenith Core**: Real-time developer metrics, GitHub repository sync, live system event ticker, audio synthesis, and interactive sci-fi terminal interface.
+2. **SUBSTRATE Anomaly Layer**: Classified anomaly archive containing recovered fragments, interactive 3D WebGL phenomena, mathematical impossibilia, and encrypted researcher logs.
+
+---
+
+## ⚡ Core Features
+
+- 🛸 **Interactive Orbit Core HUD**: Dynamic real-time metrics, system uptime counters, active webhook monitoring, and 30-day commit telemetry graph.
+- 💻 **Retro Sci-Fi Terminal**: Fully functional command-line interface supporting custom commands (`access`, `scan`, `status`, `repos`, `ping`, `whoami`, `date`, `cat fragment-00`, `clear`).
+- 🌐 **7-Language i18n Engine**: Seamless live multi-language switching across all pages and UI elements (**TR, EN, DE, FR, ES, RU, JA**) without page reloads.
+- 🎨 **3D WebGL Anomaly Catalog**: Interactive Three.js canvas renderings for spatial phenomena, impossible geometry, non-Euclidean objects, and morphogenesis.
+- 📡 **Live Event Log Feed**: Real-time background observer log ticker with sound synthesis feedback.
+- 🎹 **Web Audio API Sound Synth**: Native synthesized UI sound effects, ambient audio toggle, and boot loader chimes without external audio files.
+- 📱 **Ultra-Responsive Dark Zenith Design**: Glassmorphism HUD, custom neon scrollbars, keyboard navigation shortcuts (`Ctrl+K` for Database, `/` for Terminal, `Esc` to close modals).
+
+---
+
+## 🗺️ Interactive System Map & Directory
+
+| Node / Page | Description | Security Level | Path |
+| :--- | :--- | :---: | :--- |
+| **Control Center** | Main Dark Zenith Dashboard & Terminal | `PUBLIC` | [`index.html`](./index.html) |
+| **Substrate Archive** | Anomaly Fragment Index Table | `LEVEL 3` | [`archive.html`](./archive.html) |
+| **Researchers Database** | Personnel Logbook (A-07, EM, IX, Ω) | `RESTRICTED` | [`researchers.html`](./researchers.html) |
+| **Phenomena 3D** | Interactive 3D Spatial Anomaly Catalog | `ACTIVE` | [`phenomena.html`](./phenomena.html) |
+| **Impossible Vault** | Non-Euclidean Objects Simulation | `CONTAINED` | [`impossibilia.html`](./impossibilia.html) |
+| **GitHub 3D Node** | Interactive 3D External Node Graph | `CONNECTED` | [`github-universe.html`](./github-universe.html) |
+| **Containment Logs** | Chronological Sealed Breach Records | `SEALED` | [`containment-log.html`](./containment-log.html) |
+| **Morphogenesis** | Evolving Pattern Synthesizer | `EVOLVING` | [`morphogenesis.html`](./morphogenesis.html) |
+| **Anti-Gravity** | Gravitational Anomaly Field | `UNSTABLE` | [`antigravity.html`](./antigravity.html) |
+| **Fragment 00** | Secret Classified Origin Point | `CLASSIFIED (LEVEL 5)` | [`fragment-00.html`](./fragment-00.html) |
+
+---
+
+## 🛠️ Technology Stack
+
+<div align="center">
+
+#### 🧠 Core Technologies
+![JavaScript](https://img.shields.io/badge/JavaScript_ES6+-08080c?style=for-the-badge&logo=javascript&logoColor=F7DF1E)
+![HTML5](https://img.shields.io/badge/HTML5-08080c?style=for-the-badge&logo=html5&logoColor=E34F26)
+![CSS3](https://img.shields.io/badge/CSS3-08080c?style=for-the-badge&logo=css3&logoColor=1572B6)
+![WebGL](https://img.shields.io/badge/WebGL_3D-08080c?style=for-the-badge&logo=webgl&logoColor=990000)
+![Three.js](https://img.shields.io/badge/Three.js-08080c?style=for-the-badge&logo=three.js&logoColor=white)
+
+#### 🤖 Automation & APIs
+![Discord.js](https://img.shields.io/badge/Discord.js_v14-08080c?style=for-the-badge&logo=discord&logoColor=5865F2)
+![Luau](https://img.shields.io/badge/Luau_Roblox-08080c?style=for-the-badge&logo=robloxstudio&logoColor=00A2FF)
+![GitHub API](https://img.shields.io/badge/GitHub_REST_API-08080c?style=for-the-badge&logo=github&logoColor=white)
+![Web Audio API](https://img.shields.io/badge/Web_Audio_API-08080c?style=for-the-badge&logo=soundcharts&logoColor=00f0ff)
+
+</div>
+
+---
+
+## 💻 Terminal Command Reference
+
+Launch the built-in terminal on the main dashboard or press `/` to focus input instantly:
+
+```bash
+> help              # List all available Orbit Terminal commands
+> status            # Display real-time core system diagnostics & uptime
+> access <id>       # Access database fragment (e.g. access 00, access archive)
+> cat fragment-00   # Read classified origin log file
+> repos             # Fetch & list live GitHub repositories
+> scan              # Execute full substrate anomaly frequency scan
+> ping              # Check core response latency
+> date              # Display current system temporal coordinates
+> whoami            # Print active Observer ID & security clearance level
+> clear             # Clear the terminal output console
 ```
 
-<table>
-<tr>
-<td width="50%">
+---
 
-### ⚙️ &nbsp; Ne Yapıyorum?
-
-- 🤖 &nbsp; **Discord Botları** — Discord.js v14 ile ölçeklenebilir bot mimarileri
-- 🎮 &nbsp; **Roblox Scripting** — Luau ile oyun içi otomasyon ve sistemler
-- 🔗 &nbsp; **API Entegrasyonu** — Webhook, REST API, gerçek zamanlı veri
-- 🛡️ &nbsp; **Otomasyon** — CI/CD, monitoring, deployment pipeline'ları
-
-</td>
-<td width="50%">
-
-### 🔭 &nbsp; Şu An Üzerinde Çalışıyorum
-
-- 🌑 &nbsp; **Orbit Automaton** — GitLab Orbit dashboard
-- ⚡ &nbsp; Discord bot framework geliştirmesi
-- 🎮 &nbsp; Roblox oyun projeleri
-- 📚 &nbsp; Python AI modülleri öğreniyorum
-
-</td>
-</tr>
-</table>
-
-<br/>
-
-<!-- ═══ TECH STACK ═══ -->
-
-## <img src="https://raw.githubusercontent.com/Tarikul-Islam-Anik/Animated-Fluent-Emojis/master/Emojis/Objects/Hammer%20and%20Wrench.png" width="28" /> &nbsp; Teknoloji Yığını
+## 📊 Live Metrics & Telemetry
 
 <div align="center">
-
-#### 🧠 &nbsp; Birincil Diller
-![JavaScript](https://img.shields.io/badge/JavaScript-08080c?style=for-the-badge&logo=javascript&logoColor=F7DF1E)
-![Lua](https://img.shields.io/badge/Lua-08080c?style=for-the-badge&logo=lua&logoColor=2C2D72)
-![Python](https://img.shields.io/badge/Python-08080c?style=for-the-badge&logo=python&logoColor=3776AB)
-![TypeScript](https://img.shields.io/badge/TypeScript-08080c?style=for-the-badge&logo=typescript&logoColor=3178C6)
-
-#### 🤖 &nbsp; Bot & Otomasyon
-![Discord.js](https://img.shields.io/badge/Discord.js-08080c?style=for-the-badge&logo=discord&logoColor=5865F2)
-![Roblox Studio](https://img.shields.io/badge/Roblox_Studio-08080c?style=for-the-badge&logo=robloxstudio&logoColor=00A2FF)
-![Node.js](https://img.shields.io/badge/Node.js-08080c?style=for-the-badge&logo=node.js&logoColor=339933)
-
-#### 🔧 &nbsp; Araçlar & Platform
-![Git](https://img.shields.io/badge/Git-08080c?style=for-the-badge&logo=git&logoColor=F05032)
-![GitHub](https://img.shields.io/badge/GitHub-08080c?style=for-the-badge&logo=github&logoColor=white)
-![VS Code](https://img.shields.io/badge/VS_Code-08080c?style=for-the-badge&logo=visualstudiocode&logoColor=007ACC)
-![Docker](https://img.shields.io/badge/Docker-08080c?style=for-the-badge&logo=docker&logoColor=2496ED)
-![Linux](https://img.shields.io/badge/Linux-08080c?style=for-the-badge&logo=linux&logoColor=FCC624)
-
-#### 🗃️ &nbsp; Veritabanı & API
-![MongoDB](https://img.shields.io/badge/MongoDB-08080c?style=for-the-badge&logo=mongodb&logoColor=47A248)
-![PostgreSQL](https://img.shields.io/badge/PostgreSQL-08080c?style=for-the-badge&logo=postgresql&logoColor=4169E1)
-![Redis](https://img.shields.io/badge/Redis-08080c?style=for-the-badge&logo=redis&logoColor=DC382D)
-
-</div>
-
-<br/>
-
-<!-- ═══ GITHUB STATS ═══ -->
-
-## <img src="https://raw.githubusercontent.com/Tarikul-Islam-Anik/Animated-Fluent-Emojis/master/Emojis/Objects/Bar%20Chart.png" width="28" /> &nbsp; GitHub İstatistikleri
-
-<div align="center">
-  <img width="49%" src="https://github-readme-stats.vercel.app/api?username=kaptanbey0&show_icons=true&theme=transparent&hide_border=true&title_color=00f0ff&text_color=8888a0&icon_color=a855f7&bg_color=08080c&ring_color=00f0ff&include_all_commits=true&count_private=true" alt="GitHub Stats" />
-  <img width="49%" src="https://github-readme-streak-stats.herokuapp.com/?user=kaptanbey0&theme=transparent&hide_border=true&background=08080c&stroke=1a1a28&ring=00f0ff&fire=a855f7&currStreakLabel=00f0ff&sideLabels=8888a0&currStreakNum=e8e8f0&sideNums=e8e8f0&dates=555566" alt="Streak Stats" />
+  <img src="./assets/skill-radar.svg" width="100%" alt="Skill Radar — Hexagonal Matrix" />
 </div>
 
 <br/>
 
 <div align="center">
-  <img width="40%" src="https://github-readme-stats.vercel.app/api/top-langs/?username=kaptanbey0&layout=compact&theme=transparent&hide_border=true&title_color=00f0ff&text_color=8888a0&bg_color=08080c&langs_count=8" alt="Top Languages" />
+  <img src="./assets/system-monitor.svg" width="100%" alt="System Monitor HUD" />
 </div>
 
 <br/>
-
-<!-- ACTIVITY GRAPH -->
-<div align="center">
-  <img width="98%" src="https://github-readme-activity-graph.vercel.app/graph?username=kaptanbey0&bg_color=08080c&color=8888a0&line=00f0ff&point=a855f7&area_color=00f0ff&area=true&hide_border=true&custom_title=Commit%20Aktivitesi" alt="Activity Graph" />
-</div>
-
-<br/>
-
-<!-- ═══ PROJECTS ═══ -->
-
-## <img src="https://raw.githubusercontent.com/Tarikul-Islam-Anik/Animated-Fluent-Emojis/master/Emojis/Objects/Rocket.png" width="28" /> &nbsp; Öne Çıkan Projeler
 
 <div align="center">
-  <a href="https://github.com/kaptanbey0/orbit-automaton">
-    <img width="49%" src="https://github-readme-stats.vercel.app/api/pin/?username=kaptanbey0&repo=orbit-automaton&theme=transparent&hide_border=true&title_color=00f0ff&text_color=8888a0&icon_color=a855f7&bg_color=08080c" alt="Orbit Automaton" />
-  </a>
-  <!-- İkinci proje eklemek için aşağıdaki satırın yorumunu kaldır: -->
-  <!-- <a href="https://github.com/kaptanbey0/REPO_ADI">
-    <img width="49%" src="https://github-readme-stats.vercel.app/api/pin/?username=kaptanbey0&repo=REPO_ADI&theme=transparent&hide_border=true&title_color=00f0ff&text_color=8888a0&icon_color=a855f7&bg_color=08080c" />
-  </a> -->
+  <img src="./assets/skyline.svg" width="100%" alt="Contribution Skyline" />
 </div>
 
-<br/>
+---
 
-<!-- ═══ SKILL RADAR ═══ -->
+## 🚀 Local Installation & Deployment
 
-## <img src="https://raw.githubusercontent.com/Tarikul-Islam-Anik/Animated-Fluent-Emojis/master/Emojis/Objects/Direct%20Hit.png" width="28" /> &nbsp; Yetenek Matrisi
+No dependencies or build tools required. Orbit Automaton is built with pure web technologies and ready for immediate deployment on GitHub Pages or static hostings.
 
-<div align="center">
-  <img src="./assets/skill-radar.svg" width="100%" alt="Skill Radar — Animated hexagonal skill chart" />
-</div>
+### Clone Repository:
+```bash
+git clone https://github.com/kaptanbey0/orbit-automaton.git
+cd orbit-automaton
+```
 
-<br/>
+### Run Locally:
+Simply open `index.html` in any web browser, or launch a quick local server:
+```bash
+# Python 3
+python -m http.server 8000
 
-<!-- ═══ CONTRIBUTION SKYLINE ═══ -->
+# Node.js npx
+npx serve .
+```
+Navigate to `http://localhost:8000`.
 
-## <img src="https://raw.githubusercontent.com/Tarikul-Islam-Anik/Animated-Fluent-Emojis/master/Emojis/Travel%20and%20places/Cityscape%20at%20Dusk.png" width="28" /> &nbsp; Contribution Skyline
+---
 
-<div align="center">
-  <img src="./assets/skyline.svg" width="100%" alt="Contribution Skyline — Animated neon bar chart" />
-</div>
+## 🛡️ Lore & Storyline Summary
 
-<br/>
+> *"The substrate was not created. It was remembered."*
 
-<!-- ═══ SYSTEM MONITOR ═══ -->
+In the early cycles of **Orbit Core**, Researcher **A-07** discovered recursive frequency echoes leaking from Node 7.2. As the team (A-07, EM, IX, Ω) investigated the anomalies, observation itself triggered temporal instability—causing Fragment 14 to collapse and entangling Researcher A-07 in temporal loops. Today, KaptanBey0 Automaton acts as the observer barrier, monitoring Substrate anomalies while maintaining operational control.
 
-## <img src="https://raw.githubusercontent.com/Tarikul-Islam-Anik/Animated-Fluent-Emojis/master/Emojis/Objects/Desktop%20Computer.png" width="28" /> &nbsp; Sistem Monitörü
+---
 
-<div align="center">
-  <img src="./assets/system-monitor.svg" width="100%" alt="System Monitor — Animated HUD with live metrics" />
-</div>
-
-<br/>
-
-<!-- FOOTER WAVE -->
 <img src="./assets/wave-footer.svg" width="100%" alt="" />
 
-<!-- ═══ FOOTER ═══ -->
-
 <div align="center">
 
-### 🌑 Dark Zenith
+### 🌑 Dark Zenith Engine
 
-  <sub>
-    <b>Orbit Automaton</b> ile kodun yörüngesini kontrol et. 🛸
-  </sub>
+<sub><b>KaptanBey0 Automaton</b> &copy; 2026 &middot; Built with passion, precision, and sci-fi aesthetic.</sub>
 
-  <br/><br/>
+<br/><br/>
 
-  [![Discord](https://img.shields.io/badge/Discord-08080c?style=for-the-badge&logo=discord&logoColor=5865F2)](https://discord.gg/)
-  [![YouTube](https://img.shields.io/badge/YouTube-08080c?style=for-the-badge&logo=youtube&logoColor=FF0000)](https://youtube.com/)
-
-  <br/>
-
-  <img src="https://capsule-render.vercel.app/api?type=waving&color=0:08080c,50:0d0d14,100:08080c&height=80&section=footer&fontSize=0" width="100%" />
+[![GitHub Stars](https://img.shields.io/github/stars/kaptanbey0/orbit-automaton?style=social)](https://github.com/kaptanbey0/orbit-automaton)
+[![GitHub Forks](https://img.shields.io/github/forks/kaptanbey0/orbit-automaton?style=social)](https://github.com/kaptanbey0/orbit-automaton)
 
 </div>
-
-<!-- ═══ END ═══ -->

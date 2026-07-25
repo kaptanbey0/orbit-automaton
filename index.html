@@ -4,13 +4,43 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <meta name="description" content="KaptanBey0 Automaton — Dark Zenith temalı Discord Bot Mimarisi, Roblox Luau ve Siber Güvenlik Portföyü." />
+  <meta name="author" content="kaptanbey0" />
+  <meta name="theme-color" content="#08080c" />
+
+  <!-- Open Graph -->
+  <meta property="og:type" content="website" />
+  <meta property="og:title" content="KaptanBey0 Automaton — Dark Zenith Portfolio" />
+  <meta property="og:description" content="Cyberpunk-themed developer portfolio with interactive fragments, WebGL experiences, and procedural audio." />
+  <meta property="og:image" content="assets/logo.png" />
+
+  <!-- Twitter Card -->
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:title" content="KaptanBey0 Automaton — Dark Zenith" />
+  <meta name="twitter:description" content="Cyberpunk developer portfolio — Discord, Roblox, Automation" />
+
   <title>KaptanBey0 Automaton — Dark Zenith Portfolio</title>
+  <link rel="icon" type="image/png" href="assets/logo.png" />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@300;400;500;600;700&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
   <link rel="stylesheet" href="style.css" />
 </head>
 <body>
+
+  <!-- ═══ CINEMATIC BOOT LOADER ═══ -->
+  <div id="boot-loader" style="position:fixed; inset:0; z-index:9999; background:#030306; display:flex; flex-direction:column; align-items:center; justify-content:center; transition: opacity 0.8s ease, visibility 0.8s ease;">
+    <div style="text-align:center;">
+      <div style="font-family:'JetBrains Mono',monospace; font-size:clamp(0.8rem,2.5vw,1.4rem); font-weight:200; letter-spacing:0.6em; color:#e8e8f0; text-transform:uppercase; margin-bottom:24px;">
+        DARK <span style="color:#00f0ff; font-weight:400;">ZENITH</span>
+      </div>
+      <div style="width:200px; height:2px; background:#111; border-radius:1px; overflow:hidden; margin:0 auto;">
+        <div id="boot-progress-fill" style="width:0%; height:100%; background:linear-gradient(90deg,#00f0ff,#a855f7,#22ff88); border-radius:1px; transition:width 0.15s;"></div>
+      </div>
+      <div id="boot-status" style="font-family:'JetBrains Mono',monospace; font-size:0.6rem; letter-spacing:0.25em; color:#333; margin-top:16px; text-transform:uppercase;">
+        INITIALIZING ORBIT CORE...
+      </div>
+    </div>
+  </div>
 
   <!-- ═══ STARFIELD CANVAS ═══ -->
   <canvas id="starfield"></canvas>
@@ -28,17 +58,17 @@
       </div>
     </div>
     <nav class="topbar__nav">
-      <a href="#hero" class="topbar__link active" data-section="hero">Ana Sayfa</a>
-      <a href="#dashboard" class="topbar__link" data-section="dashboard">Kontrol</a>
-      <a href="#projects" class="topbar__link" data-section="projects">Projeler</a>
-      <a href="#languages" class="topbar__link" data-section="languages">Diller</a>
-      <a href="#terminal" class="topbar__link" data-section="terminal">Terminal</a>
+      <a href="#hero" class="topbar__link active" data-section="hero" data-i18n="nav_home">Ana Sayfa</a>
+      <a href="#dashboard" class="topbar__link" data-section="dashboard" data-i18n="nav_dashboard">Kontrol</a>
+      <a href="#projects" class="topbar__link" data-section="projects" data-i18n="nav_projects">Projeler</a>
+      <a href="#languages" class="topbar__link" data-section="languages" data-i18n="nav_languages">Diller</a>
+      <a href="#terminal" class="topbar__link" data-section="terminal" data-i18n="nav_terminal">Terminal</a>
     </nav>
     <div class="topbar__right">
-      <button class="discord-copy-btn" id="discord-btn" title="Discord Nickini Kopyala (kaptanbey01)">
+      <button class="discord-copy-btn" id="discord-btn" title="Discord Nickini Kopyala (kaptanbey01)" data-i18n-title="discord_copy_title">
         <span>💬 kaptanbey01</span>
       </button>
-      <button class="music-toggle-btn" id="ambient-music-btn" title="Ortam Müziği Aç/Kapat">
+      <button class="music-toggle-btn" id="ambient-music-btn" title="Ortam Müziği Aç/Kapat" data-i18n-title="ambient_music_title">
         <span>🎵 AMBIENT: OFF</span>
       </button>
       <div id="observer-id-badge" class="observer-badge">
@@ -71,16 +101,22 @@
   <div class="database-menu-modal" id="database-modal">
     <div class="database-menu-card">
       <div class="database-menu-card__title">
-        <span>&gt; KAPTANBEY0 ARCHIVE DATABASE</span>
-        <button id="close-db-modal" style="background:none; border:none; color:var(--neon-red); cursor:pointer; font-family:var(--font-mono); font-size:1.1rem;">[X]</button>
+        <span data-i18n="db_modal_title">&gt; KAPTANBEY0 ARCHIVE DATABASE</span>
+        <button id="close-db-modal" title="Close Modal (Esc)" style="background:none; border:none; color:var(--neon-red); cursor:pointer; font-family:var(--font-mono); font-size:1.1rem;">[X]</button>
       </div>
-      <div class="database-menu-card__list">
+      <div style="margin-bottom: 16px;">
+        <input type="text" id="db-modal-search" placeholder="Belge veya anomali ara..." data-i18n-placeholder="db_modal_search_ph" style="width:100%; padding:10px 14px; background:var(--bg-input); border:1px solid var(--border-subtle); border-radius:var(--radius-sm); color:var(--text-primary); font-family:var(--font-mono); font-size:0.82rem; outline:none; transition:border-color 0.2s;" autocomplete="off" />
+      </div>
+      <div class="database-menu-card__list" id="db-modal-list">
         <a href="index.html" class="database-menu-item"><span class="database-menu-item__num">01.</span> KaptanBey0 Control Center <span>[ACTIVE]</span></a>
         <a href="archive.html" class="database-menu-item"><span class="database-menu-item__num">02.</span> Substrate Anomaly Archive <span>[INDEXED]</span></a>
         <a href="researchers.html" class="database-menu-item"><span class="database-menu-item__num">03.</span> Researchers Database <span>[RESTRICTED]</span></a>
         <a href="phenomena.html" class="database-menu-item"><span class="database-menu-item__num">04.</span> Phenomena 3D Catalog <span>[ACTIVE]</span></a>
         <a href="impossibilia.html" class="database-menu-item"><span class="database-menu-item__num">05.</span> Impossible Objects Vault <span>[CONTAINED]</span></a>
         <a href="github-universe.html" class="database-menu-item"><span class="database-menu-item__num">06.</span> GitHub External 3D Node <span>[CONNECTED]</span></a>
+        <a href="containment-log.html" class="database-menu-item"><span class="database-menu-item__num">07.</span> Containment Logs <span>[SEALED]</span></a>
+        <a href="morphogenesis.html" class="database-menu-item"><span class="database-menu-item__num">08.</span> Morphogenesis Protocol <span>[EVOLVING]</span></a>
+        <a href="antigravity.html" class="database-menu-item"><span class="database-menu-item__num">09.</span> Anti-Gravity Engine <span>[UNSTABLE]</span></a>
         <a href="fragment-00.html" class="database-menu-item" style="border-color: rgba(255,0,85,0.4); background: rgba(255,0,85,0.05);"><span class="database-menu-item__num" style="color:#ff0055;">00.</span> Fragment 00 (Origin Point) <span style="color:#ff0055;">[CLASSIFIED]</span></a>
       </div>
     </div>
@@ -381,7 +417,7 @@ Players.<span class="fn">PlayerAdded</span>:Connect(<span class="kw">function</s
         </div>
         <div class="terminal-window__input-row">
           <span class="terminal-prompt">kaptanbey01<span class="terminal-prompt__at">@</span>automaton <span class="terminal-prompt__dir">~</span> <span class="terminal-prompt__arrow">❯</span></span>
-          <input type="text" class="terminal-input" id="terminal-input" placeholder="Komut yazın (örn: access, cat 00, status)..." autocomplete="off" spellcheck="false" />
+          <input type="text" class="terminal-input" id="terminal-input" placeholder="Komut yazın (örn: access, cat 00, status)..." data-i18n-placeholder="terminal_placeholder" autocomplete="off" spellcheck="false" />
         </div>
       </div>
 
