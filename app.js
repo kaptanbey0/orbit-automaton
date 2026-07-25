@@ -361,17 +361,17 @@ function initTerminal() {
     },
     version: {
       response: [
-        { type: 'ready', prefix: '⚡', text: 'Orbit Automaton v2.4.1 (Dark Zenith + Substrate)' },
-        { type: 'system', prefix: '  ', text: 'Tema: Dark Zenith Core' },
+        { type: 'ready', prefix: '⚡', text: 'KaptanBey0 Automaton v2.4.1 (Dark Zenith Engine)' },
+        { type: 'system', prefix: '  ', text: 'Developer: kaptanbey01' },
         { type: 'system', prefix: '  ', text: 'Motor: JavaScript, Luau & Python' },
         { type: 'system', prefix: '  ', text: 'Build: 2026.07.25' },
       ]
     },
     ping: {
       response: [
-        { type: 'success', prefix: '✓', text: 'gitlab.orbit → 12ms' },
-        { type: 'success', prefix: '✓', text: 'discord.api → 34ms' },
-        { type: 'success', prefix: '✓', text: 'roblox.api → 67ms' },
+        { type: 'success', prefix: '✓', text: 'kaptanbey0.network → 12ms' },
+        { type: 'success', prefix: '✓', text: 'discord.api (kaptanbey01) → 34ms' },
+        { type: 'success', prefix: '✓', text: 'roblox.api (luau) → 67ms' },
         { type: 'ready', prefix: '⚡', text: 'Tüm bağlantılar sağlıklı' },
       ]
     },
@@ -385,7 +385,7 @@ function initTerminal() {
     if (!cmd) return;
 
     // Echo command
-    addLine('system', `<span style="color:var(--neon-green)">orbit@automaton</span> <span style="color:var(--text-muted)">~</span> <span style="color:var(--neon-purple)">❯</span> ${escapeHtml(cmd)}`);
+    addLine('system', `<span style="color:var(--neon-green)">kaptanbey01@automaton</span> <span style="color:var(--text-muted)">~</span> <span style="color:var(--neon-purple)">❯</span> ${escapeHtml(cmd)}`);
 
     if (cmd === 'clear') {
       body.innerHTML = '';
