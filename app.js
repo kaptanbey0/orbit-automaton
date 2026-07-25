@@ -956,7 +956,10 @@ function initAudioAmbientSynth() {
 
   let isPlaying = false;
   let audioCtx = null;
-  let osc1 = null, osc2 = null, gainNode = null;
+  let oscs = [];
+  let filter = null;
+  let gainNode = null;
+  let lfo = null;
 
   btn.addEventListener('click', () => {
     if (!isPlaying) {
@@ -965,45 +968,60 @@ function initAudioAmbientSynth() {
         if (!audioCtx) audioCtx = new AudioContext();
         if (audioCtx.state === 'suspended') audioCtx.resume();
 
-        osc1 = audioCtx.createOscillator();
-        osc2 = audioCtx.createOscillator();
+        // Polyphonic Cyberpunk Synth Chord: A2, E3, A3, E4
+        const freqs = [110.00, 164.81, 220.00, 329.63];
+        oscs = [];
+
+        // Lowpass Biquad Filter for sweeping Blade Runner ambient tone
+        filter = audioCtx.createBiquadFilter();
+        filter.type = 'lowpass';
+        filter.frequency.setValueAtTime(450, audioCtx.currentTime);
+
+        // LFO for subtle filter sweep
+        lfo = audioCtx.createOscillator();
+        lfo.frequency.setValueAtTime(0.2, audioCtx.currentTime); // 0.2Hz sweep
+        const lfoGain = audioCtx.createGain();
+        lfoGain.gain.setValueAtTime(200, audioCtx.currentTime);
+        lfo.connect(filter.frequency);
+        lfo.start();
+
         gainNode = audioCtx.createGain();
+        gainNode.gain.setValueAtTime(0.001, audioCtx.currentTime);
+        gainNode.gain.linearRampToValueAtTime(0.18, audioCtx.currentTime + 1.5); // Rich audible volume
 
-        osc1.type = 'triangle';
-        osc2.type = 'sine';
+        freqs.forEach((freq, i) => {
+          const osc = audioCtx.createOscillator();
+          osc.type = i % 2 === 0 ? 'sawtooth' : 'triangle';
+          osc.frequency.setValueAtTime(freq, audioCtx.currentTime);
+          osc.connect(filter);
+          osc.start();
+          oscs.push(osc);
+        });
 
-        osc1.frequency.setValueAtTime(110, audioCtx.currentTime); // A2 chord
-        osc2.frequency.setValueAtTime(164.81, audioCtx.currentTime); // E3 chord
-
-        gainNode.gain.setValueAtTime(0.01, audioCtx.currentTime);
-        gainNode.gain.exponentialRampToValueAtTime(0.05, audioCtx.currentTime + 2);
-
-        osc1.connect(gainNode);
-        osc2.connect(gainNode);
+        filter.connect(gainNode);
         gainNode.connect(audioCtx.destination);
 
-        osc1.start();
-        osc2.start();
-
         isPlaying = true;
-        btn.innerHTML = '<span>🎵 AMBIENT: ON</span>';
-        btn.style.borderColor = 'var(--neon-purple)';
-        btn.style.color = 'var(--neon-purple)';
+        btn.innerHTML = '<span>🎵 AMBIENT: ON (PLAYING)</span>';
+        btn.style.borderColor = 'var(--neon-green)';
+        btn.style.color = 'var(--neon-green)';
+        btn.style.boxShadow = '0 0 20px rgba(34, 255, 136, 0.4)';
       } catch (e) {
-        // Fallback
+        console.error('Audio synth error:', e);
       }
     } else {
       if (gainNode && audioCtx) {
-        gainNode.gain.exponentialRampToValueAtTime(0.0001, audioCtx.currentTime + 1);
+        gainNode.gain.linearRampToValueAtTime(0.0001, audioCtx.currentTime + 0.8);
         setTimeout(() => {
-          if (osc1) osc1.stop();
-          if (osc2) osc2.stop();
-        }, 1000);
+          oscs.forEach(o => { try { o.stop(); } catch(e){} });
+          if (lfo) { try { lfo.stop(); } catch(e){} }
+        }, 900);
       }
       isPlaying = false;
       btn.innerHTML = '<span>🎵 AMBIENT: OFF</span>';
       btn.style.borderColor = '';
       btn.style.color = '';
+      btn.style.boxShadow = '';
     }
   });
 }
