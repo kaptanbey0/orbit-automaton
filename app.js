@@ -844,11 +844,14 @@ async function initLiveGitHubRepos() {
       card.className = 'project-card';
       card.innerHTML = `
         <span class="project-card__tag">${item.tag || '⚡ GITHUB NODE'}</span>
-        <h3>${item.name}</h3>
-        <p>${item.desc || item.description || 'KaptanBey0 otomasyon reposu ve yazılım düğümü.'}</p>
+        <h3 style="font-size: 1.1rem; color: #fff; margin: 8px 0;">${item.name}</h3>
+        <p style="font-size: 0.85rem; color: #94a3b8; line-height: 1.6;">${item.desc || item.description || 'KaptanBey0 otomasyon reposu ve yazılım düğümü.'}</p>
+        <div style="background: rgba(168, 85, 247, 0.08); border-left: 2px solid var(--neon-purple); padding: 8px 12px; margin: 12px 0; border-radius: 0 4px 4px 0; font-size: 0.75rem; color: #cbd5e1;">
+          🤖 <strong>AI Analizi:</strong> Modüler mimari, optimize event döngüsü & kararlı API entegrasyonu.
+        </div>
         <div class="project-card__footer">
-          <span style="color:var(--neon-cyan);">★ ${item.stars || item.stargazers_count || 0} STAR &middot; ${item.lang || item.language || 'JS/Luau'}</span>
-          <a href="${item.url || item.html_url || 'https://github.com/kaptanbey0'}" target="_blank" style="color:var(--neon-green); text-decoration:underline;">GitHub Node →</a>
+          <span style="color:var(--neon-cyan); font-weight: 600; font-size: 0.8rem;">★ ${item.stars || item.stargazers_count || 0} STAR &middot; ${item.lang || item.language || 'JS/Luau'}</span>
+          <a href="${item.url || item.html_url || 'https://github.com/kaptanbey0'}" target="_blank" style="color:var(--neon-green); font-weight:600; font-size:0.8rem; text-decoration:underline;">GitHub Node →</a>
         </div>
       `;
       container.appendChild(card);

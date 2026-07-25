@@ -3,69 +3,12 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <meta name="description" content="KaptanBey0 Automaton — Dark Zenith temalı modern otomasyon, Discord bot mimarisi, Roblox Luau ve anomali portföyü." />
+  <meta name="description" content="KaptanBey0 Automaton — Dark Zenith temalı Discord Bot Mimarisi, Roblox Luau ve Siber Güvenlik Portföyü." />
   <title>KaptanBey0 Automaton — Dark Zenith Portfolio</title>
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@300;400;500;600;700&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
   <link rel="stylesheet" href="style.css" />
-  <style>
-    .hero-section {
-      padding: 40px 0 60px;
-      text-align: center;
-      position: relative;
-    }
-    .hero-banner-container {
-      margin-bottom: 30px;
-      border-radius: 12px;
-      overflow: hidden;
-      border: 1px solid rgba(0, 240, 255, 0.3);
-      box-shadow: 0 0 35px rgba(0, 240, 255, 0.25);
-    }
-    .hero-title-box {
-      margin: 20px 0;
-    }
-    .hero-avatar-logo {
-      width: 100px;
-      height: 100px;
-      border-radius: 50%;
-      border: 3px solid var(--neon-cyan);
-      box-shadow: 0 0 25px var(--neon-cyan);
-      margin-bottom: 15px;
-      object-fit: cover;
-    }
-    .visual-cards-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
-      gap: 24px;
-      margin: 40px 0;
-    }
-    .visual-card-item {
-      background: rgba(13, 13, 20, 0.85);
-      border: 1px solid rgba(0, 240, 255, 0.2);
-      border-radius: var(--radius-md);
-      padding: 20px;
-      backdrop-filter: blur(10px);
-      transition: all 0.35s var(--ease-spring);
-    }
-    .visual-card-item:hover {
-      transform: translateY(-6px);
-      border-color: var(--neon-purple);
-      box-shadow: 0 0 30px rgba(168, 85, 247, 0.3);
-    }
-    .visual-card-item img {
-      width: 100%;
-      height: auto;
-      border-radius: 6px;
-    }
-    .kaptan-logo-img {
-      width: 32px;
-      height: 32px;
-      border-radius: 50%;
-      border: 1px solid var(--neon-cyan);
-      margin-right: 10px;
-    }
-  </style>
 </head>
 <body>
 
@@ -114,12 +57,12 @@
           <option value="ja">JA (日本語)</option>
         </select>
       </div>
-      <button class="nav-database-btn" id="nav-db-btn">
+      <button class="nav-database-btn" id="nav-db-btn" data-i18n="nav_db">
         <span>&gt; ACCESS DATABASE</span>
       </button>
       <div class="status-beacon status-beacon--online" id="status-beacon" style="margin-left: 8px;">
         <span class="status-beacon__dot"></span>
-        <span class="status-beacon__label">Çevrimiçi</span>
+        <span class="status-beacon__label" data-i18n="status_online">Çevrimiçi</span>
       </div>
     </div>
   </header>
@@ -147,31 +90,90 @@
   <main class="main">
 
     <!-- ── SECTION 0: HERO SHOWCASE ── -->
-    <section class="section section--hero hero-section" id="hero">
-      <div class="hero-banner-container">
-        <img src="assets/header.svg" alt="KaptanBey0 Automaton Header" style="width: 100%; display: block;" />
+    <section class="section section--hero" id="hero">
+      
+      <!-- HOLOGRAPHIC HERO PROFILE CARD -->
+      <div class="hero-container-card">
+        <div class="hero-profile-row">
+          <div class="hero-avatar-wrapper">
+            <img src="assets/logo.png" alt="KaptanBey0 Avatar" class="hero-avatar-img" />
+            <div class="hero-avatar-ring"></div>
+          </div>
+          <div class="hero-content-col">
+            <div class="hero-badges-row">
+              <span class="cyber-badge cyber-badge--cyan">🤖 DISCORD BOT ARCHITECT</span>
+              <span class="cyber-badge cyber-badge--purple">🎮 ROBLOX LUAU SCRIPTING</span>
+              <span class="cyber-badge cyber-badge--green">🛠️ PYTHON AI PIPELINES</span>
+            </div>
+            <h1 class="glitch-title" data-text="KAPTANBEY0 — DARK ZENITH CORE" style="font-size: 2.2rem; color: #fff; margin-bottom: 6px;">
+              KAPTANBEY0 — DARK ZENITH CORE
+            </h1>
+            <p style="font-family: var(--font-mono); color: var(--neon-cyan); font-size: 0.95rem; line-height: 1.6;">
+              🚀 Yüksek performanslı Discord botları, Roblox Luau oyun otomasyonları ve otonom yazılım çözümleri.
+            </p>
+            <div class="hero-cta-btns">
+              <a href="https://discord.com/users/kaptanbey01" target="_blank" class="cyber-btn cyber-btn--discord">
+                💬 Discord: kaptanbey01
+              </a>
+              <a href="https://github.com/kaptanbey0" target="_blank" class="cyber-btn cyber-btn--primary">
+                ⚡ GitHub Profili (@kaptanbey0)
+              </a>
+              <a href="archive.html" class="cyber-btn" style="background: rgba(168, 85, 247, 0.15); color: var(--neon-purple); border: 1px solid rgba(168, 85, 247, 0.4);">
+                📂 Substrate Arşivi
+              </a>
+            </div>
+          </div>
+        </div>
       </div>
-
-      <img src="assets/logo.png" alt="KaptanBey0 Avatar" class="hero-avatar-logo" />
-      <h1 class="glitch-title" data-text="KAPTANBEY0 — DARK ZENITH" style="font-size: 2.2rem; color: #fff;">KAPTANBEY0 — DARK ZENITH</h1>
-      <p style="font-family: var(--font-mono); color: var(--neon-cyan); font-size: 0.95rem; margin-top: 8px;">
-        🤖 Discord Bot Mimarisi &middot; 🎮 Roblox Luau Scripting &middot; 🛠️ Otonom Sistemler
-      </p>
 
       <!-- VISUAL CARDS GRID SHOWCASE -->
       <div class="visual-cards-grid">
+        
+        <!-- CARD 1: PROFILE HUD -->
         <div class="visual-card-item">
-          <h3 style="font-family: var(--font-mono); color: var(--neon-purple); font-size: 0.9rem; margin-bottom: 12px;">📊 PROFİL KARTI</h3>
-          <img src="assets/profile-card.svg" alt="KaptanBey0 Profile Card" />
+          <h3 style="font-family: var(--font-mono); color: var(--neon-cyan); font-size: 0.9rem; margin-bottom: 12px;">📊 KAPTANBEY0 PROFİL HUD</h3>
+          <img src="assets/profile-card.svg" alt="Profile Card" style="margin-bottom: 15px;" />
+          <div style="font-family: var(--font-mono); font-size: 0.8rem; color: #94a3b8; line-height: 1.6;">
+            • <strong>Developer:</strong> kaptanbey01<br/>
+            • <strong>Node Status:</strong> Active Node 7.2<br/>
+            • <strong>Clearance:</strong> OMEGA LEVEL
+          </div>
         </div>
+
+        <!-- CARD 2: SKILL RADAR & INTERACTIVE BARS -->
         <div class="visual-card-item">
-          <h3 style="font-family: var(--font-mono); color: var(--neon-cyan); font-size: 0.9rem; margin-bottom: 12px;">🎯 YETENEK RADARI</h3>
-          <img src="assets/skill-radar.svg" alt="KaptanBey0 Skill Radar" />
+          <h3 style="font-family: var(--font-mono); color: var(--neon-purple); font-size: 0.9rem; margin-bottom: 12px;">🎯 YETENEK & UZMANLIK</h3>
+          <div class="skills-progress-list">
+            <div>
+              <div class="skill-item__label-row"><span>Discord.js v14 & Bot Architecture</span><span>98%</span></div>
+              <div class="skill-item__bar-bg"><div class="skill-item__bar-fill" style="width: 98%;"></div></div>
+            </div>
+            <div>
+              <div class="skill-item__label-row"><span>Roblox Luau & DataStore Systems</span><span>95%</span></div>
+              <div class="skill-item__bar-bg"><div class="skill-item__bar-fill" style="width: 95%;"></div></div>
+            </div>
+            <div>
+              <div class="skill-item__label-row"><span>Python AI & Automation Pipelines</span><span>90%</span></div>
+              <div class="skill-item__bar-bg"><div class="skill-item__bar-fill" style="width: 90%;"></div></div>
+            </div>
+            <div>
+              <div class="skill-item__label-row"><span>Node.js & Webhook Integrations</span><span>96%</span></div>
+              <div class="skill-item__bar-bg"><div class="skill-item__bar-fill" style="width: 96%;"></div></div>
+            </div>
+          </div>
         </div>
+
+        <!-- CARD 3: SYSTEM MONITOR -->
         <div class="visual-card-item">
-          <h3 style="font-family: var(--font-mono); color: var(--neon-green); font-size: 0.9rem; margin-bottom: 12px;">🖥️ SİSTEM MONİTÖRÜ</h3>
-          <img src="assets/system-monitor.svg" alt="System Monitor" />
+          <h3 style="font-family: var(--font-mono); color: var(--neon-green); font-size: 0.9rem; margin-bottom: 12px;">🖥️ CANLI SİSTEM MONİTÖRÜ</h3>
+          <img src="assets/system-monitor.svg" alt="System Monitor" style="margin-bottom: 15px;" />
+          <div style="font-family: var(--font-mono); font-size: 0.8rem; color: #94a3b8; line-height: 1.6;">
+            • <strong>Uptime:</strong> %99.97 Kararlı<br/>
+            • <strong>Active Hooks:</strong> 47 Dinleniyor<br/>
+            • <strong>API Endpoints:</strong> 128 Aktif Düğüm
+          </div>
         </div>
+
       </div>
     </section>
 
@@ -208,7 +210,7 @@
           </div>
           <div class="stat-card__body">
             <span class="stat-card__value" id="uptime-value">99.97%</span>
-            <span class="stat-card__label">Uptime</span>
+            <span class="stat-card__label" data-i18n="stat_uptime">Uptime</span>
           </div>
           <div class="stat-card__glow"></div>
         </div>
@@ -219,7 +221,7 @@
           </div>
           <div class="stat-card__body">
             <span class="stat-card__value" id="hooks-value">47</span>
-            <span class="stat-card__label">Aktif Webhook</span>
+            <span class="stat-card__label" data-i18n="stat_webhooks">Aktif Webhook</span>
           </div>
           <div class="stat-card__glow"></div>
         </div>
@@ -230,7 +232,7 @@
           </div>
           <div class="stat-card__body">
             <span class="stat-card__value" id="apis-value">128</span>
-            <span class="stat-card__label">API Endpoint</span>
+            <span class="stat-card__label" data-i18n="stat_apis">API Endpoint</span>
           </div>
           <div class="stat-card__glow"></div>
         </div>
@@ -241,7 +243,7 @@
           </div>
           <div class="stat-card__body">
             <span class="stat-card__value" id="impact-value">0</span>
-            <span class="stat-card__label">Risk Uyarısı</span>
+            <span class="stat-card__label" data-i18n="stat_risks">Risk Uyarısı</span>
           </div>
           <div class="stat-card__glow"></div>
         </div>
@@ -251,7 +253,7 @@
       <div class="activity-panel">
         <div class="panel-header">
           <span class="panel-header__dot"></span>
-          <span>Commit Aktivitesi — Son 30 Gün</span>
+          <span data-i18n="commit_activity">Commit Aktivitesi — Son 30 Gün</span>
         </div>
         <div class="activity-graph" id="activity-graph"></div>
       </div>
@@ -272,8 +274,8 @@
     <!-- ── SECTION 3: KAPTANBEY0 AĞ BAĞLANTISI ── -->
     <section class="section section--orbit" id="orbit">
       <div class="section__header">
-        <h2 class="glitch-title" data-text="KaptanBey0 Ağ Bağlantısı">KaptanBey0 Ağ Bağlantısı</h2>
-        <p class="section__subtitle">KaptanBey0 Automaton mimarisi &middot; Webhook &amp; API bağımlılık haritası</p>
+        <h2 class="glitch-title" data-i18n="network_title" data-text="KaptanBey0 Ağ Bağlantısı">KaptanBey0 Ağ Bağlantısı</h2>
+        <p class="section__subtitle" data-i18n="network_sub">KaptanBey0 Automaton mimarisi &middot; Webhook &amp; API bağımlılık haritası</p>
       </div>
 
       <div class="orbit-vis-container">
@@ -281,8 +283,8 @@
         <div class="orbit-info-overlay">
           <div class="orbit-info-card">
             <span class="orbit-info-card__tag">kaptanbey01</span>
-            <h3>Bağımlılık Haritası</h3>
-            <p>Kodun bir yerinde değişiklik yaptığında, projenin neresinin etkileneceğini anında öngörüyor.</p>
+            <h3 data-i18n="dependency_map">Bağımlılık Haritası</h3>
+            <p data-i18n="dependency_desc">Kodun bir yerinde değişiklik yaptığında, projenin neresinin etkileneceğini anında öngörüyor.</p>
             <div class="orbit-info-card__stats">
               <div><strong id="orbit-nodes">34</strong><small>Node</small></div>
               <div><strong id="orbit-edges">89</strong><small>Bağlantı</small></div>
@@ -295,7 +297,7 @@
       <div class="dependency-list">
         <div class="panel-header">
           <span class="panel-header__dot"></span>
-          <span>Son Değişiklik Etki Analizi</span>
+          <span data-i18n="impact_analysis">Son Değişiklik Etki Analizi</span>
         </div>
         <div class="dep-items" id="dep-items"></div>
       </div>
@@ -385,7 +387,7 @@ Players.<span class="fn">PlayerAdded</span>:Connect(<span class="kw">function</s
 
       <!-- SYSTEM EVENT LOG STREAMER -->
       <div class="system-event-log">
-        <div class="system-event-log__title">
+        <div class="system-event-log__title" data-i18n="event_ticker_title">
           <span style="color:var(--neon-cyan);">●</span> LIVE SYSTEM EVENT TICKER
         </div>
         <div class="system-event-log__list" id="system-event-log-list"></div>
@@ -396,9 +398,7 @@ Players.<span class="fn">PlayerAdded</span>:Connect(<span class="kw">function</s
 
   <!-- ═══ FOOTER ═══ -->
   <footer class="footer">
-    <span>KaptanBey0 Automaton &copy; 2026</span>
-    <span class="footer__sep">&middot;</span>
-    <span>Dark Zenith Engine &middot; kaptanbey01</span>
+    <span data-i18n="footer_text">KaptanBey0 Automaton &copy; 2026 &middot; Dark Zenith Engine &middot; kaptanbey01</span>
     <span class="footer__sep">&middot;</span>
     <span id="clock"></span>
   </footer>
