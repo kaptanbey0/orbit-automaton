@@ -154,44 +154,73 @@
   </style>
 </head>
 <body>
+<nav class="nexus-subpage-hub">
+    <a href="index.html" class="hub-link" data-i18n="back_to_control"><span class="hub-icon">⚡</span> Dashboard</a>
+    <a href="archive.html" class="hub-link" data-i18n="nav_archive_tab"><span class="hub-icon">📂</span> Archive</a>
+    <a href="researchers.html" class="hub-link" data-i18n="nav_res_tab"><span class="hub-icon">👨‍🔬</span> Researchers</a>
+    <a href="phenomena.html" class="hub-link" data-i18n="nav_phen_tab"><span class="hub-icon">🔮</span> Phenomena 3D</a>
+    <a href="impossibilia.html" class="hub-link" data-i18n="nav_imp_tab"><span class="hub-icon">🌀</span> Impossible Vault</a>
+    <a href="morphogenesis.html" class="hub-link" data-i18n="nav_morph_tab"><span class="hub-icon">🧬</span> Morphogenesis</a>
+    <a href="github-universe.html" class="hub-link" data-i18n="nav_gh_tab"><span class="hub-icon">🪐</span> GitHub 3D</a>
+    <a href="containment-log.html" class="hub-link" data-i18n="nav_logs_tab"><span class="hub-icon">📋</span> Logs</a>
+    <a href="fragment-00.html" class="hub-link active hub-link--secret" data-i18n="nav_frag00_tab"><span class="hub-icon">🗝️</span> Fragment 00</a>
+    <div class="lang-select-wrapper" style="margin-left:auto; display:inline-flex; align-items:center; gap:6px; background:rgba(13,13,20,0.8); border:1px solid rgba(0,240,255,0.3); padding:4px 10px; border-radius:4px;">
+      <span style="font-size: 0.75rem;">🌐</span>
+      <select class="lang-select-box" style="background:transparent; color:var(--neon-cyan); border:none; font-family:var(--font-mono); font-size:0.8rem; cursor:pointer;">
+        <option value="tr">TR</option>
+        <option value="en">EN</option>
+        <option value="de">DE</option>
+        <option value="fr">FR</option>
+        <option value="es">ES</option>
+        <option value="ru">RU</option>
+        <option value="ja">JA</option>
+      </select>
+    </div>
+  </nav>
+
+  <!-- STARFIELD & AMBIENT PARTICLES -->
+  <canvas id="starfield"></canvas>
+  <div class="ambient-particles" id="ambient-particles"></div>
+  <div class="scanline-overlay"></div>
+
 <div class="page-container">
 
   <div class="origin-header">
-    <span class="classified-badge">CLEARANCE LEVEL: OMEGA ARCHIVE</span>
-    <h1 class="fragment-title">FRAGMENT 00 — ORIGIN POINT</h1>
-    <p style="color: #64748b; font-size: 0.85rem;">System Identifier: SUBSTRATE://00-ORIGIN-NULL</p>
+    <span class="classified-badge" data-i18n="frag00_clearance">CLEARANCE LEVEL: OMEGA ARCHIVE</span>
+    <h1 class="fragment-title" data-i18n="frag00_main_title">FRAGMENT 00 — ORIGIN POINT</h1>
+    <p style="color: #64748b; font-size: 0.85rem;" data-i18n="frag00_sys_id">System Identifier: SUBSTRATE://00-ORIGIN-NULL</p>
   </div>
 
   <div class="meta-grid">
     <div class="meta-item">
-      <span class="meta-label">Fragment ID</span>
+      <span class="meta-label" data-i18n="meta_frag_id">Fragment ID</span>
       <span class="meta-value">00</span>
     </div>
     <div class="meta-item">
-      <span class="meta-label">Classification</span>
-      <span class="meta-value">ORIGIN GEOMETRY / SELF-INDEX</span>
+      <span class="meta-label" data-i18n="meta_classification">Classification</span>
+      <span class="meta-value" data-i18n="val_classification">ORIGIN GEOMETRY / SELF-INDEX</span>
     </div>
     <div class="meta-item">
-      <span class="meta-label">Discovery Date</span>
-      <span class="meta-value">TIME-ZERO (PRE-CATALOG)</span>
+      <span class="meta-label" data-i18n="meta_discovery_date">Discovery Date</span>
+      <span class="meta-value" data-i18n="val_discovery_date">TIME-ZERO (PRE-CATALOG)</span>
     </div>
     <div class="meta-item">
-      <span class="meta-label">Primary Researcher</span>
-      <span class="meta-value">UNKNOWN ARCHITECT</span>
+      <span class="meta-label" data-i18n="meta_primary_res">Primary Researcher</span>
+      <span class="meta-value" data-i18n="val_primary_res">UNKNOWN ARCHITECT</span>
     </div>
     <div class="meta-item">
-      <span class="meta-label">Threat Level</span>
-      <span class="meta-value" style="color: #ff0055;">EXISTENTIAL / ONCOLOGICAL</span>
+      <span class="meta-label" data-i18n="meta_threat_level">Threat Level</span>
+      <span class="meta-value" style="color: #ff0055;" data-i18n="val_threat_level">EXISTENTIAL / ONCOLOGICAL</span>
     </div>
     <div class="meta-item">
-      <span class="meta-label">Status</span>
-      <span class="meta-value" style="color: #00f0ff;">DO NOT INDEX</span>
+      <span class="meta-label" data-i18n="meta_status">Status</span>
+      <span class="meta-value" style="color: #00f0ff;" data-i18n="val_status">DO NOT INDEX</span>
     </div>
   </div>
 
   <div class="audio-player-sim">
-    <button class="audio-btn" onclick="alert('Audio stream decryption in progress... Resonance tone generated.')">▶</button>
-    <div style="font-size: 0.8rem; color: #a855f7; width: 140px;">AUDIO LOG #00</div>
+    <button class="audio-btn" onclick="if(window.orbitSynthBeep){window.orbitSynthBeep(350, 0.4); window.orbitSynthBeep(700, 0.3);}">▶</button>
+    <div style="font-size: 0.8rem; color: #a855f7; width: 140px;" data-i18n="audio_log_label">AUDIO LOG #00</div>
     <div class="audio-wave">
       <div class="audio-bar" style="animation-delay: 0.1s;"></div>
       <div class="audio-bar" style="animation-delay: 0.4s;"></div>
@@ -201,28 +230,29 @@
       <div class="audio-bar" style="animation-delay: 0.5s;"></div>
       <div class="audio-bar" style="animation-delay: 0.7s;"></div>
     </div>
-    <span style="font-size: 0.75rem; color: #64748b;">00:42 / DECRYPTED</span>
+    <span style="font-size: 0.75rem; color: #64748b;" data-i18n="audio_log_decrypted">00:42 / DECRYPTED</span>
   </div>
 
   <div class="log-box">
-    <p><strong>[SYSTEM NOTE]:</strong> This file was not added to the Substrate database. This file created the database.</p>
+    <p data-i18n="frag00_sys_note"><strong>[SYSTEM NOTE]:</strong> This file was not added to the Substrate database. This file created the database.</p>
     <br/>
-    <p><em>"We spent months attempting to isolate the anomalous pulse emitting from deep terminal node 0. When we finally traced the signal source back to its root coordinate, we discovered a recursive script running on hardware that had no power source connected."</em></p>
+    <p data-i18n="frag00_narrative_1"><em>"We spent months attempting to isolate the anomalous pulse emitting from deep terminal node 0. When we finally traced the signal source back to its root coordinate, we discovered a recursive script running on hardware that had no power source connected."</em></p>
   </div>
 
   <div style="margin: 30px 0;">
-    <h3 style="color: #00f0ff; font-size: 1rem; margin-bottom: 15px; letter-spacing: 0.1em;">OBSERVATION RECORD #00-A</h3>
-    <p>The Substrate is not an archive of strange phenomena found in space. It is a recording device left behind by an architecture that dissolved itself to allow normal physics to exist.</p>
-    <p style="margin-top: 15px;">Every fragment index (01 through 31) is merely a splinter created when Fragment 00 shattered. If all fragments reach 100% synchronization, the Dark Zenith network will initiate an automatic recursion protocol.</p>
+    <h3 style="color: #00f0ff; font-size: 1rem; margin-bottom: 15px; letter-spacing: 0.1em;" data-i18n="frag00_obs_title">OBSERVATION RECORD #00-A</h3>
+    <p data-i18n="frag00_obs_text_1">The Substrate is not an archive of strange phenomena found in space. It is a recording device left behind by an architecture that dissolved itself to allow normal physics to exist.</p>
+    <p style="margin-top: 15px;" data-i18n="frag00_obs_text_2">Every fragment index (01 through 31) is merely a splinter created when Fragment 00 shattered. If all fragments reach 100% synchronization, the Nexus Prime network will initiate an automatic recursion protocol.</p>
   </div>
 
-  <div style="background: rgba(255, 0, 85, 0.05); border: 1px dashed rgba(255, 0, 85, 0.3); padding: 15px; border-radius: 4px; font-size: 0.8rem; color: #f43f5e;">
+  <div style="background: rgba(255, 0, 85, 0.05); border: 1px dashed rgba(255, 0, 85, 0.3); padding: 15px; border-radius: 4px; font-size: 0.8rem; color: #f43f5e;" data-i18n="frag00_warning_box">
     <span class="glitch-text">WARNING:</span> ACCESS TO FRAGMENT 00 HAS BEEN LOGGED IN THE CENTRAL EVENT TICKER. OBSERVER ID STAMPED.
   </div>
 
-  <a href="index.html" class="nav-back">← RETURN TO KAPTANBEY0 CORE CONTROL CENTER</a>
+  <a href="index.html" class="nav-back" data-i18n="frag00_return_btn">← RETURN TO KAPTANBEY0 CORE CONTROL CENTER</a>
 
 </div>
 <script src="i18n.js"></script>
+<script src="app.js"></script>
 </body>
 </html>

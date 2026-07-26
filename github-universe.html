@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8"/>
 <meta name="viewport" content="width=device-width,initial-scale=1.0"/>
-<title>GitHub Universe — Anti-Gravity</title>
+<title>GitHub Universe — 3D Node Explorer</title>
 <link rel="icon" type="image/png" href="assets/logo.png" />
 <style>
 *{margin:0;padding:0;box-sizing:border-box}
@@ -48,8 +48,33 @@ canvas{display:block;position:fixed;inset:0}
 <script type="importmap">
 {"imports":{"three":"https://unpkg.com/three@0.164.1/build/three.module.js","three/addons/":"https://unpkg.com/three@0.164.1/examples/jsm/"}}
 </script>
+<link rel="stylesheet" href="style.css" />
 </head>
 <body>
+
+<nav class="nexus-subpage-hub">
+    <a href="index.html" class="hub-link" data-i18n="back_to_control"><span class="hub-icon">⚡</span> Dashboard</a>
+    <a href="archive.html" class="hub-link" data-i18n="nav_archive_tab"><span class="hub-icon">📂</span> Archive</a>
+    <a href="researchers.html" class="hub-link" data-i18n="nav_res_tab"><span class="hub-icon">👨‍🔬</span> Researchers</a>
+    <a href="phenomena.html" class="hub-link" data-i18n="nav_phen_tab"><span class="hub-icon">🔮</span> Phenomena 3D</a>
+    <a href="impossibilia.html" class="hub-link" data-i18n="nav_imp_tab"><span class="hub-icon">🌀</span> Impossible Vault</a>
+    <a href="morphogenesis.html" class="hub-link" data-i18n="nav_morph_tab"><span class="hub-icon">🧬</span> Morphogenesis</a>
+    <a href="github-universe.html" class="hub-link active" data-i18n="nav_gh_tab"><span class="hub-icon">🪐</span> GitHub 3D</a>
+    <a href="containment-log.html" class="hub-link" data-i18n="nav_logs_tab"><span class="hub-icon">📋</span> Logs</a>
+    <a href="fragment-00.html" class="hub-link hub-link--secret" data-i18n="nav_frag00_tab"><span class="hub-icon">🗝️</span> Fragment 00</a>
+    <div class="lang-select-wrapper" style="margin-left:auto; display:inline-flex; align-items:center; gap:6px; background:rgba(13,13,20,0.8); border:1px solid rgba(0,240,255,0.3); padding:4px 10px; border-radius:4px;">
+      <span style="font-size: 0.75rem;">🌐</span>
+      <select class="lang-select-box" style="background:transparent; color:var(--neon-cyan); border:none; font-family:var(--font-mono); font-size:0.8rem; cursor:pointer;">
+        <option value="tr">TR</option>
+        <option value="en">EN</option>
+        <option value="de">DE</option>
+        <option value="fr">FR</option>
+        <option value="es">ES</option>
+        <option value="ru">RU</option>
+        <option value="ja">JA</option>
+      </select>
+    </div>
+  </nav>
 
 <div id="loader">
   <div class="loader-orbit">
@@ -59,9 +84,9 @@ canvas{display:block;position:fixed;inset:0}
     <div class="loader-core"></div>
   </div>
   <h1>GITHUB <b>UNIVERSE</b></h1>
-  <div class="sub">Anti-Gravity Field</div>
+  <div class="sub">Zero-Gravity Node Explorer</div>
   <div class="pbar"><i id="pb"></i></div>
-  <div id="ltxt">Initializing...</div>
+  <div id="ltxt" data-i18n="gh_loading">Initializing...</div>
 </div>
 
 <div id="vig"></div>
@@ -71,10 +96,10 @@ canvas{display:block;position:fixed;inset:0}
 
 <div id="hud">
   <div class="h h-tl">EXTERNAL NODE DETECTED: github.com/kaptanbey0/orbit-automaton<br/><span id="hFps">60</span> fps · <span id="hObj">0</span> objects</div>
-  <div class="h h-tr"><a href="index.html" style="color: #00f0ff; text-decoration: underline; pointer-events: auto;">← RETURN TO ORBIT CORE</a><br/>Dark Zenith Engine</div>
-  <div class="h h-bl"><span id="hTime">00:00</span><br/>Zero-Gravity Mode &middot; Substrate Sync</div>
+  <div class="h h-tr"><a href="index.html" style="color: #00f0ff; text-decoration: underline; pointer-events: auto;">← RETURN TO ORBIT CORE</a><br/>Nexus Prime Engine</div>
+  <div class="h h-bl"><span id="hTime">00:00</span><br/><span data-i18n="gh_mode">Zero-Gravity Mode &middot; Substrate Sync</span></div>
   <div class="h h-br"><span id="hCommits">0</span> commits<br/><span id="hParts">0</span> particles</div>
-  <div class="h h-bc">▲ EXTERNAL REPOSITORY NODE CONNECTED ▲</div>
+  <div class="h h-bc"><span data-i18n="gh_connected">▲ EXTERNAL REPOSITORY NODE CONNECTED ▲</span></div>
 </div>
 
 <script type="module">
@@ -933,5 +958,6 @@ async function init(){
 
 init();
 </script>
+<script src="i18n.js"></script>
 </body>
 </html>

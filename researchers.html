@@ -39,7 +39,8 @@
     }
     .nav-bar-sub {
       display: flex;
-      gap: 15px;
+      justify-content: space-between;
+      align-items: center;
       margin-bottom: 30px;
     }
     .nav-btn {
@@ -104,31 +105,68 @@
 </head>
 <body>
 
-  <div class="nav-bar-sub">
-    <a href="index.html" class="nav-btn">← KaptanBey0 Core Ana Sayfa</a>
-    <a href="archive.html" class="nav-btn">Substrate Arşivi →</a>
+  <!-- STARFIELD & AMBIENT PARTICLES -->
+  <canvas id="starfield"></canvas>
+  <div class="ambient-particles" id="ambient-particles"></div>
+  <div class="scanline-overlay"></div>
+
+
+  <nav class="nexus-subpage-hub">
+    <a href="index.html" class="hub-link" data-i18n="back_to_control"><span class="hub-icon">⚡</span> Dashboard</a>
+    <a href="archive.html" class="hub-link" data-i18n="nav_archive_tab"><span class="hub-icon">📂</span> Archive</a>
+    <a href="researchers.html" class="hub-link active" data-i18n="nav_res_tab"><span class="hub-icon">👨‍🔬</span> Researchers</a>
+    <a href="phenomena.html" class="hub-link" data-i18n="nav_phen_tab"><span class="hub-icon">🔮</span> Phenomena 3D</a>
+    <a href="impossibilia.html" class="hub-link" data-i18n="nav_imp_tab"><span class="hub-icon">🌀</span> Impossible Vault</a>
+    <a href="morphogenesis.html" class="hub-link" data-i18n="nav_morph_tab"><span class="hub-icon">🧬</span> Morphogenesis</a>
+    <a href="github-universe.html" class="hub-link" data-i18n="nav_gh_tab"><span class="hub-icon">🪐</span> GitHub 3D</a>
+    <a href="containment-log.html" class="hub-link" data-i18n="nav_logs_tab"><span class="hub-icon">📋</span> Logs</a>
+    <a href="fragment-00.html" class="hub-link hub-link--secret" data-i18n="nav_frag00_tab"><span class="hub-icon">🗝️</span> Fragment 00</a>
+    <div class="lang-select-wrapper" style="margin-left:auto; display:inline-flex; align-items:center; gap:6px; background:rgba(13,13,20,0.8); border:1px solid rgba(0,240,255,0.3); padding:4px 10px; border-radius:4px;">
+      <span style="font-size: 0.75rem;">🌐</span>
+      <select class="lang-select-box" style="background:transparent; color:var(--neon-cyan); border:none; font-family:var(--font-mono); font-size:0.8rem; cursor:pointer;">
+        <option value="tr">TR</option>
+        <option value="en">EN</option>
+        <option value="de">DE</option>
+        <option value="fr">FR</option>
+        <option value="es">ES</option>
+        <option value="ru">RU</option>
+        <option value="ja">JA</option>
+      </select>
+    </div>
+  </nav>
+    <div class="lang-select-wrapper" style="display:inline-flex; align-items:center; gap:6px; background:rgba(13,13,20,0.8); border:1px solid rgba(0,240,255,0.3); padding:4px 10px; border-radius:4px;">
+      <span style="font-size: 0.75rem;">🌐</span>
+      <select class="lang-select-box" id="lang-select" style="background:transparent; color:var(--neon-cyan); border:none; font-family:var(--font-mono); font-size:0.8rem; cursor:pointer;">
+        <option value="tr">TR (Türkçe)</option>
+        <option value="en">EN (English)</option>
+        <option value="de">DE (Deutsch)</option>
+        <option value="fr">FR (Français)</option>
+        <option value="es">ES (Español)</option>
+        <option value="ru">RU (Русский)</option>
+        <option value="ja">JA (日本語)</option>
+      </select>
+    </div>
   </div>
 
   <div class="header-box">
-    <div class="title-sub">SUBSTRATE PERSONEL KAYITLARI // RESTRICTED DATABASE</div>
-    <h1 class="main-head">ARAŞTIRMACI VERİTABANI</h1>
+    <div class="title-sub" data-i18n="res_top_badge">SUBSTRATE PERSONEL KAYITLARI // GİZLİ VERİTABANI</div>
+    <h1 class="main-head" data-i18n="res_main_title">ARAŞTIRMACI VERİTABANI</h1>
   </div>
 
   <!-- RESEARCHER A-07 -->
   <div class="personnel-card personnel-card--missing">
     <div class="card-header">
       <span class="researcher-name">RESEARCHER A-07</span>
-      <span class="status-tag status-tag--missing">DURUM: KAYIP (MISSING)</span>
+      <span class="status-tag status-tag--missing" data-i18n="status_missing">DURUM: KAYIP (MISSING)</span>
     </div>
     <div>
-      <strong>Yetki Seviyesi:</strong> LEVEL 5 (OMEGA)<br/>
-      <strong>Atanan Fragment'lar:</strong> 01, 02, 11, 14, 00 [RESTRICTED]<br/>
-      <strong>Son İletilen Mesaj:</strong>
-      <div class="quote-box">
-        "Orijinal yörüngeyi buldum. O yaratılmadı. O hatırlandı."<br/>
-        <em>("I found the original orbit. It was not created. It was remembered.")</em>
+      <strong data-i18n="res_clearance">Yetki Seviyesi:</strong> LEVEL 5 (OMEGA)<br/>
+      <strong data-i18n="res_assigned">Atanan Fragment'lar:</strong> 01, 02, 11, 14, 00 [RESTRICTED]<br/>
+      <strong data-i18n="res_last_msg">Son İletilen Mesaj:</strong>
+      <div class="quote-box" data-i18n="res_a07_quote">
+        "Orijinal yörüngeyi buldum. O yaratılmadı. O hatırlandı."
       </div>
-      <strong>Notlar:</strong> Fragment 14 çıkarma girişimi sırasında kayboldu. Disparition sonrasında yazılan loglar kronolojik titreşim gösteriyor.
+      <strong data-i18n="res_notes">Notlar:</strong> <span data-i18n="res_a07_notes">Fragment 14 çıkarma girişimi sırasında kayboldu. Disparition sonrasında yazılan loglar kronolojik titreşim gösteriyor.</span>
     </div>
   </div>
 
@@ -136,22 +174,22 @@
   <div class="personnel-card">
     <div class="card-header">
       <span class="researcher-name">RESEARCHER IX</span>
-      <span class="status-tag status-tag--corrupted">DURUM: VERİ BOZULMUŞ</span>
+      <span class="status-tag status-tag--corrupted" data-i18n="status_corrupted_data">DURUM: VERİ BOZULMUŞ</span>
     </div>
     <div>
-      <strong>Yetki Seviyesi:</strong> LEVEL 3<br/>
-      <strong>Atanan Fragment'lar:</strong> 19, 22, 23<br/>
-      <strong>Kurtarma İlerlemesi:</strong>
+      <strong data-i18n="res_clearance">Yetki Seviyesi:</strong> LEVEL 3<br/>
+      <strong data-i18n="res_assigned">Atanan Fragment'lar:</strong> 19, 22, 23<br/>
+      <strong data-i18n="res_recovery">Kurtarma İlerlemesi:</strong>
       <div class="recovery-progress" style="margin-top: 10px;">
         <div class="recovery-progress__bar-bg">
           <div class="recovery-progress__bar-fill"></div>
         </div>
         <span style="font-size: 0.75rem; color: var(--neon-red); font-weight: bold;">%17 KURTARILDI</span>
       </div>
-      <div class="quote-box">
+      <div class="quote-box" data-i18n="res_ix_quote">
         "Gözlem güvertesine girmeden önce darbe sesini duydum. Bu notu 3 saat önce yazıyorum. A-07'nin kapıyı açmasına izin vermeyin."
       </div>
-      <strong>Notlar:</strong> Fragment 19 çıkarma işleminde zamansal yakınlıktan etkilendi.
+      <strong data-i18n="res_notes">Notlar:</strong> <span data-i18n="res_ix_notes">Fragment 19 çıkarma işleminde zamansal yakınlıktan etkilendi.</span>
     </div>
   </div>
 
@@ -159,16 +197,16 @@
   <div class="personnel-card">
     <div class="card-header">
       <span class="researcher-name">RESEARCHER EM</span>
-      <span class="status-tag status-tag--active">DURUM: AKTİF / SİSTEMATİK</span>
+      <span class="status-tag status-tag--active" data-i18n="status_active_sys">DURUM: AKTİF / SİSTEMATİK</span>
     </div>
     <div>
-      <strong>Yetki Seviyesi:</strong> LEVEL 3<br/>
-      <strong>Atanan Fragment'lar:</strong> 03, 07<br/>
-      <strong>Log Tarzı:</strong> Soğuk, matematiksel ve kesinlikle objektif.<br/>
-      <div class="quote-box">
+      <strong data-i18n="res_clearance">Yetki Seviyesi:</strong> LEVEL 3<br/>
+      <strong data-i18n="res_assigned">Atanan Fragment'lar:</strong> 03, 07<br/>
+      <strong data-i18n="res_style">Log Tarzı:</strong> <span data-i18n="res_em_style_val">Soğuk, matematiksel ve kesinlikle objektif.</span><br/>
+      <div class="quote-box" data-i18n="res_em_quote">
         "Fragment 07 geometrisi yeniden oluşturulamaz bellek döngüleri sergiliyor. Fiziksel müdahale olmadan arşivlenmesini öneriyorum."
       </div>
-      <strong>Notlar:</strong> Echo Topolojisi için ilk muhafaza şartnamesini kaleme aldı.
+      <strong data-i18n="res_notes">Notlar:</strong> <span data-i18n="res_em_notes">Echo Topolojisi için ilk muhafaza şartnamesini kaleme aldı.</span>
     </div>
   </div>
 
@@ -176,23 +214,24 @@
   <div class="personnel-card personnel-card--omega">
     <div class="card-header">
       <span class="researcher-name">RESEARCHER Ω</span>
-      <span class="status-tag status-tag--omega">DURUM: ULAŞILAMIYOR (NODE 7.2)</span>
+      <span class="status-tag status-tag--omega" data-i18n="status_unreachable">DURUM: ULAŞILAMIYOR (NODE 7.2)</span>
     </div>
     <div>
-      <strong>Yetki Seviyesi:</strong> LEVEL 4<br/>
-      <strong>Atanan Fragment'lar:</strong> 31, 00<br/>
-      <strong>Log Tarzı:</strong> Arkeolojik, vakur, felsefi.<br/>
-      <div class="quote-box">
+      <strong data-i18n="res_clearance">Yetki Seviyesi:</strong> LEVEL 4<br/>
+      <strong data-i18n="res_assigned">Atanan Fragment'lar:</strong> 31, 00<br/>
+      <strong data-i18n="res_style">Log Tarzı:</strong> <span data-i18n="res_om_style_val">Arkeolojik, vakur, felsefi.</span><br/>
+      <div class="quote-box" data-i18n="res_om_quote">
         "Yeni yasalar keşfetmiyoruz. Bu evren inşa edilmeden önce ölen fizik yasalarının cesetlerini kazıyoruz."
       </div>
-      <strong>Notlar:</strong> Yok olmuş geometri ve uzay izleri uzmanı. Derin terminal düğümünde yalnız olduğu düşünülüyor.
+      <strong data-i18n="res_notes">Notlar:</strong> <span data-i18n="res_om_notes">Yok olmuş geometri ve uzay izleri uzmanı. Derin terminal düğümünde yalnız olduğu düşünülüyor.</span>
     </div>
   </div>
 
-  <p style="text-align:center; font-size: 0.75rem; color: #64748b; margin-top: 50px; letter-spacing: 0.2em;">
+  <p style="text-align:center; font-size: 0.75rem; color: #64748b; margin-top: 50px; letter-spacing: 0.2em;" data-i18n="footer_res">
     KAPTANBEY0 AUTOMATON PERSONNEL DATABASE &middot; DO NOT ALTER RECORD HISTORY
   </p>
 
 <script src="i18n.js"></script>
+<script src="app.js"></script>
 </body>
 </html>

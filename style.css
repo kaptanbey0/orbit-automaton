@@ -1,5 +1,5 @@
 /* ═══════════════════════════════════════════════════
-   ORBIT AUTOMATON — DARK ZENITH THEME
+   ORBIT AUTOMATON — NEXUS PRIME ENGINE THEME
    Ultra-minimal, mat siyah, neon detaylı arayüz
    ═══════════════════════════════════════════════════ */
 
@@ -49,6 +49,23 @@
   /* Transitions */
   --ease-out: cubic-bezier(0.16, 1, 0.3, 1);
   --ease-spring: cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+/* ─── ANIMATION KEYFRAMES ─── */
+@keyframes holoShimmer {
+  0% { background-position: -200% 0; }
+  100% { background-position: 200% 0; }
+}
+
+@keyframes neonBorderPulse {
+  0%, 100% { border-color: rgba(0, 240, 255, 0.25); box-shadow: 0 0 10px rgba(0, 240, 255, 0.1); }
+  50% { border-color: rgba(168, 85, 247, 0.45); box-shadow: 0 0 25px rgba(168, 85, 247, 0.25); }
+}
+
+@keyframes particleFloat {
+  0% { transform: translateY(0) rotate(0deg); opacity: 0.8; }
+  50% { transform: translateY(-15px) rotate(180deg); opacity: 1; }
+  100% { transform: translateY(0) rotate(360deg); opacity: 0.8; }
 }
 
 /* ─── RESET & BASE ─── */
@@ -116,7 +133,7 @@ img {
   inset: 0;
   z-index: 0;
   pointer-events: none;
-  opacity: 0.5;
+  opacity: 0.7;
 }
 
 /* ─── SCANLINE OVERLAY ─── */
@@ -132,6 +149,77 @@ img {
     rgba(0, 240, 255, 0.012) 2px,
     rgba(0, 240, 255, 0.012) 4px
   );
+}
+
+/* ─── AMBIENT FLOATING PARTICLES ─── */
+.ambient-particles {
+  position: fixed;
+  inset: 0;
+  z-index: 1;
+  pointer-events: none;
+  overflow: hidden;
+}
+
+.cosmic-dust {
+  position: absolute;
+  bottom: -10px;
+  border-radius: 50%;
+  pointer-events: none;
+  animation: dustRise linear infinite;
+  will-change: transform, opacity;
+}
+
+@keyframes dustRise {
+  0% {
+    transform: translateY(0) translateX(0) scale(1);
+    opacity: 0;
+  }
+  10% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.7;
+  }
+  90% {
+    opacity: 0.3;
+  }
+  100% {
+    transform: translateY(-105vh) translateX(40px) scale(0.3);
+    opacity: 0;
+  }
+}
+
+/* ─── HERO ENERGY ORBS ─── */
+.hero-energy-orb {
+  position: absolute;
+  border-radius: 50%;
+  pointer-events: none;
+  z-index: 0;
+  animation: orbDrift ease-in-out infinite alternate;
+  will-change: transform, opacity;
+}
+
+@keyframes orbDrift {
+  0% {
+    transform: translate(0, 0) scale(1);
+    opacity: 0.5;
+  }
+  25% {
+    transform: translate(15px, -20px) scale(1.08);
+    opacity: 0.7;
+  }
+  50% {
+    transform: translate(-10px, -35px) scale(0.95);
+    opacity: 0.5;
+  }
+  75% {
+    transform: translate(20px, -15px) scale(1.1);
+    opacity: 0.65;
+  }
+  100% {
+    transform: translate(-15px, 10px) scale(1);
+    opacity: 0.45;
+  }
 }
 
 /* ─── TOPBAR ─── */
@@ -1485,10 +1573,56 @@ img {
   overflow: hidden;
 }
 
+/* Holographic shimmer overlay */
+.visual-card-item::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    105deg,
+    transparent 30%,
+    rgba(0, 240, 255, 0.04) 45%,
+    rgba(168, 85, 247, 0.04) 55%,
+    transparent 70%
+  );
+  background-size: 200% 100%;
+  animation: holoShimmer 6s ease-in-out infinite;
+  pointer-events: none;
+  z-index: 1;
+  opacity: 0;
+  transition: opacity 0.4s ease;
+}
+
+.visual-card-item:hover::before {
+  opacity: 1;
+}
+
+/* Corner accent particle */
+.visual-card-item::after {
+  content: '';
+  position: absolute;
+  top: -2px;
+  right: -2px;
+  width: 6px;
+  height: 6px;
+  background: var(--neon-cyan);
+  border-radius: 50%;
+  box-shadow: 0 0 8px var(--neon-cyan), 0 0 20px rgba(0, 240, 255, 0.3);
+  opacity: 0;
+  transition: opacity 0.4s ease;
+  z-index: 2;
+}
+
+.visual-card-item:hover::after {
+  opacity: 1;
+  animation: particleFloat 2s ease-in-out infinite;
+}
+
 .visual-card-item:hover {
   border-color: var(--neon-cyan-dim);
   transform: translateY(-4px);
-  box-shadow: 0 8px 32px rgba(0, 240, 255, 0.1);
+  box-shadow: 0 8px 32px rgba(0, 240, 255, 0.1), 0 0 1px rgba(168, 85, 247, 0.2);
+  animation: neonBorderPulse 3s ease-in-out infinite;
 }
 
 .visual-card-item h4 {
@@ -1721,6 +1855,22 @@ img {
   border: 2px dashed var(--neon-purple);
   border-radius: 50%;
   animation: spin 10s linear infinite;
+}
+
+/* Second outer glow ring */
+.hero-avatar-wrapper::after {
+  content: '';
+  position: absolute;
+  inset: -14px;
+  border: 1px solid rgba(0, 240, 255, 0.15);
+  border-radius: 50%;
+  animation: spin 15s linear infinite reverse, avatarGlowPulse 4s ease-in-out infinite;
+  pointer-events: none;
+}
+
+@keyframes avatarGlowPulse {
+  0%, 100% { box-shadow: 0 0 15px rgba(0, 240, 255, 0.1); border-color: rgba(0, 240, 255, 0.15); }
+  50% { box-shadow: 0 0 30px rgba(168, 85, 247, 0.25); border-color: rgba(168, 85, 247, 0.35); }
 }
 
 .hero-content-col {
@@ -2213,14 +2363,314 @@ img {
   }
 }
 
-/* ─── Archive Table Mobile ─── */
-@media (max-width: 600px) {
-  .archive-table {
-    display: block;
-    overflow-x: auto;
-    -webkit-overflow-scrolling: touch;
+/* ─── SUBPAGE ENTRANCE & POLISH ANIMATIONS ─── */
+body {
+  animation: pageEntrance 0.7s var(--ease-out) both;
+}
+
+@keyframes pageEntrance {
+  0% {
+    opacity: 0;
+    transform: translateY(12px) scale(0.995);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0) scale(1);
   }
 }
+
+/* Personnel Card Sci-Fi Glow & Hover */
+.personnel-card {
+  position: relative;
+  background: var(--bg-card);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-md);
+  padding: 24px;
+  margin-bottom: 20px;
+  transition: all 0.35s var(--ease-out);
+  overflow: hidden;
+}
+
+.personnel-card::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 3px;
+  height: 100%;
+  background: var(--neon-purple);
+  opacity: 0.6;
+  transition: opacity 0.3s ease, width 0.3s ease;
+}
+
+.personnel-card:hover {
+  border-color: rgba(168, 85, 247, 0.4);
+  box-shadow: 0 8px 32px rgba(168, 85, 247, 0.12), 0 0 20px rgba(0, 240, 255, 0.05);
+  transform: translateY(-3px);
+}
+
+.personnel-card:hover::before {
+  opacity: 1;
+  width: 5px;
+}
+
+.personnel-card--omega::before {
+  background: var(--neon-cyan);
+}
+
+.personnel-card--omega:hover {
+  border-color: rgba(0, 240, 255, 0.5);
+  box-shadow: 0 8px 32px rgba(0, 240, 255, 0.15);
+}
+
+/* Archive Table Polish & Hover Glow */
+.archive-table tr {
+  transition: background 0.25s ease, transform 0.25s ease;
+}
+
+.archive-table tbody tr:hover {
+  background: rgba(0, 240, 255, 0.08) !important;
+  box-shadow: inset 4px 0 0 var(--neon-cyan);
+}
+
+/* Back Button Glow & Pulse */
+.back-btn, .nav-btn {
+  position: relative;
+  overflow: hidden;
+  transition: all 0.3s var(--ease-out) !important;
+}
+
+.back-btn:hover, .nav-btn:hover {
+  box-shadow: 0 0 20px rgba(0, 240, 255, 0.35) !important;
+  border-color: var(--neon-cyan) !important;
+}
+
+/* Glassmorphism Subpage Top Bar */
+.nav-bar-sub, .back-nav-bar {
+  background: rgba(8, 8, 12, 0.75);
+  backdrop-filter: blur(16px);
+  padding: 12px 18px;
+  border-radius: var(--radius-md);
+  border: 1px solid var(--border-neon);
+  margin-bottom: 24px;
+}
+
+/* ─── NEXUS SUBPAGE HUB NAV BAR ─── */
+.nexus-subpage-hub {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 16px;
+  background: rgba(10, 10, 16, 0.85);
+  backdrop-filter: blur(20px) saturate(1.4);
+  border: 1px solid var(--border-neon);
+  border-radius: var(--radius-md);
+  margin-bottom: 28px;
+  overflow-x: auto;
+  scrollbar-width: none;
+  box-shadow: 0 4px 24px rgba(0, 0, 0, 0.4);
+}
+
+.nexus-subpage-hub::-webkit-scrollbar {
+  display: none;
+}
+
+.nexus-subpage-hub .hub-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 14px;
+  font-family: var(--font-mono);
+  font-size: 0.78rem;
+  font-weight: 500;
+  color: var(--text-secondary);
+  text-decoration: none;
+  border-radius: var(--radius-sm);
+  border: 1px solid transparent;
+  white-space: nowrap;
+  transition: all 0.25s var(--ease-out);
+}
+
+.nexus-subpage-hub .hub-link:hover {
+  color: var(--neon-cyan);
+  background: rgba(0, 240, 255, 0.08);
+  border-color: rgba(0, 240, 255, 0.25);
+  box-shadow: 0 0 12px rgba(0, 240, 255, 0.15);
+}
+
+.nexus-subpage-hub .hub-link.active {
+  color: #fff;
+  background: rgba(0, 240, 255, 0.15);
+  border-color: var(--neon-cyan);
+  box-shadow: 0 0 16px rgba(0, 240, 255, 0.25);
+}
+
+.nexus-subpage-hub .hub-link--secret {
+  color: #ff0055;
+  border-color: rgba(255, 0, 85, 0.3);
+}
+
+.nexus-subpage-hub .hub-link--secret:hover,
+.nexus-subpage-hub .hub-link--secret.active {
+  color: #fff;
+  background: rgba(255, 0, 85, 0.2);
+  border-color: #ff0055;
+  box-shadow: 0 0 16px rgba(255, 0, 85, 0.35);
+}
+
+/* ─── SCI-FI VIEWPORT LASER SCANNER ─── */
+body::after {
+  content: '';
+  position: fixed;
+  top: -100px;
+  left: 0;
+  width: 100vw;
+  height: 2px;
+  background: linear-gradient(90deg, transparent, rgba(0, 240, 255, 0.8), rgba(168, 85, 247, 0.8), transparent);
+  box-shadow: 0 0 15px rgba(0, 240, 255, 0.9), 0 0 30px rgba(168, 85, 247, 0.6);
+  pointer-events: none;
+  z-index: 9997;
+  animation: viewportLaser 8s linear infinite;
+  opacity: 0.7;
+}
+
+@keyframes viewportLaser {
+  0% {
+    top: -10px;
+    opacity: 0;
+  }
+  5% {
+    opacity: 0.8;
+  }
+  95% {
+    opacity: 0.8;
+  }
+  100% {
+    top: 100vh;
+    opacity: 0;
+  }
+}
+
+/* ─── BUTTON NEON PULSE ANIMATIONS ─── */
+.discord-copy-btn, .music-toggle-btn, .topbar__link.active {
+  animation: buttonNeonPulse 3s ease-in-out infinite alternate;
+}
+
+@keyframes buttonNeonPulse {
+  0% {
+    box-shadow: 0 0 8px rgba(0, 240, 255, 0.2);
+  }
+  50% {
+    box-shadow: 0 0 18px rgba(0, 240, 255, 0.5), 0 0 30px rgba(168, 85, 247, 0.3);
+  }
+  100% {
+    box-shadow: 0 0 8px rgba(0, 240, 255, 0.2);
+  }
+}
+
+/* ─── VISUAL CARD HOLOGRAPHIC LIGHT SWEEP ─── */
+.visual-card-item::after, .project-card::after, .personnel-card::after {
+  content: '';
+  position: absolute;
+  top: -50%;
+  left: -50%;
+  width: 200%;
+  height: 200%;
+  background: linear-gradient(
+    45deg,
+    transparent 45%,
+    rgba(0, 240, 255, 0.08) 50%,
+    rgba(168, 85, 247, 0.08) 52%,
+    transparent 55%
+  );
+  transform: rotate(30deg) translateY(-100%);
+  transition: transform 0.8s var(--ease-out);
+  pointer-events: none;
+}
+
+.visual-card-item:hover::after, .project-card:hover::after, .personnel-card:hover::after {
+  transform: rotate(30deg) translateY(100%);
+}
+
+/* ─── MULTI-COLOR ANIMATED GRADIENT HEADINGS ─── */
+.glitch-title {
+  background: linear-gradient(135deg, var(--neon-cyan) 0%, var(--neon-purple) 50%, var(--neon-green) 100%);
+  background-size: 200% 200%;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  animation: gradientTextShift 6s ease infinite alternate;
+}
+
+@keyframes gradientTextShift {
+  0% {
+    background-position: 0% 50%;
+  }
+  100% {
+    background-position: 100% 50%;
+  }
+}
+
+/* ─── HUB LINK ACTIVE NEON UNDERLINE GLOW ─── */
+.nexus-subpage-hub .hub-link {
+  position: relative;
+}
+
+.nexus-subpage-hub .hub-link.active::after {
+  content: '';
+  position: absolute;
+  bottom: -2px;
+  left: 10%;
+  width: 80%;
+  height: 2px;
+  background: var(--neon-cyan);
+  box-shadow: 0 0 10px var(--neon-cyan);
+  border-radius: 2px;
+  animation: underlinePulse 2s ease-in-out infinite alternate;
+}
+
+@keyframes underlinePulse {
+  0% { opacity: 0.6; width: 60%; left: 20%; }
+  100% { opacity: 1; width: 85%; left: 7.5%; }
+}
+
+/* ─── FLOATING SCROLL-TO-TOP ROCKET BUTTON ─── */
+#scroll-top-btn {
+  position: fixed;
+  bottom: 24px;
+  right: 24px;
+  z-index: 9990;
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  background: rgba(10, 10, 16, 0.85);
+  backdrop-filter: blur(12px);
+  border: 1px solid var(--border-neon);
+  color: var(--neon-cyan);
+  font-size: 1.1rem;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 0 20px rgba(0, 240, 255, 0.25);
+  opacity: 0;
+  pointer-events: none;
+  transform: translateY(10px) scale(0.9);
+  transition: all 0.3s var(--ease-out);
+}
+
+#scroll-top-btn.visible {
+  opacity: 1;
+  pointer-events: auto;
+  transform: translateY(0) scale(1);
+}
+
+#scroll-top-btn:hover {
+  background: rgba(0, 240, 255, 0.2);
+  border-color: var(--neon-cyan);
+  box-shadow: 0 0 25px rgba(0, 240, 255, 0.5);
+  transform: translateY(-3px) scale(1.08);
+}
+
 
 
 

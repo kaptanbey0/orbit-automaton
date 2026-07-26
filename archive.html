@@ -96,111 +96,143 @@
 </head>
 <body>
 
-  <div class="back-nav-bar" style="display:flex; justify-content:space-between; align-items:center;">
-    <a href="index.html" class="back-btn" data-i18n="back_to_control">← Kontrol Merkezine Dön</a>
-    <div class="lang-select-wrapper" style="display:inline-flex; align-items:center; gap:6px; background:rgba(13,13,20,0.8); border:1px solid rgba(0,240,255,0.3); padding:4px 10px; border-radius:4px;">
+  <!-- STARFIELD & AMBIENT PARTICLES -->
+  <canvas id="starfield"></canvas>
+  <div class="ambient-particles" id="ambient-particles"></div>
+  <div class="scanline-overlay"></div>
+
+
+  <nav class="nexus-subpage-hub">
+    <a href="index.html" class="hub-link" data-i18n="back_to_control"><span class="hub-icon">⚡</span> Dashboard</a>
+    <a href="archive.html" class="hub-link active" data-i18n="nav_archive_tab"><span class="hub-icon">📂</span> Archive</a>
+    <a href="researchers.html" class="hub-link" data-i18n="nav_res_tab"><span class="hub-icon">👨‍🔬</span> Researchers</a>
+    <a href="phenomena.html" class="hub-link" data-i18n="nav_phen_tab"><span class="hub-icon">🔮</span> Phenomena 3D</a>
+    <a href="impossibilia.html" class="hub-link" data-i18n="nav_imp_tab"><span class="hub-icon">🌀</span> Impossible Vault</a>
+    <a href="morphogenesis.html" class="hub-link" data-i18n="nav_morph_tab"><span class="hub-icon">🧬</span> Morphogenesis</a>
+    <a href="github-universe.html" class="hub-link" data-i18n="nav_gh_tab"><span class="hub-icon">🪐</span> GitHub 3D</a>
+    <a href="containment-log.html" class="hub-link" data-i18n="nav_logs_tab"><span class="hub-icon">📋</span> Logs</a>
+    <a href="fragment-00.html" class="hub-link hub-link--secret" data-i18n="nav_frag00_tab"><span class="hub-icon">🗝️</span> Fragment 00</a>
+    <div class="lang-select-wrapper" style="margin-left:auto; display:inline-flex; align-items:center; gap:6px; background:rgba(13,13,20,0.8); border:1px solid rgba(0,240,255,0.3); padding:4px 10px; border-radius:4px;">
       <span style="font-size: 0.75rem;">🌐</span>
-      <select class="lang-select-box" id="lang-select" style="background:transparent; color:var(--neon-cyan); border:none; font-family:var(--font-mono); font-size:0.8rem; cursor:pointer;">
-        <option value="tr">TR (Türkçe)</option>
-        <option value="en">EN (English)</option>
-        <option value="de">DE (Deutsch)</option>
-        <option value="fr">FR (Français)</option>
-        <option value="es">ES (Español)</option>
-        <option value="ru">RU (Русский)</option>
-        <option value="ja">JA (日本語)</option>
+      <select class="lang-select-box" style="background:transparent; color:var(--neon-cyan); border:none; font-family:var(--font-mono); font-size:0.8rem; cursor:pointer;">
+        <option value="tr">TR</option>
+        <option value="en">EN</option>
+        <option value="de">DE</option>
+        <option value="fr">FR</option>
+        <option value="es">ES</option>
+        <option value="ru">RU</option>
+        <option value="ja">JA</option>
       </select>
     </div>
+  </nav>
   </div>
 
   <div class="archive-header">
-    <div style="font-size: 0.75rem; color: var(--neon-purple); letter-spacing: 0.2em;">KAPTANBEY0 AUTOMATON // SUBSTRATE ARŞİVİ</div>
-    <h1 class="classified-title">SUBSTRATE ANOMALİ ARŞİVİ</h1>
-    <p style="color: #94a3b8; font-size: 0.85rem;">Erişim Seviyesi: OMEGA &middot; Tüm anomali parçaları ve kayıt indeksi</p>
+    <div style="font-size: 0.75rem; color: var(--neon-purple); letter-spacing: 0.2em;" data-i18n="archive_header_badge">KAPTANBEY0 AUTOMATON // SUBSTRATE ARŞİVİ</div>
+    <h1 class="classified-title" data-i18n="archive_main_title">SUBSTRATE ANOMALİ ARŞİVİ</h1>
+    <p style="color: #94a3b8; font-size: 0.85rem;" data-i18n="archive_access_sub">Erişim Seviyesi: OMEGA &middot; Tüm anomali parçaları ve kayıt indeksi</p>
   </div>
 
   <table class="archive-table">
     <thead>
       <tr>
-        <th>ID</th>
-        <th>ANOMALİ ADI</th>
-        <th>ARAŞTIRMACI</th>
-        <th>TARİH</th>
-        <th>DURUM</th>
-        <th>ERİŞİM</th>
+        <th data-i18n="col_id">ID</th>
+        <th data-i18n="col_name">ANOMALİ ADI</th>
+        <th data-i18n="col_researcher">ARAŞTIRMACI</th>
+        <th data-i18n="col_date">TARİH</th>
+        <th data-i18n="col_status">DURUM</th>
+        <th data-i18n="col_access">ERİŞİM</th>
       </tr>
     </thead>
     <tbody>
       <tr>
         <td style="color: var(--neon-cyan); font-weight: bold;">00</td>
-        <td>Fragment 00 — Origin Point</td>
+        <td data-i18n="frag_00_title">Fragment 00 — Origin Point</td>
         <td>Architect Ω</td>
         <td>Time-Zero</td>
-        <td><span class="status-badge status-badge--classified">CLASSIFIED</span></td>
-        <td><a href="fragment-00.html" style="color: var(--neon-purple); text-decoration: underline;">[GİZLİ GİRİŞ]</a></td>
+        <td><span class="status-badge status-badge--classified" data-i18n="status_classified">GİZLİ</span></td>
+        <td><a href="fragment-00.html" style="color: var(--neon-purple); text-decoration: underline;" data-i18n="btn_secret">[GİZLİ GİRİŞ]</a></td>
       </tr>
       <tr>
         <td style="color: var(--neon-cyan); font-weight: bold;">03</td>
-        <td>Fragment 03 — Mirror Echo</td>
+        <td data-i18n="frag_03_title">Fragment 03 — Mirror Echo</td>
         <td>Researcher EM</td>
         <td>2026.04.12</td>
-        <td><span class="status-badge status-badge--active">DÜZENLİ</span></td>
-        <td><a href="fragment-03.html" style="color: var(--neon-cyan); text-decoration: underline;">[OKU]</a></td>
+        <td><span class="status-badge status-badge--active" data-i18n="status_active">DÜZENLİ</span></td>
+        <td><button class="frag-inspect-btn" data-frag="03" style="background:none; border:none; color: var(--neon-cyan); text-decoration: underline; cursor:pointer; font-family:inherit;" data-i18n="btn_read">[OKU]</button></td>
       </tr>
       <tr>
         <td style="color: var(--neon-cyan); font-weight: bold;">07</td>
-        <td>Fragment 07 — Echo Topology</td>
+        <td data-i18n="frag_07_title">Fragment 07 — Echo Topology</td>
         <td>Researcher EM</td>
         <td>2026.05.01</td>
-        <td><span class="status-badge status-badge--active">SABİT</span></td>
-        <td><a href="fragment-07.html" style="color: var(--neon-cyan); text-decoration: underline;">[OKU]</a></td>
+        <td><span class="status-badge status-badge--active" data-i18n="status_fixed">SABİT</span></td>
+        <td><button class="frag-inspect-btn" data-frag="07" style="background:none; border:none; color: var(--neon-cyan); text-decoration: underline; cursor:pointer; font-family:inherit;" data-i18n="btn_read">[OKU]</button></td>
       </tr>
       <tr>
         <td style="color: var(--neon-cyan); font-weight: bold;">11</td>
-        <td>Fragment 11 — Spatial Scar</td>
+        <td data-i18n="frag_11_title">Fragment 11 — Spatial Scar</td>
         <td>Researcher A-07</td>
         <td>2026.05.19</td>
-        <td><span class="status-badge status-badge--active">KORUNUYOR</span></td>
-        <td><a href="fragment-11.html" style="color: var(--neon-cyan); text-decoration: underline;">[OKU]</a></td>
+        <td><span class="status-badge status-badge--active" data-i18n="status_guarded">KORUNUYOR</span></td>
+        <td><button class="frag-inspect-btn" data-frag="11" style="background:none; border:none; color: var(--neon-cyan); text-decoration: underline; cursor:pointer; font-family:inherit;" data-i18n="btn_read">[OKU]</button></td>
       </tr>
       <tr>
         <td style="color: var(--neon-cyan); font-weight: bold;">14</td>
-        <td>Fragment 14 — Temporal Collapse</td>
+        <td data-i18n="frag_14_title">Fragment 14 — Temporal Collapse</td>
         <td>Researcher A-07 (MISSING)</td>
         <td>2026.06.04</td>
-        <td><span class="status-badge status-badge--warning">KRİTİK UYARI</span></td>
-        <td><a href="fragment-14.html" style="color: var(--neon-red); text-decoration: underline;">[TEHLİKELİ]</a></td>
+        <td><span class="status-badge status-badge--warning" data-i18n="status_warning">KRİTİK UYARI</span></td>
+        <td><button class="frag-inspect-btn" data-frag="14" style="background:none; border:none; color: var(--neon-red); text-decoration: underline; cursor:pointer; font-family:inherit;" data-i18n="btn_danger">[TEHLİKELİ]</button></td>
       </tr>
       <tr>
         <td style="color: var(--neon-cyan); font-weight: bold;">19</td>
-        <td>Fragment 19 — Causal Inversion</td>
+        <td data-i18n="frag_19_title">Fragment 19 — Causal Inversion</td>
         <td>Researcher IX</td>
         <td>2026.06.22</td>
-        <td><span class="status-badge status-badge--warning">BOZULMUŞ</span></td>
-        <td><a href="fragment-19.html" style="color: var(--neon-amber); text-decoration: underline;">[INSPECT]</a></td>
+        <td><span class="status-badge status-badge--warning" data-i18n="status_corrupted">BOZULMUŞ</span></td>
+        <td><button class="frag-inspect-btn" data-frag="19" style="background:none; border:none; color: var(--neon-amber); text-decoration: underline; cursor:pointer; font-family:inherit;" data-i18n="btn_inspect">[İNCELE]</button></td>
       </tr>
       <tr>
         <td style="color: var(--neon-cyan); font-weight: bold;">31</td>
-        <td>Fragment 31 — Extinct Geometry</td>
+        <td data-i18n="frag_31_title">Fragment 31 — Extinct Geometry</td>
         <td>Researcher Ω</td>
         <td>2026.07.10</td>
-        <td><span class="status-badge status-badge--active">GÖZLEMDE</span></td>
-        <td><a href="fragment-31.html" style="color: var(--neon-cyan); text-decoration: underline;">[OKU]</a></td>
+        <td><span class="status-badge status-badge--active" data-i18n="status_observing">GÖZLEMDE</span></td>
+        <td><button class="frag-inspect-btn" data-frag="31" style="background:none; border:none; color: var(--neon-cyan); text-decoration: underline; cursor:pointer; font-family:inherit;" data-i18n="btn_read">[OKU]</button></td>
       </tr>
       <tr>
         <td style="color: var(--neon-cyan); font-weight: bold;">22</td>
-        <td>Fragment 22 — Impossible Signal</td>
+        <td data-i18n="frag_22_title">Fragment 22 — Impossible Signal</td>
         <td>Researcher IX</td>
         <td>2026.07.18</td>
-        <td><span class="status-badge status-badge--warning">BOZULMUŞ</span></td>
-        <td><a href="fragment-22.html" style="color: var(--neon-amber); text-decoration: underline;">[INSPECT]</a></td>
+        <td><span class="status-badge status-badge--warning" data-i18n="status_corrupted">BOZULMUŞ</span></td>
+        <td><button class="frag-inspect-btn" data-frag="22" style="background:none; border:none; color: var(--neon-amber); text-decoration: underline; cursor:pointer; font-family:inherit;" data-i18n="btn_inspect">[İNCELE]</button></td>
       </tr>
     </tbody>
   </table>
 
-  <div style="background: rgba(0, 240, 255, 0.04); border-left: 3px solid var(--neon-cyan); padding: 15px; margin-top: 30px; font-size: 0.85rem; color: #94a3b8;">
-    <strong>[SİSTEM NOTU]:</strong> Substrate arşivi KaptanBey0 Automaton motoru tarafından taranmakta ve canlı tutulmaktadır.
+  <div style="background: rgba(0, 240, 255, 0.04); border-left: 3px solid var(--neon-cyan); padding: 15px; margin-top: 30px; font-size: 0.85rem; color: #94a3b8;" data-i18n="sys_note_archive">
+    [SİSTEM NOTU]: Substrate arşivi KaptanBey0 Automaton Nexus Prime motoru tarafından taranmakta ve canlı tutulmaktadır.
+  </div>
+
+  <!-- FRAGMENT INSPECTOR MODAL -->
+  <div id="frag-modal" style="position:fixed; inset:0; z-index:9999; background:rgba(3,3,6,0.92); backdrop-filter:blur(16px); display:none; align-items:center; justify-content:center; padding:20px;">
+    <div style="background:var(--bg-card); border:1px solid var(--border-neon); border-radius:var(--radius-md); max-width:640px; width:100%; padding:28px; box-shadow:0 0 40px rgba(0,240,255,0.2); position:relative;">
+      <button id="close-frag-modal" style="position:absolute; top:18px; right:18px; background:none; border:none; color:var(--neon-red); cursor:pointer; font-family:var(--font-mono); font-size:1.1rem;">[X]</button>
+      <div style="font-size:0.75rem; color:var(--neon-purple); letter-spacing:0.2em; margin-bottom:8px;" id="frag-modal-badge">SUBSTRATE // FRAGMENT INSPECTOR</div>
+      <h2 style="font-size:1.4rem; color:#fff; font-family:var(--font-mono); margin-bottom:12px;" id="frag-modal-title">FRAGMENT INSPECTOR</h2>
+      <div style="font-size:0.8rem; color:var(--neon-cyan); margin-bottom:16px;" id="frag-modal-meta">Researcher: — · Date: —</div>
+      <div style="background:rgba(0,0,0,0.4); border:1px solid var(--border-subtle); padding:16px; border-radius:6px; font-size:0.85rem; color:#cbd5e1; line-height:1.7; margin-bottom:20px; font-style:italic;" id="frag-modal-body">
+        "Loading transcript..."
+      </div>
+      <div style="display:flex; gap:12px; justify-content:flex-end;">
+        <a id="frag-modal-sim-link" href="phenomena.html" style="font-family:var(--font-mono); font-size:0.8rem; color:var(--neon-cyan); background:rgba(0,240,255,0.1); border:1px solid rgba(0,240,255,0.3); padding:8px 16px; border-radius:4px; text-decoration:none;">[OPEN 3D SIMULATION]</a>
+      </div>
+    </div>
   </div>
 
   <script src="i18n.js"></script>
+  <script src="app.js"></script>
 </body>
 </html>

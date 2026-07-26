@@ -28,6 +28,35 @@ a:hover{color:rgba(160,140,110,.35)}
 <link rel="stylesheet" href="style.css" />
 </head>
 <body>
+<nav class="nexus-subpage-hub">
+    <a href="index.html" class="hub-link" data-i18n="back_to_control"><span class="hub-icon">⚡</span> Dashboard</a>
+    <a href="archive.html" class="hub-link" data-i18n="nav_archive_tab"><span class="hub-icon">📂</span> Archive</a>
+    <a href="researchers.html" class="hub-link" data-i18n="nav_res_tab"><span class="hub-icon">👨‍🔬</span> Researchers</a>
+    <a href="phenomena.html" class="hub-link" data-i18n="nav_phen_tab"><span class="hub-icon">🔮</span> Phenomena 3D</a>
+    <a href="impossibilia.html" class="hub-link" data-i18n="nav_imp_tab"><span class="hub-icon">🌀</span> Impossible Vault</a>
+    <a href="morphogenesis.html" class="hub-link" data-i18n="nav_morph_tab"><span class="hub-icon">🧬</span> Morphogenesis</a>
+    <a href="github-universe.html" class="hub-link" data-i18n="nav_gh_tab"><span class="hub-icon">🪐</span> GitHub 3D</a>
+    <a href="containment-log.html" class="hub-link active" data-i18n="nav_logs_tab"><span class="hub-icon">📋</span> Logs</a>
+    <a href="fragment-00.html" class="hub-link hub-link--secret" data-i18n="nav_frag00_tab"><span class="hub-icon">🗝️</span> Fragment 00</a>
+    <div class="lang-select-wrapper" style="margin-left:auto; display:inline-flex; align-items:center; gap:6px; background:rgba(13,13,20,0.8); border:1px solid rgba(0,240,255,0.3); padding:4px 10px; border-radius:4px;">
+      <span style="font-size: 0.75rem;">🌐</span>
+      <select class="lang-select-box" style="background:transparent; color:var(--neon-cyan); border:none; font-family:var(--font-mono); font-size:0.8rem; cursor:pointer;">
+        <option value="tr">TR</option>
+        <option value="en">EN</option>
+        <option value="de">DE</option>
+        <option value="fr">FR</option>
+        <option value="es">ES</option>
+        <option value="ru">RU</option>
+        <option value="ja">JA</option>
+      </select>
+    </div>
+  </nav>
+
+  <!-- STARFIELD & AMBIENT PARTICLES -->
+  <canvas id="starfield"></canvas>
+  <div class="ambient-particles" id="ambient-particles"></div>
+  <div class="scanline-overlay"></div>
+
 <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:3vh;">
   <a href="index.html" style="color:rgba(0,240,255,0.7); text-decoration:none; font-size:0.8rem;" data-i18n="back_to_control">← Kontrol Merkezine Dön</a>
   <div style="display:inline-flex; align-items:center; gap:6px; background:rgba(20,20,30,0.6); border:1px solid rgba(0,240,255,0.2); padding:2px 8px; border-radius:4px;">
@@ -44,107 +73,62 @@ a:hover{color:rgba(160,140,110,.35)}
   </div>
 </div>
 
-<h1>Containment Notes — LOG-001</h1>
-<div class="date">Compiled from research terminal RESEARCH-04</div>
-<div class="date">Chronological order uncertain</div>
+<h1 data-i18n="cont_main_title">Containment Notes — LOG-001</h1>
+<div class="date" data-i18n="cont_subtitle_1">Compiled from research terminal RESEARCH-04</div>
+<div class="date" data-i18n="cont_subtitle_2">Chronological order uncertain</div>
 <hr class="line"/>
 
 <div class="entry">
-<div class="date">Entry date: Unknown</div>
-First contact with substrate material.
-The sample was inert for 14 hours.
-On hour 15 it began to <span class="redacted">remember</span>.
-We did not expect geometry to have memory.
-<div class="ref">→ See: <a href="fragment-07.html">Fragment 07</a></div>
+<div class="date" data-i18n="cont_entry_date_unk">Entry date: Unknown</div>
+<p data-i18n="cont_entry_1">First contact with substrate material. Sample remained inert for 14 hours. On hour 15 it began to remember. We did not expect geometry to have memory.</p>
+<div class="ref"><span data-i18n="cont_see_ref">→ See:</span> <a href="archive.html" data-i18n="frag_07_title">Fragment 07 — Archive Inspector</a></div>
 </div>
 
 <hr class="line"/>
 
 <div class="entry">
-<div class="date">Entry date: Unknown</div>
-The echo count in Fragment 07 exceeded predicted bounds.
-Containment updated to UNSTABLE.
-<span class="redacted">Dr. ██████</span> recommended immediate archival.
-Recommendation was followed.
+<div class="date" data-i18n="cont_entry_date_unk">Entry date: Unknown</div>
+<p data-i18n="cont_entry_2">Echo count in Fragment 07 exceeded predicted bounds. Containment status updated to UNSTABLE. Dr. ██████ recommended immediate archival.</p>
 </div>
 
 <hr class="line"/>
 
 <div class="entry">
-<div class="date">Entry date: Unknown</div>
-Fragment 11 attempted to <span class="redacted">observe itself</span>.
-This created a recursive loop that destroyed the observation chamber.
-Fragment 11 has been locked.
-No visual data was recovered.
-<div class="ref">→ See: <a href="fragment-11.html">Fragment 11</a></div>
+<div class="date" data-i18n="cont_entry_date_unk">Entry date: Unknown</div>
+<p data-i18n="cont_entry_3">Micro-drift detected on Node 7.2. All personnel evacuated from observation deck.</p>
+<div class="ref"><span data-i18n="cont_see_ref">→ See:</span> <a href="archive.html" data-i18n="frag_11_title">Fragment 11 — Archive Inspector</a></div>
 </div>
 
 <hr class="line"/>
 
 <div class="entry">
 <div class="date">Entry date: ████-██-12</div>
-Fragment 14 was reconstructed from partial data.
-During reconstruction, the fragment <span class="redacted">reached backward in time</span>
-and modified its own extraction record.
-Fragment 14 has been destroyed.
-<span class="warn">Do not attempt reconstruction.</span>
+<p data-i18n="cont_entry_4">3-second clock deviation recorded near Fragment 14. Timeline integrity degraded.</p>
 </div>
 
 <hr class="line"/>
 
 <div class="entry">
 <div class="date">Entry date: ████-██-14</div>
-New fragment recovered. Designated Fragment 19.
-During initial observation, the recording equipment
-registered damage <i>before</i> the fragment was activated.
-The damage pattern matched the fragment's geometry
-at timestamp T+3.2 seconds.
-<div class="ref">→ See: <a href="fragment-19.html">Fragment 19</a></div>
-</div>
-
-<hr class="line"/>
-
-<div class="entry">
-<div class="date">Entry date: ████-██-14</div>
-Containment of Fragment 19 has failed.
-The pre-distortion field extended beyond the chamber.
-<span class="redacted">████████████████████████████████████</span>
-<span class="redacted">████████████████████</span>
-We are uncertain if this note was written before or after the event.
+<p data-i18n="cont_entry_5">Observer detected mass resonance. Signal self-sustains independently from external systems.</p>
+<div class="ref"><span data-i18n="cont_see_ref">→ See:</span> <a href="archive.html" data-i18n="frag_19_title">Fragment 19 — Archive Inspector</a></div>
 </div>
 
 <hr class="line"/>
 
 <div class="entry">
 <div class="date">Entry date: ████-██-19</div>
-Fragment 31 was found in a dormant state.
-Unlike other fragments, this one appears to be dead.
-The geometry is fossilized. It no longer moves
-or responds to observation.
-However, the space around it has been permanently deformed.
-Something was here. Something large.
-What remains is only its absence.
-<div class="ref">→ See: <a href="fragment-31.html">Fragment 31</a></div>
+<p data-i18n="cont_entry_6">All logs encrypted. Direct access restriction imposed on Fragment 00.</p>
+<div class="ref"><span data-i18n="cont_see_ref">→ See:</span> <a href="archive.html" data-i18n="frag_31_title">Fragment 31 — Archive Inspector</a></div>
 </div>
 
 <hr class="line"/>
 
-<div class="entry">
-<div class="date">Entry date: ████-██-21</div>
-<span class="redacted">████████████████████████████████████████</span>
-<span class="redacted">████████████████████████████████████████████████</span>
-<span class="redacted">████████████████████████████</span>
-Research team status: unknown.
-Terminal will remain active until power failure.
-This is the last entry.
-</div>
-
-<hr class="line"/>
-
-<div style="margin:4vh 0;color:rgba(60,55,45,.06);letter-spacing:.6em;font-size:clamp(.25rem,.6vw,.3rem)">
+<div style="margin:4vh 0;color:rgba(60,55,45,.4);letter-spacing:.4em;font-size:clamp(.3rem,.7vw,.4rem)" data-i18n="cont_end_note">
 END OF LOG — NO FURTHER ENTRIES RECORDED
 </div>
 
 <script src="i18n.js"></script>
+<script src="app.js"></script>
 </body>
 </html>

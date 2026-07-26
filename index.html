@@ -3,22 +3,22 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <meta name="description" content="KaptanBey0 Automaton — Dark Zenith temalı Discord Bot Mimarisi, Roblox Luau ve Siber Güvenlik Portföyü." />
+  <meta name="description" content="KaptanBey0 Automaton — Nexus Prime temalı Discord Bot Mimarisi, Roblox Luau ve Siber Güvenlik Portföyü." />
   <meta name="author" content="kaptanbey0" />
   <meta name="theme-color" content="#08080c" />
 
   <!-- Open Graph -->
   <meta property="og:type" content="website" />
-  <meta property="og:title" content="KaptanBey0 Automaton — Dark Zenith Portfolio" />
+  <meta property="og:title" content="KaptanBey0 Automaton — Nexus Prime Portfolio" />
   <meta property="og:description" content="Cyberpunk-themed developer portfolio with interactive fragments, WebGL experiences, and procedural audio." />
   <meta property="og:image" content="assets/logo.png" />
 
   <!-- Twitter Card -->
   <meta name="twitter:card" content="summary_large_image" />
-  <meta name="twitter:title" content="KaptanBey0 Automaton — Dark Zenith" />
+  <meta name="twitter:title" content="KaptanBey0 Automaton — Nexus Prime" />
   <meta name="twitter:description" content="Cyberpunk developer portfolio — Discord, Roblox, Automation" />
 
-  <title>KaptanBey0 Automaton — Dark Zenith Portfolio</title>
+  <title>KaptanBey0 Automaton — Nexus Prime Portfolio</title>
   <link rel="icon" type="image/png" href="assets/logo.png" />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
@@ -31,7 +31,7 @@
   <div id="boot-loader" style="position:fixed; inset:0; z-index:9999; background:#030306; display:flex; flex-direction:column; align-items:center; justify-content:center; transition: opacity 0.8s ease, visibility 0.8s ease;">
     <div style="text-align:center;">
       <div style="font-family:'JetBrains Mono',monospace; font-size:clamp(0.8rem,2.5vw,1.4rem); font-weight:200; letter-spacing:0.6em; color:#e8e8f0; text-transform:uppercase; margin-bottom:24px;">
-        DARK <span style="color:#00f0ff; font-weight:400;">ZENITH</span>
+        NEXUS <span style="color:#00f0ff; font-weight:400;">PRIME</span>
       </div>
       <div style="width:200px; height:2px; background:#111; border-radius:1px; overflow:hidden; margin:0 auto;">
         <div id="boot-progress-fill" style="width:0%; height:100%; background:linear-gradient(90deg,#00f0ff,#a855f7,#22ff88); border-radius:1px; transition:width 0.15s;"></div>
@@ -45,6 +45,9 @@
   <!-- ═══ STARFIELD CANVAS ═══ -->
   <canvas id="starfield"></canvas>
 
+  <!-- ═══ AMBIENT FLOATING PARTICLES ═══ -->
+  <div class="ambient-particles" id="ambient-particles"></div>
+
   <!-- ═══ SCANLINE OVERLAY ═══ -->
   <div class="scanline-overlay"></div>
 
@@ -54,7 +57,7 @@
       <img src="assets/logo.png" alt="KaptanBey0 Logo" class="kaptan-logo-img" id="orbit-logo" title="Click 3x for secret fragment" />
       <div class="topbar__title">
         <span class="topbar__name">KaptanBey0 Automaton</span>
-        <span class="topbar__version">v2.4.1 &middot; Dark Zenith</span>
+        <span class="topbar__version" data-i18n="topbar_version">v2.4.1 &middot; Nexus Prime Core</span>
       </div>
     </div>
     <nav class="topbar__nav">
@@ -65,8 +68,14 @@
       <a href="#terminal" class="topbar__link" data-section="terminal" data-i18n="nav_terminal">Terminal</a>
     </nav>
     <div class="topbar__right">
+      <button class="theme-toggle-btn" id="theme-toggle-btn" title="Tema Değiştir (Cyan / Emerald / Amber / Purple)" style="font-family:var(--font-mono); font-size:0.75rem; background:rgba(0,240,255,0.08); color:var(--neon-cyan); border:1px solid rgba(0,240,255,0.3); border-radius:4px; padding:4px 10px; cursor:pointer; transition:all 0.3s;">
+        <span>🎨 THEME: CYAN</span>
+      </button>
+      <button class="shortcuts-btn" id="shortcuts-btn" title="Klavye Kısayolları (?" style="font-family:var(--font-mono); font-size:0.75rem; background:rgba(168,85,247,0.08); color:var(--neon-purple); border:1px solid rgba(168,85,247,0.3); border-radius:4px; padding:4px 10px; cursor:pointer; transition:all 0.3s;">
+        <span>⌨️ [?]</span>
+      </button>
       <button class="discord-copy-btn" id="discord-btn" title="Discord Nickini Kopyala (kaptanbey01)" data-i18n-title="discord_copy_title">
-        <span>💬 kaptanbey01</span>
+        <span>💬 Discord: kaptanbey01</span>
       </button>
       <button class="music-toggle-btn" id="ambient-music-btn" title="Ortam Müziği Aç/Kapat" data-i18n-title="ambient_music_title">
         <span>🎵 AMBIENT: OFF</span>
@@ -108,16 +117,15 @@
         <input type="text" id="db-modal-search" placeholder="Belge veya anomali ara..." data-i18n-placeholder="db_modal_search_ph" style="width:100%; padding:10px 14px; background:var(--bg-input); border:1px solid var(--border-subtle); border-radius:var(--radius-sm); color:var(--text-primary); font-family:var(--font-mono); font-size:0.82rem; outline:none; transition:border-color 0.2s;" autocomplete="off" />
       </div>
       <div class="database-menu-card__list" id="db-modal-list">
-        <a href="index.html" class="database-menu-item"><span class="database-menu-item__num">01.</span> KaptanBey0 Control Center <span>[ACTIVE]</span></a>
-        <a href="archive.html" class="database-menu-item"><span class="database-menu-item__num">02.</span> Substrate Anomaly Archive <span>[INDEXED]</span></a>
-        <a href="researchers.html" class="database-menu-item"><span class="database-menu-item__num">03.</span> Researchers Database <span>[RESTRICTED]</span></a>
-        <a href="phenomena.html" class="database-menu-item"><span class="database-menu-item__num">04.</span> Phenomena 3D Catalog <span>[ACTIVE]</span></a>
-        <a href="impossibilia.html" class="database-menu-item"><span class="database-menu-item__num">05.</span> Impossible Objects Vault <span>[CONTAINED]</span></a>
-        <a href="github-universe.html" class="database-menu-item"><span class="database-menu-item__num">06.</span> GitHub External 3D Node <span>[CONNECTED]</span></a>
-        <a href="containment-log.html" class="database-menu-item"><span class="database-menu-item__num">07.</span> Containment Logs <span>[SEALED]</span></a>
-        <a href="morphogenesis.html" class="database-menu-item"><span class="database-menu-item__num">08.</span> Morphogenesis Protocol <span>[EVOLVING]</span></a>
-        <a href="antigravity.html" class="database-menu-item"><span class="database-menu-item__num">09.</span> Anti-Gravity Engine <span>[UNSTABLE]</span></a>
-        <a href="fragment-00.html" class="database-menu-item" style="border-color: rgba(255,0,85,0.4); background: rgba(255,0,85,0.05);"><span class="database-menu-item__num" style="color:#ff0055;">00.</span> Fragment 00 (Origin Point) <span style="color:#ff0055;">[CLASSIFIED]</span></a>
+        <a href="index.html" class="database-menu-item"><span class="database-menu-item__num">01.</span> <span data-i18n="db_item_1">KaptanBey0 Control Center</span> <span>[ACTIVE]</span></a>
+        <a href="archive.html" class="database-menu-item"><span class="database-menu-item__num">02.</span> <span data-i18n="db_item_2">Substrate Anomaly Archive</span> <span>[INDEXED]</span></a>
+        <a href="researchers.html" class="database-menu-item"><span class="database-menu-item__num">03.</span> <span data-i18n="db_item_3">Researchers Database</span> <span>[RESTRICTED]</span></a>
+        <a href="phenomena.html" class="database-menu-item"><span class="database-menu-item__num">04.</span> <span data-i18n="db_item_4">Phenomena 3D Catalog</span> <span>[ACTIVE]</span></a>
+        <a href="impossibilia.html" class="database-menu-item"><span class="database-menu-item__num">05.</span> <span data-i18n="db_item_5">Impossible Objects Vault</span> <span>[CONTAINED]</span></a>
+        <a href="github-universe.html" class="database-menu-item"><span class="database-menu-item__num">06.</span> <span data-i18n="db_item_6">GitHub External 3D Node</span> <span>[CONNECTED]</span></a>
+        <a href="containment-log.html" class="database-menu-item"><span class="database-menu-item__num">07.</span> <span data-i18n="db_item_7">Containment Logs</span> <span>[SEALED]</span></a>
+        <a href="morphogenesis.html" class="database-menu-item"><span class="database-menu-item__num">08.</span> <span data-i18n="db_item_8">Morphogenesis Protocol</span> <span>[EVOLVING]</span></a>
+        <a href="fragment-00.html" class="database-menu-item" style="border-color: rgba(255,0,85,0.4); background: rgba(255,0,85,0.05);"><span class="database-menu-item__num" style="color:#ff0055;">00.</span> <span data-i18n="db_item_0">Fragment 00 (Origin Point)</span> <span style="color:#ff0055;">[CLASSIFIED]</span></a>
       </div>
     </div>
   </div>
@@ -137,24 +145,24 @@
           </div>
           <div class="hero-content-col">
             <div class="hero-badges-row">
-              <span class="cyber-badge cyber-badge--cyan">🤖 DISCORD BOT ARCHITECT</span>
-              <span class="cyber-badge cyber-badge--purple">🎮 ROBLOX LUAU SCRIPTING</span>
-              <span class="cyber-badge cyber-badge--green">🛠️ PYTHON AI PIPELINES</span>
+              <span class="cyber-badge cyber-badge--cyan" data-i18n="hero_badge_discord">🤖 DISCORD BOT ARCHITECT</span>
+              <span class="cyber-badge cyber-badge--purple" data-i18n="hero_badge_roblox">🎮 ROBLOX LUAU SCRIPTING</span>
+              <span class="cyber-badge cyber-badge--green" data-i18n="hero_badge_python">🛠️ PYTHON AI PIPELINES</span>
             </div>
-            <h1 class="glitch-title" data-text="KAPTANBEY0 — DARK ZENITH CORE" style="font-size: 2.2rem; color: #fff; margin-bottom: 6px;">
-              KAPTANBEY0 — DARK ZENITH CORE
+            <h1 class="glitch-title" data-i18n="hero_title" data-text="KAPTANBEY0 — NEXUS PRIME CORE" style="font-size: 2.2rem; color: #fff; margin-bottom: 6px;">
+              KAPTANBEY0 — NEXUS PRIME CORE
             </h1>
-            <p style="font-family: var(--font-mono); color: var(--neon-cyan); font-size: 0.95rem; line-height: 1.6;">
+            <p style="font-family: var(--font-mono); color: var(--neon-cyan); font-size: 0.95rem; line-height: 1.6;" data-i18n="hero_sub">
               🚀 Yüksek performanslı Discord botları, Roblox Luau oyun otomasyonları ve otonom yazılım çözümleri.
             </p>
             <div class="hero-cta-btns">
-              <a href="https://discord.com/users/kaptanbey01" target="_blank" class="cyber-btn cyber-btn--discord">
+              <a href="https://discord.com/users/kaptanbey01" target="_blank" class="cyber-btn cyber-btn--discord" data-i18n="hero_cta_discord">
                 💬 Discord: kaptanbey01
               </a>
-              <a href="https://github.com/kaptanbey0" target="_blank" class="cyber-btn cyber-btn--primary">
+              <a href="https://github.com/kaptanbey0" target="_blank" class="cyber-btn cyber-btn--primary" data-i18n="hero_cta_github">
                 ⚡ GitHub Profili (@kaptanbey0)
               </a>
-              <a href="archive.html" class="cyber-btn" style="background: rgba(168, 85, 247, 0.15); color: var(--neon-purple); border: 1px solid rgba(168, 85, 247, 0.4);">
+              <a href="archive.html" class="cyber-btn" style="background: rgba(168, 85, 247, 0.15); color: var(--neon-purple); border: 1px solid rgba(168, 85, 247, 0.4);" data-i18n="hero_cta_archive">
                 📂 Substrate Arşivi
               </a>
             </div>
@@ -167,46 +175,47 @@
         
         <!-- CARD 1: PROFILE HUD -->
         <div class="visual-card-item">
-          <h3 style="font-family: var(--font-mono); color: var(--neon-cyan); font-size: 0.9rem; margin-bottom: 12px;">📊 KAPTANBEY0 PROFİL HUD</h3>
+          <h3 style="font-family: var(--font-mono); color: var(--neon-cyan); font-size: 0.9rem; margin-bottom: 12px;" data-i18n="hud_title">📊 KAPTANBEY0 PROFİL HUD</h3>
           <img src="assets/profile-card.svg" alt="Profile Card" style="margin-bottom: 15px;" />
           <div style="font-family: var(--font-mono); font-size: 0.8rem; color: #94a3b8; line-height: 1.6;">
-            • <strong>Developer:</strong> kaptanbey01<br/>
-            • <strong>Node Status:</strong> Active Node 7.2<br/>
-            • <strong>Clearance:</strong> OMEGA LEVEL
+            • <strong data-i18n="hud_developer">Geliştirici:</strong> kaptanbey01<br/>
+            • <strong data-i18n="hud_status">Düğüm Durumu:</strong> <span data-i18n="hud_status_val">Aktif Düğüm 7.2</span><br/>
+            • <strong data-i18n="hud_clearance">Yetki Seviyesi:</strong> <span data-i18n="hud_clearance_val">OMEGA SEVİYESİ</span>
           </div>
         </div>
 
         <!-- CARD 2: SKILL RADAR & INTERACTIVE BARS -->
         <div class="visual-card-item">
-          <h3 style="font-family: var(--font-mono); color: var(--neon-purple); font-size: 0.9rem; margin-bottom: 12px;">🎯 YETENEK & UZMANLIK</h3>
+          <h3 style="font-family: var(--font-mono); color: var(--neon-purple); font-size: 0.9rem; margin-bottom: 12px;" data-i18n="skills_title">🎯 YETENEK & UZMANLIK</h3>
           <div class="skills-progress-list">
             <div>
-              <div class="skill-item__label-row"><span>Discord.js v14 & Bot Architecture</span><span>98%</span></div>
+              <div class="skill-item__label-row"><span data-i18n="skill_1_name">Discord.js v14 & Bot Mimarisi</span><span>98%</span></div>
               <div class="skill-item__bar-bg"><div class="skill-item__bar-fill" style="width: 98%;"></div></div>
             </div>
             <div>
-              <div class="skill-item__label-row"><span>Roblox Luau & DataStore Systems</span><span>95%</span></div>
+              <div class="skill-item__label-row"><span data-i18n="skill_2_name">Roblox Luau & DataStore Sistemleri</span><span>95%</span></div>
               <div class="skill-item__bar-bg"><div class="skill-item__bar-fill" style="width: 95%;"></div></div>
             </div>
             <div>
-              <div class="skill-item__label-row"><span>Python AI & Automation Pipelines</span><span>90%</span></div>
+              <div class="skill-item__label-row"><span data-i18n="skill_3_name">Python AI & Otomasyon Hattı</span><span>90%</span></div>
               <div class="skill-item__bar-bg"><div class="skill-item__bar-fill" style="width: 90%;"></div></div>
             </div>
             <div>
-              <div class="skill-item__label-row"><span>Node.js & Webhook Integrations</span><span>96%</span></div>
+              <div class="skill-item__label-row"><span data-i18n="skill_4_name">Node.js & Webhook Entegrasyonları</span><span>96%</span></div>
               <div class="skill-item__bar-bg"><div class="skill-item__bar-fill" style="width: 96%;"></div></div>
             </div>
           </div>
         </div>
 
-        <!-- CARD 3: SYSTEM MONITOR -->
-        <div class="visual-card-item">
-          <h3 style="font-family: var(--font-mono); color: var(--neon-green); font-size: 0.9rem; margin-bottom: 12px;">🖥️ CANLI SİSTEM MONİTÖRÜ</h3>
-          <img src="assets/system-monitor.svg" alt="System Monitor" style="margin-bottom: 15px;" />
-          <div style="font-family: var(--font-mono); font-size: 0.8rem; color: #94a3b8; line-height: 1.6;">
-            • <strong>Uptime:</strong> %99.97 Kararlı<br/>
-            • <strong>Active Hooks:</strong> 47 Dinleniyor<br/>
-            • <strong>API Endpoints:</strong> 128 Aktif Düğüm
+        <!-- CARD 4: ANOMALY DIAGNOSTIC RADAR -->
+        <div class="visual-card-item" style="position:relative; overflow:hidden;">
+          <h3 style="font-family: var(--font-mono); color: var(--neon-cyan); font-size: 0.9rem; margin-bottom: 12px;" data-i18n="radar_title">📡 ANOMALİ TEŞHİS RADARI</h3>
+          <div style="display:flex; justify-content:center; align-items:center; height:130px;">
+            <canvas id="radar-canvas" width="120" height="120" style="border-radius:50%; border:1px solid rgba(0,240,255,0.3); background:rgba(0,10,20,0.6); box-shadow:0 0 15px rgba(0,240,255,0.2);"></canvas>
+          </div>
+          <div style="font-family: var(--font-mono); font-size: 0.78rem; color: #94a3b8; margin-top: 10px; text-align:center;">
+            • <strong data-i18n="radar_freq_lbl">Frekans:</strong> 842.4 MHz<br/>
+            • <strong data-i18n="radar_blips_lbl">Algılanan Sinyal:</strong> <span data-i18n="radar_blips_val">7 Aktif Düğüm</span>
           </div>
         </div>
 
@@ -219,18 +228,18 @@
       <!-- ORBIT CORE BANNER -->
       <div class="orbit-core-banner">
         <div class="orbit-core-banner__header">
-          <div class="orbit-core-banner__title">
-            <span style="color:var(--neon-purple);">DARK ZENITH</span> // KAPTANBEY0 CORE
+          <div class="orbit-core-banner__title" data-i18n="core_banner_title">
+            <span style="color:var(--neon-purple);">NEXUS PRIME</span> // KAPTANBEY0 CORE
           </div>
           <div class="anomaly-index-box">
-            <span class="anomaly-index__label">ANOMALY INDEX: 82%</span>
+            <span class="anomaly-index__label" data-i18n="anomaly_index">ANOMALİ İNDEKSİ: %82</span>
             <div class="anomaly-index__bar-bg">
               <div class="anomaly-index__bar-fill"></div>
             </div>
           </div>
         </div>
-        <div class="orbit-core-banner__warning">
-          <span>⚠️ WARNING:</span> Fragment 14 synchronization wave unstable. Continuous echo detected across node 7.2.
+        <div class="orbit-core-banner__warning" data-i18n="core_warning">
+          <span>⚠️ UYARI:</span> Fragment 14 senkronizasyon dalgası kararsız. Node 7.2 üzerinde sürekli eko algılandı.
         </div>
       </div>
 
@@ -322,9 +331,9 @@
             <h3 data-i18n="dependency_map">Bağımlılık Haritası</h3>
             <p data-i18n="dependency_desc">Kodun bir yerinde değişiklik yaptığında, projenin neresinin etkileneceğini anında öngörüyor.</p>
             <div class="orbit-info-card__stats">
-              <div><strong id="orbit-nodes">34</strong><small>Node</small></div>
-              <div><strong id="orbit-edges">89</strong><small>Bağlantı</small></div>
-              <div><strong id="orbit-clusters">7</strong><small>Küme</small></div>
+              <div><strong id="orbit-nodes">34</strong><small data-i18n="lbl_nodes">Node</small></div>
+              <div><strong id="orbit-edges">89</strong><small data-i18n="lbl_connections">Bağlantı</small></div>
+              <div><strong id="orbit-clusters">7</strong><small data-i18n="lbl_clusters">Küme</small></div>
             </div>
           </div>
         </div>
@@ -352,7 +361,7 @@
             <div class="lang-card__icon lang-card__icon--js">JS</div>
             <div>
               <h3>JavaScript</h3>
-              <span class="lang-card__badge">Birincil</span>
+              <span class="lang-card__badge" data-i18n="badge_primary">Birincil</span>
             </div>
           </div>
           <div class="lang-card__code">
@@ -371,7 +380,7 @@ bot.<span class="fn">on</span>(<span class="st">'ready'</span>, () => console.<s
             <div class="lang-card__icon lang-card__icon--lua">Lua</div>
             <div>
               <h3>Luau</h3>
-              <span class="lang-card__badge lang-card__badge--lua">Birincil</span>
+              <span class="lang-card__badge lang-card__badge--lua" data-i18n="badge_primary">Birincil</span>
             </div>
           </div>
           <div class="lang-card__code">
@@ -404,15 +413,15 @@ Players.<span class="fn">PlayerAdded</span>:Connect(<span class="kw">function</s
         <div class="terminal-window__body" id="terminal-body">
           <div class="terminal-line terminal-line--system">
             <span class="terminal-line__prefix">system</span>
-            <span>KaptanBey0 Automaton v2.4.1 başlatılıyor...</span>
+            <span data-i18n="term_init">KaptanBey0 Automaton v2.4.1 başlatılıyor...</span>
           </div>
           <div class="terminal-line terminal-line--success">
             <span class="terminal-line__prefix">✓</span>
-            <span>KaptanBey0 Ağ Bağlantısı kuruldu</span>
+            <span data-i18n="term_net_established">KaptanBey0 Ağ Bağlantısı kuruldu</span>
           </div>
           <div class="terminal-line terminal-line--ready">
             <span class="terminal-line__prefix">⚡</span>
-            <span>Agent hazır. Komut bekleniyor...</span>
+            <span data-i18n="term_ready">Agent hazır. Komut bekleniyor...</span>
           </div>
         </div>
         <div class="terminal-window__input-row">
@@ -434,7 +443,7 @@ Players.<span class="fn">PlayerAdded</span>:Connect(<span class="kw">function</s
 
   <!-- ═══ FOOTER ═══ -->
   <footer class="footer">
-    <span data-i18n="footer_text">KaptanBey0 Automaton &copy; 2026 &middot; Dark Zenith Engine &middot; kaptanbey01</span>
+    <span data-i18n="footer_text">KaptanBey0 Automaton &copy; 2026 &middot; Nexus Prime Engine &middot; kaptanbey01</span>
     <span class="footer__sep">&middot;</span>
     <span id="clock"></span>
   </footer>

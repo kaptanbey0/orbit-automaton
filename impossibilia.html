@@ -16,8 +16,38 @@ color:rgba(0,0,0,0);pointer-events:none;z-index:1;
 text-align:center;max-width:80vw;line-height:2;
 transition:color 5s}
 </style>
+<link rel="stylesheet" href="style.css" />
 </head>
 <body>
+<nav class="nexus-subpage-hub">
+    <a href="index.html" class="hub-link" data-i18n="back_to_control"><span class="hub-icon">⚡</span> Dashboard</a>
+    <a href="archive.html" class="hub-link" data-i18n="nav_archive_tab"><span class="hub-icon">📂</span> Archive</a>
+    <a href="researchers.html" class="hub-link" data-i18n="nav_res_tab"><span class="hub-icon">👨‍🔬</span> Researchers</a>
+    <a href="phenomena.html" class="hub-link" data-i18n="nav_phen_tab"><span class="hub-icon">🔮</span> Phenomena 3D</a>
+    <a href="impossibilia.html" class="hub-link active" data-i18n="nav_imp_tab"><span class="hub-icon">🌀</span> Impossible Vault</a>
+    <a href="morphogenesis.html" class="hub-link" data-i18n="nav_morph_tab"><span class="hub-icon">🧬</span> Morphogenesis</a>
+    <a href="github-universe.html" class="hub-link" data-i18n="nav_gh_tab"><span class="hub-icon">🪐</span> GitHub 3D</a>
+    <a href="containment-log.html" class="hub-link" data-i18n="nav_logs_tab"><span class="hub-icon">📋</span> Logs</a>
+    <a href="fragment-00.html" class="hub-link hub-link--secret" data-i18n="nav_frag00_tab"><span class="hub-icon">🗝️</span> Fragment 00</a>
+    <div class="lang-select-wrapper" style="margin-left:auto; display:inline-flex; align-items:center; gap:6px; background:rgba(13,13,20,0.8); border:1px solid rgba(0,240,255,0.3); padding:4px 10px; border-radius:4px;">
+      <span style="font-size: 0.75rem;">🌐</span>
+      <select class="lang-select-box" style="background:transparent; color:var(--neon-cyan); border:none; font-family:var(--font-mono); font-size:0.8rem; cursor:pointer;">
+        <option value="tr">TR</option>
+        <option value="en">EN</option>
+        <option value="de">DE</option>
+        <option value="fr">FR</option>
+        <option value="es">ES</option>
+        <option value="ru">RU</option>
+        <option value="ja">JA</option>
+      </select>
+    </div>
+  </nav>
+
+  <!-- STARFIELD & AMBIENT PARTICLES -->
+  <canvas id="starfield"></canvas>
+  <div class="ambient-particles" id="ambient-particles"></div>
+  <div class="scanline-overlay"></div>
+
 <div style="position:fixed; top:15px; left:20px; right:20px; z-index:100; display:flex; justify-content:space-between; align-items:center; pointer-events:auto;">
   <a href="index.html" style="color:rgba(0,240,255,0.7); text-decoration:none; font-family:monospace; font-size:0.8rem; background:rgba(10,10,20,0.8); border:1px solid rgba(0,240,255,0.3); padding:4px 10px; border-radius:4px;" data-i18n="back_to_control">← Kontrol Merkezine Dön</a>
   <div style="display:inline-flex; align-items:center; gap:6px; background:rgba(10,10,20,0.8); border:1px solid rgba(0,240,255,0.3); padding:2px 8px; border-radius:4px;">
@@ -455,13 +485,15 @@ resize();addEventListener('resize',resize);
 
 const t0=performance.now();
 const lawEl=document.getElementById('law');
-const laws=[
-  {at:3,text:'Law I — Echo Topology: every shape remembers every form it has ever been'},
-  {at:25,text:'Law II — Dimensional Bleeding: space has variable dimensionality'},
-  {at:50,text:'Law III — Observation Collapse: looking determines what exists'},
-  {at:72,text:''},
-];
-let lawIdx=0;
+function getLawText(idx) {
+  const tr = (key, fallback) => (window.i18nEngine ? window.i18nEngine.t(key, fallback) : fallback);
+  if (idx === 0) return tr('law_1_name', 'Law I — Echo Topology') + ': ' + tr('law_1_quote', 'every shape remembers every form it has ever been');
+  if (idx === 1) return tr('law_2_name', 'Law II — Temporal Scarring') + ': ' + tr('law_2_quote', 'space has variable dimensionality');
+  if (idx === 2) return tr('law_3_name', 'Law III — Causal Inversion') + ': ' + tr('law_3_quote', 'looking determines what exists');
+  return '';
+}
+const lawTimes = [3, 25, 50, 72];
+let lawIdx = 0;
 
 (function frame(){
   const t=(performance.now()-t0)*0.001;
@@ -469,18 +501,18 @@ let lawIdx=0;
   gl.uniform1f(uT,t);
   gl.drawArrays(gl.TRIANGLE_STRIP,0,4);
 
-  // Show laws as subtle text
-  if(lawIdx<laws.length&&t>laws[lawIdx].at){
-    lawEl.textContent=laws[lawIdx].text;
-    lawEl.style.color=laws[lawIdx].text?'rgba(140,120,100,0.07)':'rgba(0,0,0,0)';
-    lawIdx++;if(lawIdx>=laws.length)lawIdx=0;
+  if(lawIdx < lawTimes.length && t > lawTimes[lawIdx]){
+    const text = getLawText(lawIdx);
+    lawEl.textContent = text;
+    lawEl.style.color = text ? 'rgba(0, 240, 255, 0.4)' : 'rgba(0,0,0,0)';
+    lawIdx++;
   }
-  // Reset cycle
-  if(t>85){lawIdx=0}
+  if(t > 85){ lawIdx = 0; }
 
   requestAnimationFrame(frame);
 })();
 </script>
 <script src="i18n.js"></script>
+<script src="app.js"></script>
 </body>
 </html>

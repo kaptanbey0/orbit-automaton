@@ -7,6 +7,8 @@ document.addEventListener('DOMContentLoaded', () => {
   initBootLoader();
   initDiscordCopyBtn();
   initStarfield();
+  initAmbientParticles();
+  initHeroOrbs();
   initOrbitVisualization();
   initActivityGraph();
   initDependencyList();
@@ -46,12 +48,19 @@ function initAudioSynth() {
   };
 }
 
-/* ─── STARFIELD ─── */
+/* ─── ENHANCED COSMIC PARTICLE STARFIELD ─── */
 function initStarfield() {
   const canvas = document.getElementById('starfield');
+  if (!canvas) return;
   const ctx = canvas.getContext('2d');
   let stars = [];
-  const STAR_COUNT = 200;
+  const STAR_COUNT = 320;
+  let mouse = { x: -999, y: -999, radius: 140 };
+
+  window.addEventListener('mousemove', (e) => {
+    mouse.x = e.clientX;
+    mouse.y = e.clientY;
+  });
 
   function resize() {
     canvas.width = window.innerWidth;
@@ -61,42 +70,82 @@ function initStarfield() {
   function createStars() {
     stars = [];
     for (let i = 0; i < STAR_COUNT; i++) {
+      const isPurple = Math.random() > 0.65;
+      const isGreen = !isPurple && Math.random() > 0.8;
       stars.push({
         x: Math.random() * canvas.width,
         y: Math.random() * canvas.height,
-        size: Math.random() * 1.5 + 0.3,
-        speed: Math.random() * 0.3 + 0.05,
-        opacity: Math.random() * 0.6 + 0.2,
+        vx: (Math.random() - 0.5) * 0.3,
+        vy: (Math.random() - 0.5) * 0.3 - 0.1,
+        size: Math.random() * 2 + 0.4,
+        baseOpacity: Math.random() * 0.65 + 0.2,
+        color: isPurple ? '168, 85, 247' : isGreen ? '34, 255, 136' : '0, 240, 255',
         pulse: Math.random() * Math.PI * 2,
-        pulseSpeed: Math.random() * 0.02 + 0.005,
+        pulseSpeed: Math.random() * 0.03 + 0.008,
       });
     }
   }
 
   function draw() {
     ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+    // Draw constellation lines between close stars
+    for (let i = 0; i < stars.length; i++) {
+      for (let j = i + 1; j < stars.length; j++) {
+        const dx = stars[i].x - stars[j].x;
+        const dy = stars[i].y - stars[j].y;
+        const dist = Math.sqrt(dx * dx + dy * dy);
+        if (dist < 90) {
+          const alpha = (1 - dist / 90) * 0.12;
+          ctx.beginPath();
+          ctx.moveTo(stars[i].x, stars[i].y);
+          ctx.lineTo(stars[j].x, stars[j].y);
+          ctx.strokeStyle = `rgba(0, 240, 255, ${alpha})`;
+          ctx.lineWidth = 0.5;
+          ctx.stroke();
+        }
+      }
+    }
+
     stars.forEach(star => {
       star.pulse += star.pulseSpeed;
-      const alpha = star.opacity * (0.5 + 0.5 * Math.sin(star.pulse));
-      ctx.beginPath();
-      ctx.arc(star.x, star.y, star.size, 0, Math.PI * 2);
-      ctx.fillStyle = `rgba(0, 240, 255, ${alpha})`;
-      ctx.fill();
+      const alpha = star.baseOpacity * (0.5 + 0.5 * Math.sin(star.pulse));
 
-      // Occasional purple stars
-      if (star.size > 1.2) {
+      // Mouse repulsion/attraction force
+      const dx = mouse.x - star.x;
+      const dy = mouse.y - star.y;
+      const dist = Math.sqrt(dx * dx + dy * dy);
+      if (dist < mouse.radius) {
+        const force = (mouse.radius - dist) / mouse.radius;
+        star.x -= (dx / dist) * force * 2;
+        star.y -= (dy / dist) * force * 2;
+      }
+
+      // Movement
+      star.x += star.vx;
+      star.y += star.vy;
+
+      // Wrap around screen
+      if (star.x < -10) star.x = canvas.width + 10;
+      if (star.x > canvas.width + 10) star.x = -10;
+      if (star.y < -10) star.y = canvas.height + 10;
+      if (star.y > canvas.height + 10) star.y = -10;
+
+      // Glow aura for larger stars
+      if (star.size > 1.4) {
         ctx.beginPath();
-        ctx.arc(star.x, star.y, star.size * 2, 0, Math.PI * 2);
-        ctx.fillStyle = `rgba(168, 85, 247, ${alpha * 0.15})`;
+        ctx.arc(star.x, star.y, star.size * 3, 0, Math.PI * 2);
+        ctx.fillStyle = `rgba(${star.color}, ${alpha * 0.25})`;
         ctx.fill();
       }
 
-      star.y += star.speed;
-      if (star.y > canvas.height + 5) {
-        star.y = -5;
-        star.x = Math.random() * canvas.width;
-      }
+      // Core particle
+      ctx.beginPath();
+      ctx.arc(star.x, star.y, star.size, 0, Math.PI * 2);
+      ctx.fillStyle = `rgba(${star.color}, ${alpha})`;
+      ctx.fill();
     });
+
     requestAnimationFrame(draw);
   }
 
@@ -104,6 +153,83 @@ function initStarfield() {
   createStars();
   draw();
   window.addEventListener('resize', () => { resize(); createStars(); });
+}
+
+/* ─── AMBIENT FLOATING COSMIC DUST ─── */
+function initAmbientParticles() {
+  const container = document.getElementById('ambient-particles');
+  if (!container) return;
+
+  const PARTICLE_COUNT = 35;
+  const colors = [
+    'rgba(0, 240, 255, 0.4)',
+    'rgba(168, 85, 247, 0.35)',
+    'rgba(34, 255, 136, 0.3)',
+    'rgba(255, 170, 34, 0.25)',
+    'rgba(0, 240, 255, 0.2)',
+  ];
+
+  for (let i = 0; i < PARTICLE_COUNT; i++) {
+    const dot = document.createElement('div');
+    dot.className = 'cosmic-dust';
+    const size = Math.random() * 4 + 1.5;
+    const x = Math.random() * 100;
+    const delay = Math.random() * 20;
+    const duration = Math.random() * 18 + 14;
+    const color = colors[Math.floor(Math.random() * colors.length)];
+    const blur = Math.random() * 3 + 1;
+
+    dot.style.cssText = `
+      left: ${x}%;
+      width: ${size}px;
+      height: ${size}px;
+      background: ${color};
+      box-shadow: 0 0 ${blur * 3}px ${color}, 0 0 ${blur * 8}px ${color};
+      animation-delay: ${delay}s;
+      animation-duration: ${duration}s;
+      filter: blur(${blur * 0.5}px);
+    `;
+    container.appendChild(dot);
+  }
+}
+
+/* ─── HERO ENERGY ORBS ─── */
+function initHeroOrbs() {
+  const hero = document.querySelector('.section--hero');
+  if (!hero) return;
+
+  const orbCount = 6;
+  const orbColors = [
+    { bg: 'rgba(0, 240, 255, 0.08)', glow: '0, 240, 255' },
+    { bg: 'rgba(168, 85, 247, 0.07)', glow: '168, 85, 247' },
+    { bg: 'rgba(34, 255, 136, 0.06)', glow: '34, 255, 136' },
+    { bg: 'rgba(0, 240, 255, 0.05)', glow: '0, 240, 255' },
+    { bg: 'rgba(168, 85, 247, 0.06)', glow: '168, 85, 247' },
+    { bg: 'rgba(255, 170, 34, 0.05)', glow: '255, 170, 34' },
+  ];
+
+  for (let i = 0; i < orbCount; i++) {
+    const orb = document.createElement('div');
+    orb.className = 'hero-energy-orb';
+    const size = Math.random() * 180 + 60;
+    const x = Math.random() * 80 + 10;
+    const y = Math.random() * 70 + 10;
+    const delay = Math.random() * 8;
+    const duration = Math.random() * 10 + 12;
+    const c = orbColors[i % orbColors.length];
+
+    orb.style.cssText = `
+      left: ${x}%;
+      top: ${y}%;
+      width: ${size}px;
+      height: ${size}px;
+      background: radial-gradient(circle, ${c.bg} 0%, transparent 70%);
+      box-shadow: 0 0 ${size * 0.6}px rgba(${c.glow}, 0.15);
+      animation-delay: ${delay}s;
+      animation-duration: ${duration}s;
+    `;
+    hero.appendChild(orb);
+  }
 }
 
 /* ─── ORBIT VISUALIZATION ─── */
@@ -279,27 +405,34 @@ function initDependencyList() {
   const container = document.getElementById('dep-items');
   if (!container) return;
 
-  const deps = [
-    { file: 'api/webhooks.js', msg: 'Yeni endpoint eklendi — 3 downstream servis etkileniyor', severity: 'medium', count: '3 etki' },
-    { file: 'lib/auth/oauth.ts', msg: 'Token yenileme mantığı güncellendi — güvenli', severity: 'low', count: '1 etki' },
-    { file: 'services/discord.js', msg: 'Rate limiter konfigürasyonu değişti', severity: 'low', count: '2 etki' },
-    { file: 'game/init.lua', msg: 'DataStore v2 migrasyonu tamamlandı', severity: 'low', count: '5 etki' },
-    { file: 'config/deploy.yml', msg: 'Production branch kuralı eklendi — CI pipeline tetikleniyor', severity: 'high', count: '12 etki' },
-    { file: 'middleware/cors.js', msg: 'Wildcard origin kaldırıldı — tüm frontend\'ler etkileniyor', severity: 'high', count: '8 etki' },
-  ];
+  function render() {
+    container.innerHTML = '';
+    const t = (key, fallback) => (window.i18nEngine ? window.i18nEngine.t(key, fallback) : fallback);
+    const deps = [
+      { file: 'api/webhooks.js', msg: t('dep_msg_1', 'Yeni endpoint eklendi — 3 downstream servis etkileniyor'), severity: 'medium', count: t('dep_cnt_1', '3 etki') },
+      { file: 'lib/auth/oauth.ts', msg: t('dep_msg_2', 'Token yenileme mantığı güncellendi — güvenli'), severity: 'low', count: t('dep_cnt_2', '1 etki') },
+      { file: 'services/discord.js', msg: t('dep_msg_3', 'Rate limiter konfigürasyonu değişti'), severity: 'low', count: t('dep_cnt_3', '2 etki') },
+      { file: 'game/init.lua', msg: t('dep_msg_4', 'DataStore v2 migrasyonu tamamlandı'), severity: 'low', count: t('dep_cnt_4', '5 etki') },
+      { file: 'config/deploy.yml', msg: t('dep_msg_5', 'Production branch kuralı eklendi — CI pipeline tetikleniyor'), severity: 'high', count: t('dep_cnt_5', '12 etki') },
+      { file: 'middleware/cors.js', msg: t('dep_msg_6', 'Wildcard origin kaldırıldı — tüm frontend\'ler etkileniyor'), severity: 'high', count: t('dep_cnt_6', '8 etki') },
+    ];
 
-  deps.forEach((dep, i) => {
-    const item = document.createElement('div');
-    item.className = 'dep-item';
-    item.style.animationDelay = `${i * 80}ms`;
-    item.innerHTML = `
-      <span class="dep-item__severity dep-item__severity--${dep.severity}"></span>
-      <span class="dep-item__file">${dep.file}</span>
-      <span class="dep-item__msg">${dep.msg}</span>
-      <span class="dep-item__count">${dep.count}</span>
-    `;
-    container.appendChild(item);
-  });
+    deps.forEach((dep, i) => {
+      const item = document.createElement('div');
+      item.className = 'dep-item';
+      item.style.animationDelay = `${i * 80}ms`;
+      item.innerHTML = `
+        <span class="dep-item__severity dep-item__severity--${dep.severity}"></span>
+        <span class="dep-item__file">${dep.file}</span>
+        <span class="dep-item__msg">${dep.msg}</span>
+        <span class="dep-item__count">${dep.count}</span>
+      `;
+      container.appendChild(item);
+    });
+  }
+
+  render();
+  document.addEventListener('orbit:lang-changed', render);
 }
 
 /* ─── AUTOMATION GRID ─── */
@@ -307,28 +440,38 @@ function initAutomationGrid() {
   const container = document.getElementById('auto-grid');
   if (!container) return;
 
-  const items = [
-    { name: 'Discord Bot Monitor', status: 'Aktif', active: true },
-    { name: 'Roblox Script Sync', status: 'Aktif', active: true },
-    { name: 'API Docs Fetcher', status: 'Aktif', active: true },
-    { name: 'Test Runner', status: 'Bekleme', active: false },
-    { name: 'Webhook Listener', status: 'Aktif', active: true },
-    { name: 'Dependency Scanner', status: 'Aktif', active: true },
-    { name: 'CI/CD Pipeline', status: 'Aktif', active: true },
-    { name: 'Log Aggregator', status: 'Bekleme', active: false },
-    { name: 'Impact Analyzer', status: 'Aktif', active: true },
-  ];
+  function render() {
+    container.innerHTML = '';
+    const t = (key, fallback) => (window.i18nEngine ? window.i18nEngine.t(key, fallback) : fallback);
+    const activeText = t('auto_active', 'Aktif');
+    const idleText = t('auto_idle', 'Bekleme');
 
-  items.forEach(item => {
-    const el = document.createElement('div');
-    el.className = 'auto-item';
-    el.innerHTML = `
-      <span class="auto-item__indicator auto-item__indicator--${item.active ? 'active' : 'idle'}"></span>
-      <span class="auto-item__name">${item.name}</span>
-      <span class="auto-item__status">${item.status}</span>
-    `;
-    container.appendChild(el);
-  });
+    const items = [
+      { name: 'Discord Bot Monitor', status: activeText, active: true },
+      { name: 'Roblox Script Sync', status: activeText, active: true },
+      { name: 'API Docs Fetcher', status: activeText, active: true },
+      { name: 'Test Runner', status: idleText, active: false },
+      { name: 'Webhook Listener', status: activeText, active: true },
+      { name: 'Dependency Scanner', status: activeText, active: true },
+      { name: 'CI/CD Pipeline', status: activeText, active: true },
+      { name: 'Log Aggregator', status: idleText, active: false },
+      { name: 'Impact Analyzer', status: activeText, active: true },
+    ];
+
+    items.forEach(item => {
+      const el = document.createElement('div');
+      el.className = 'auto-item';
+      el.innerHTML = `
+        <span class="auto-item__indicator auto-item__indicator--${item.active ? 'active' : 'idle'}"></span>
+        <span class="auto-item__name">${item.name}</span>
+        <span class="auto-item__status">${item.status}</span>
+      `;
+      container.appendChild(el);
+    });
+  }
+
+  render();
+  document.addEventListener('orbit:lang-changed', render);
 }
 
 /* ─── TERMINAL ─── */
@@ -337,25 +480,30 @@ function initTerminal() {
   const body = document.getElementById('terminal-body');
   if (!input || !body) return;
 
+  function getHelpResponse() {
+    const t = (key, fallback) => (window.i18nEngine ? window.i18nEngine.t(key, fallback) : fallback);
+    return [
+      { type: 'info', prefix: 'help', text: t('term_help_title', 'Kullanılabilir komutlar:') },
+      { type: 'system', prefix: '  ', text: t('term_cmd_access', 'access     — Sci-Fi Veritabanı Menüsünü Aç') },
+      { type: 'system', prefix: '  ', text: t('term_cmd_status', 'status     — Orbit & Anomali durumunu göster') },
+      { type: 'system', prefix: '  ', text: t('term_cmd_scan', 'scan       — Substrate düğüm taraması başlat') },
+      { type: 'system', prefix: '  ', text: t('term_cmd_res', 'researchers— Araştırmacı Veritabanına Git') },
+      { type: 'system', prefix: '  ', text: t('term_cmd_arch', 'archive    — Substrate Fragment Arşivini Aç') },
+      { type: 'system', prefix: '  ', text: t('term_cmd_cat', 'cat 00     — [GİZLİ] Fragment 00 Origin Point oku') },
+      { type: 'system', prefix: '  ', text: t('term_cmd_deploy', 'deploy     — Deploy ve pipeline durumu') },
+      { type: 'system', prefix: '  ', text: t('term_cmd_ping', 'ping       — Bağlantı hızı testi') },
+      { type: 'system', prefix: '  ', text: t('term_cmd_clear', 'clear      — Terminali temizle') },
+      { type: 'system', prefix: '  ', text: t('term_cmd_ver', 'version    — Orbit Automaton sürümü') },
+    ];
+  }
+
   const commands = {
     help: {
-      response: [
-        { type: 'info', prefix: 'help', text: 'Kullanılabilir komutlar:' },
-        { type: 'system', prefix: '  ', text: 'access     — Sci-Fi Veritabanı Menüsünü Aç' },
-        { type: 'system', prefix: '  ', text: 'status     — Orbit & Anomali durumunu göster' },
-        { type: 'system', prefix: '  ', text: 'scan       — Substrate düğüm taraması başlat' },
-        { type: 'system', prefix: '  ', text: 'researchers— Araştırmacı Veritabanına Git' },
-        { type: 'system', prefix: '  ', text: 'archive    — Substrate Fragment Arşivini Aç' },
-        { type: 'system', prefix: '  ', text: 'cat 00     — [GİZLİ] Fragment 00 Origin Point oku' },
-        { type: 'system', prefix: '  ', text: 'deploy     — Deploy ve pipeline durumu' },
-        { type: 'system', prefix: '  ', text: 'ping       — Bağlantı hızı testi' },
-        { type: 'system', prefix: '  ', text: 'clear      — Terminali temizle' },
-        { type: 'system', prefix: '  ', text: 'version    — Orbit Automaton sürümü' },
-      ]
+      get response() { return getHelpResponse(); }
     },
     status: {
       response: [
-        { type: 'success', prefix: '✓', text: 'Orbit Agent: Çevrimiçi (Dark Zenith)' },
+        { type: 'success', prefix: '✓', text: 'Orbit Agent: Çevrimiçi (Nexus Prime Core)' },
         { type: 'success', prefix: '✓', text: 'Substrate Arşivi: Senkronize (%82 Anomali Dizin)' },
         { type: 'info', prefix: 'WARN', text: 'Fragment 14: Kararsız Titreşim Algılandı' },
         { type: 'info', prefix: 'info', text: 'Bellek Kullanımı: 234 MB / 2048 MB' },
@@ -385,7 +533,7 @@ function initTerminal() {
     },
     version: {
       response: [
-        { type: 'ready', prefix: '⚡', text: 'KaptanBey0 Automaton v2.4.1 (Dark Zenith Engine)' },
+        { type: 'ready', prefix: '⚡', text: 'KaptanBey0 Automaton v2.4.1 (Nexus Prime Engine)' },
         { type: 'system', prefix: '  ', text: 'Developer: kaptanbey01' },
         { type: 'system', prefix: '  ', text: 'Motor: JavaScript, Luau & Python' },
         { type: 'system', prefix: '  ', text: 'Build: 2026.07.25' },
@@ -404,7 +552,7 @@ function initTerminal() {
         { type: 'info', prefix: '👤', text: 'OBSERVER ID: ' + (sessionStorage.getItem('orbit_observer_id') || 'OBSERVER-XXXX-OMEGA') },
         { type: 'system', prefix: '  ', text: 'Clearance Level: 3 — Standard Observer' },
         { type: 'system', prefix: '  ', text: 'Session: Active' },
-        { type: 'system', prefix: '  ', text: 'Protocol: Dark Zenith v2.4.1' },
+        { type: 'system', prefix: '  ', text: 'Protocol: Nexus Prime v2.4.1' },
       ]
     },
     date: {
@@ -631,15 +779,17 @@ function initSystemEventLog() {
   const container = document.getElementById('system-event-log-list');
   if (!container) return;
 
-  const events = [
-    'Observer session authenticated',
-    'SUBSTRATE archive indexed: Fragment 31 resonance detected',
-    'Fragment 14 synchronization wave alert issued',
-    'Researcher IX node broadcast captured',
-    'External GitHub Node ping: kaptanbey0/orbit-automaton',
-    'Background automation cycle #894 completed',
-    'Classified query blocked: Fragment 00 origin scan',
-    'Dark Zenith Core: All telemetry links operational'
+  const t = (key, fallback) => (window.i18nEngine ? window.i18nEngine.t(key, fallback) : fallback);
+
+  const eventKeys = [
+    'event_log_1',
+    'event_log_2',
+    'event_log_3',
+    'event_log_4',
+    'event_log_5',
+    'event_log_6',
+    'event_log_7',
+    'event_log_8'
   ];
 
   function getTimestamp() {
@@ -659,13 +809,13 @@ function initSystemEventLog() {
   }
 
   // Initial populate
-  addEvent('Observer connected to Orbit Core');
-  addEvent('Substrate archive index mounted at 82%');
+  addEvent(t('event_log_init', 'Gözlemci Orbit Core\'a bağlandı'));
+  addEvent(t('event_log_mounted', 'Substrate arşiv indeksi %82 oranında yüklendi'));
 
   // Periodic updates
   setInterval(() => {
-    const randomEvent = events[Math.floor(Math.random() * events.length)];
-    addEvent(randomEvent);
+    const randomKey = eventKeys[Math.floor(Math.random() * eventKeys.length)];
+    addEvent(t(randomKey, 'System event logged'));
   }, 6000);
 }
 
@@ -728,35 +878,43 @@ async function initLiveGitHubRepos() {
   const container = document.getElementById('github-projects-grid');
   if (!container) return;
 
-  const defaultProjects = [
+  let currentProjects = [
     {
       name: "orbit-automaton",
-      tag: "⚡ NODE 01 — AUTOMATON CORE",
-      desc: "KaptanBey0 Automaton — Dark Zenith temalı, Substrate lore zekası ve GitLab/GitHub otomasyon portalı.",
+      tagKey: "proj_1_tag",
+      descKey: "proj_1_desc",
+      tagDefault: "⚡ DÜĞÜM 01 — AUTOMATON CORE",
+      descDefault: "KaptanBey0 Automaton — Nexus Prime temalı, Substrate lore zekası ve GitLab/GitHub otomasyon portalı.",
       url: "https://github.com/kaptanbey0/orbit-automaton",
       lang: "JavaScript / HTML / CSS",
       stars: 12
     },
     {
       name: "discord-bot-framework",
-      tag: "🤖 NODE 02 — DISCORD BOT",
-      desc: "Discord.js v14 ile geliştirilmiş ölçeklenebilir bot altyapısı ve gelişmiş komut yöneticisi.",
+      tagKey: "proj_2_tag",
+      descKey: "proj_2_desc",
+      tagDefault: "🤖 DÜĞÜM 02 — DISCORD BOT",
+      descDefault: "Discord.js v14 ile geliştirilmiş ölçeklenebilir bot altyapısı ve gelişmiş komut yöneticisi.",
       url: "https://github.com/kaptanbey0",
       lang: "JavaScript / Node.js",
       stars: 8
     },
     {
       name: "roblox-luau-systems",
-      tag: "🎮 NODE 03 — ROBLOX SCRIPTING",
-      desc: "Luau mimarisi ile oyun içi otomasyon, DataStore kaydı ve gerçek zamanlı sunucu event yönetimi.",
+      tagKey: "proj_3_tag",
+      descKey: "proj_3_desc",
+      tagDefault: "🎮 DÜĞÜM 03 — ROBLOX SCRIPTING",
+      descDefault: "Luau mimarisi ile oyun içi otomasyon, DataStore kaydı ve gerçek zamanlı sunucu event yönetimi.",
       url: "https://github.com/kaptanbey0",
       lang: "Luau",
       stars: 15
     },
     {
       name: "python-automation-suite",
-      tag: "🛠️ NODE 04 — PYTHON AUTOMATION",
-      desc: "Python tabanlı veri işleme modülleri, REST API entegrasyonları ve otomatik sistem araçları.",
+      tagKey: "proj_4_tag",
+      descKey: "proj_4_desc",
+      tagDefault: "🛠️ DÜĞÜM 04 — PYTHON OTOMASYON",
+      descDefault: "Python tabanlı veri işleme modülleri, REST API entegrasyonları ve otomatik sistem araçları.",
       url: "https://github.com/kaptanbey0",
       lang: "Python",
       stars: 6
@@ -765,27 +923,40 @@ async function initLiveGitHubRepos() {
 
   function renderProjects(items) {
     container.innerHTML = '';
+    const t = (key, fallback) => (window.i18nEngine ? window.i18nEngine.t(key, fallback) : fallback);
+
     items.forEach((item) => {
       const card = document.createElement('div');
       card.className = 'project-card';
+      const tag = item.tagKey ? t(item.tagKey, item.tagDefault) : (item.tag || t('proj_default_tag', '⚡ GITHUB DÜĞÜMÜ'));
+      const desc = item.descKey ? t(item.descKey, item.descDefault) : (item.desc || item.description || t('proj_default_desc', 'KaptanBey0 otomasyon reposu ve yazılım düğümü.'));
+      const aiTitle = t('ai_analysis_title', 'AI Analizi:');
+      const aiDesc = t('ai_analysis_desc', 'Modüler mimari, optimize event döngüsü & kararlı API entegrasyonu.');
+      const nodeLinkText = t('proj_view_github', 'GitHub\'da İncele') + ' →';
+
       card.innerHTML = `
-        <span class="project-card__tag">${item.tag || '⚡ GITHUB NODE'}</span>
+        <span class="project-card__tag">${tag}</span>
         <h3 style="font-size: 1.1rem; color: #fff; margin: 8px 0;">${item.name}</h3>
-        <p style="font-size: 0.85rem; color: #94a3b8; line-height: 1.6;">${item.desc || item.description || 'KaptanBey0 otomasyon reposu ve yazılım düğümü.'}</p>
+        <p style="font-size: 0.85rem; color: #94a3b8; line-height: 1.6;">${desc}</p>
         <div style="background: rgba(168, 85, 247, 0.08); border-left: 2px solid var(--neon-purple); padding: 8px 12px; margin: 12px 0; border-radius: 0 4px 4px 0; font-size: 0.75rem; color: #cbd5e1;">
-          🤖 <strong>AI Analizi:</strong> Modüler mimari, optimize event döngüsü & kararlı API entegrasyonu.
+          🤖 <strong>${aiTitle}</strong> ${aiDesc}
         </div>
         <div class="project-card__footer">
           <span style="color:var(--neon-cyan); font-weight: 600; font-size: 0.8rem;">★ ${item.stars || item.stargazers_count || 0} STAR &middot; ${item.lang || item.language || 'JS/Luau'}</span>
-          <a href="${item.url || item.html_url || 'https://github.com/kaptanbey0'}" target="_blank" style="color:var(--neon-green); font-weight:600; font-size:0.8rem; text-decoration:underline;">GitHub Node →</a>
+          <a href="${item.url || item.html_url || 'https://github.com/kaptanbey0'}" target="_blank" style="color:var(--neon-green); font-weight:600; font-size:0.8rem; text-decoration:underline;">${nodeLinkText}</a>
         </div>
       `;
       container.appendChild(card);
     });
   }
 
-  // Initial render with default showcase projects
-  renderProjects(defaultProjects);
+  // Initial render
+  renderProjects(currentProjects);
+
+  // Re-render on language change
+  document.addEventListener('orbit:lang-changed', () => {
+    renderProjects(currentProjects);
+  });
 
   // Fetch live repos from GitHub API
   try {
@@ -796,19 +967,19 @@ async function initLiveGitHubRepos() {
         const apisEl = document.getElementById('apis-value');
         if (apisEl) apisEl.textContent = repos.length;
 
-        const liveMapped = repos.map((r, i) => ({
+        currentProjects = repos.map((r, i) => ({
           name: r.name,
           tag: `⚡ GITHUB NODE 0${i + 1}`,
-          desc: r.description || 'KaptanBey0 kamuya açık GitHub reposu.',
+          desc: r.description,
           url: r.html_url,
           lang: r.language || 'JavaScript',
           stars: r.stargazers_count
         }));
-        renderProjects(liveMapped);
+        renderProjects(currentProjects);
       }
     }
   } catch (e) {
-    // Keep fallback showcase
+    // Keep showcase
   }
 }
 
@@ -983,7 +1154,69 @@ function initKeyboardShortcuts() {
         setTimeout(() => termInput.focus(), 400);
       }
     }
+
+    // "m" — toggle ambient audio
+    if ((e.key === 'm' || e.key === 'M') && !['INPUT', 'TEXTAREA', 'SELECT'].includes(document.activeElement.tagName)) {
+      const musicBtn = document.getElementById('ambient-music-btn');
+      if (musicBtn) musicBtn.click();
+    }
+
+    // "l" — cycle language
+    if ((e.key === 'l' || e.key === 'L') && !['INPUT', 'TEXTAREA', 'SELECT'].includes(document.activeElement.tagName)) {
+      if (window.i18nEngine) {
+        const langs = ['tr', 'en', 'de', 'fr', 'es', 'ru', 'ja'];
+        const nextIdx = (langs.indexOf(window.i18nEngine.currentLang) + 1) % langs.length;
+        window.i18nEngine.setLanguage(langs[nextIdx]);
+      }
+    }
+
+    // "?" — toggle shortcuts overlay
+    if (e.key === '?' && !['INPUT', 'TEXTAREA', 'SELECT'].includes(document.activeElement.tagName)) {
+      toggleShortcutsModal();
+    }
   });
+
+  // Attach universal synth sound feedback to all interactive elements
+  document.querySelectorAll('a, button, .visual-card-item, .project-card, .database-menu-item, .hub-link').forEach(el => {
+    el.addEventListener('click', () => {
+      if (window.orbitSynthBeep) window.orbitSynthBeep(750, 0.04);
+    });
+  });
+}
+
+/* ─── SHORTCUTS OVERLAY MODAL ─── */
+function toggleShortcutsModal() {
+  let modal = document.getElementById('shortcuts-modal');
+  if (!modal) {
+    modal = document.createElement('div');
+    modal.id = 'shortcuts-modal';
+    modal.style.cssText = 'position:fixed; inset:0; z-index:99999; background:rgba(3,3,6,0.92); backdrop-filter:blur(16px); display:flex; align-items:center; justify-content:center; padding:20px;';
+    modal.innerHTML = `
+      <div style="background:var(--bg-card); border:1px solid var(--border-neon); border-radius:var(--radius-md); max-width:480px; width:100%; padding:28px; box-shadow:0 0 40px rgba(0,240,255,0.25); position:relative;">
+        <button id="close-shortcuts-modal" style="position:absolute; top:18px; right:18px; background:none; border:none; color:var(--neon-red); cursor:pointer; font-family:var(--font-mono); font-size:1.1rem;">[X]</button>
+        <div style="font-size:0.75rem; color:var(--neon-cyan); letter-spacing:0.2em; margin-bottom:8px;">NEXUS PRIME // KEYBOARD MATRIX</div>
+        <h3 style="font-size:1.3rem; color:#fff; font-family:var(--font-mono); margin-bottom:16px;">⌨️ Keyboard Shortcuts</h3>
+        <div style="display:flex; flex-direction:column; gap:10px; font-family:var(--font-mono); font-size:0.82rem; color:#cbd5e1;">
+          <div style="display:flex; justify-content:space-between; border-bottom:1px solid rgba(255,255,255,0.06); padding-bottom:6px;"><span>Open Sci-Fi Database</span><span style="color:var(--neon-cyan); font-weight:bold;">Ctrl + K</span></div>
+          <div style="display:flex; justify-content:space-between; border-bottom:1px solid rgba(255,255,255,0.06); padding-bottom:6px;"><span>Focus Sci-Fi Terminal</span><span style="color:var(--neon-cyan); font-weight:bold;">/</span></div>
+          <div style="display:flex; justify-content:space-between; border-bottom:1px solid rgba(255,255,255,0.06); padding-bottom:6px;"><span>Toggle Ambient Music</span><span style="color:var(--neon-cyan); font-weight:bold;">M</span></div>
+          <div style="display:flex; justify-content:space-between; border-bottom:1px solid rgba(255,255,255,0.06); padding-bottom:6px;"><span>Cycle 7 Languages</span><span style="color:var(--neon-cyan); font-weight:bold;">L</span></div>
+          <div style="display:flex; justify-content:space-between; border-bottom:1px solid rgba(255,255,255,0.06); padding-bottom:6px;"><span>Toggle Shortcuts Overlay</span><span style="color:var(--neon-cyan); font-weight:bold;">?</span></div>
+          <div style="display:flex; justify-content:space-between; padding-top:2px;"><span>Close Active Modals</span><span style="color:var(--neon-red); font-weight:bold;">Esc</span></div>
+        </div>
+      </div>
+    `;
+    document.body.appendChild(modal);
+
+    document.getElementById('close-shortcuts-modal').addEventListener('click', () => {
+      modal.style.display = 'none';
+    });
+    modal.addEventListener('click', (e) => {
+      if (e.target === modal) modal.style.display = 'none';
+    });
+  } else {
+    modal.style.display = modal.style.display === 'none' ? 'flex' : 'none';
+  }
 }
 
 /* ─── SECTION ENTRANCE ANIMATIONS ─── */
@@ -1008,16 +1241,363 @@ function initEntranceAnimations() {
   });
 }
 
-// Apply entrance-visible
+// Apply entrance-visible & initializations
 document.addEventListener('DOMContentLoaded', () => {
-  // Add the CSS class dynamically
   const style = document.createElement('style');
   style.textContent = `.entrance-visible { opacity: 1 !important; transform: translateY(0) !important; }`;
   document.head.appendChild(style);
 
   initKeyboardShortcuts();
   initEntranceAnimations();
+  initFragmentInspector();
+  initCursorParticleTrail();
+  init3DCardTilt();
+  initThemeSwitcher();
+  initRadarScanner();
+  initTerminalHistory();
+  initScrollTopButton();
+
+  const shortcutsBtn = document.getElementById('shortcuts-btn');
+  if (shortcutsBtn) {
+    shortcutsBtn.addEventListener('click', () => toggleShortcutsModal());
+  }
 });
+
+/* ─── FLOATING SCROLL-TO-TOP BUTTON ─── */
+function initScrollTopButton() {
+  let btn = document.getElementById('scroll-top-btn');
+  if (!btn) {
+    btn = document.createElement('button');
+    btn.id = 'scroll-top-btn';
+    btn.title = 'Yukarı Dön (Scroll to Top)';
+    btn.innerHTML = '🚀';
+    document.body.appendChild(btn);
+  }
+
+  window.addEventListener('scroll', () => {
+    if (window.scrollY > 300) {
+      btn.classList.add('visible');
+    } else {
+      btn.classList.remove('visible');
+    }
+  });
+
+  btn.addEventListener('click', () => {
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+    if (window.orbitSynthBeep) window.orbitSynthBeep(900, 0.05);
+  });
+}
+
+/* ─── ANOMALY RADAR SCANNER ─── */
+function initRadarScanner() {
+  const canvas = document.getElementById('radar-canvas');
+  if (!canvas) return;
+  const ctx = canvas.getContext('2d');
+  const cx = canvas.width / 2;
+  const cy = canvas.height / 2;
+  const radius = canvas.width / 2 - 4;
+
+  let angle = 0;
+  const blips = [
+    { r: 25, a: 0.8, opacity: 0.9 },
+    { r: 40, a: 2.4, opacity: 0.7 },
+    { r: 18, a: 4.1, opacity: 0.8 },
+    { r: 48, a: 5.2, opacity: 0.6 }
+  ];
+
+  function drawRadar() {
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+    // Concentric grid circles
+    ctx.strokeStyle = 'rgba(0, 240, 255, 0.2)';
+    ctx.lineWidth = 1;
+    [0.3, 0.65, 0.95].forEach(scale => {
+      ctx.beginPath();
+      ctx.arc(cx, cy, radius * scale, 0, Math.PI * 2);
+      ctx.stroke();
+    });
+
+    // Crosshairs
+    ctx.beginPath();
+    ctx.moveTo(cx, 4); ctx.lineTo(cx, canvas.height - 4);
+    ctx.moveTo(4, cy); ctx.lineTo(canvas.width - 4, cy);
+    ctx.strokeStyle = 'rgba(0, 240, 255, 0.15)';
+    ctx.stroke();
+
+    // Sweeping beam arc
+    angle += 0.04;
+    if (angle > Math.PI * 2) angle = 0;
+
+    const startAngle = angle - 0.5;
+    const endAngle = angle;
+
+    const gradient = ctx.createConicGradient(angle - Math.PI / 2, cx, cy);
+    gradient.addColorStop(0, 'rgba(0, 240, 255, 0.4)');
+    gradient.addColorStop(0.15, 'rgba(0, 240, 255, 0.05)');
+    gradient.addColorStop(1, 'transparent');
+
+    ctx.fillStyle = gradient;
+    ctx.beginPath();
+    ctx.arc(cx, cy, radius, 0, Math.PI * 2);
+    ctx.fill();
+
+    // Sweeping leading line
+    ctx.beginPath();
+    ctx.moveTo(cx, cy);
+    ctx.lineTo(cx + Math.cos(angle) * radius, cy + Math.sin(angle) * radius);
+    ctx.strokeStyle = 'rgba(0, 240, 255, 0.9)';
+    ctx.lineWidth = 1.5;
+    ctx.stroke();
+
+    // Blips
+    blips.forEach(b => {
+      const bx = cx + Math.cos(b.a) * b.r;
+      const by = cy + Math.sin(b.a) * b.r;
+
+      ctx.beginPath();
+      ctx.arc(bx, by, 2.5, 0, Math.PI * 2);
+      ctx.fillStyle = `rgba(168, 85, 247, ${b.opacity})`;
+      ctx.shadowColor = '#a855f7';
+      ctx.shadowBlur = 6;
+      ctx.fill();
+    });
+
+    requestAnimationFrame(drawRadar);
+  }
+
+  requestAnimationFrame(drawRadar);
+}
+
+/* ─── TERMINAL COMMAND HISTORY ─── */
+function initTerminalHistory() {
+  const input = document.getElementById('terminal-input');
+  if (!input) return;
+
+  const history = [];
+  let historyIdx = -1;
+
+  input.addEventListener('keydown', (e) => {
+    if (e.key === 'Enter') {
+      const val = input.value.trim();
+      if (val && history[history.length - 1] !== val) {
+        history.push(val);
+      }
+      historyIdx = history.length;
+    } else if (e.key === 'ArrowUp') {
+      if (history.length === 0) return;
+      e.preventDefault();
+      if (historyIdx > 0) historyIdx--;
+      input.value = history[historyIdx] || '';
+    } else if (e.key === 'ArrowDown') {
+      if (history.length === 0) return;
+      e.preventDefault();
+      if (historyIdx < history.length - 1) {
+        historyIdx++;
+        input.value = history[historyIdx];
+      } else {
+        historyIdx = history.length;
+        input.value = '';
+      }
+    }
+  });
+}
+
+/* ─── DYNAMIC THEME SWITCHER ─── */
+function initThemeSwitcher() {
+  const themes = {
+    cyan: { name: 'CYAN', cyan: '#00f0ff', purple: '#a855f7', border: 'rgba(0, 240, 255, 0.3)' },
+    emerald: { name: 'EMERALD', cyan: '#22ff88', purple: '#00f0ff', border: 'rgba(34, 255, 136, 0.3)' },
+    amber: { name: 'AMBER', cyan: '#ffaa00', purple: '#ff0055', border: 'rgba(255, 170, 0, 0.3)' },
+    purple: { name: 'PURPLE', cyan: '#a855f7', purple: '#ff0055', border: 'rgba(168, 85, 247, 0.3)' }
+  };
+
+  const themeKeys = Object.keys(themes);
+  let savedTheme = localStorage.getItem('orbit_theme') || 'cyan';
+  if (!themes[savedTheme]) savedTheme = 'cyan';
+
+  function applyTheme(themeKey) {
+    const t = themes[themeKey];
+    document.documentElement.style.setProperty('--neon-cyan', t.cyan);
+    document.documentElement.style.setProperty('--neon-purple', t.purple);
+    document.documentElement.style.setProperty('--border-neon', t.border);
+
+    const btn = document.getElementById('theme-toggle-btn');
+    if (btn) {
+      btn.querySelector('span').textContent = `🎨 THEME: ${t.name}`;
+      btn.style.color = t.cyan;
+      btn.style.borderColor = t.border;
+    }
+
+    localStorage.setItem('orbit_theme', themeKey);
+  }
+
+  applyTheme(savedTheme);
+
+  const themeBtn = document.getElementById('theme-toggle-btn');
+  if (themeBtn) {
+    themeBtn.addEventListener('click', () => {
+      const currentIdx = themeKeys.indexOf(localStorage.getItem('orbit_theme') || 'cyan');
+      const nextKey = themeKeys[(currentIdx + 1) % themeKeys.length];
+      applyTheme(nextKey);
+      if (window.orbitSynthBeep) window.orbitSynthBeep(880, 0.05);
+    });
+  }
+}
+
+/* ─── CURSOR SPARK PARTICLE TRAIL ─── */
+function initCursorParticleTrail() {
+  // Mobile / touch devices skip to save performance
+  if ('ontouchstart' in window || window.innerWidth < 768) return;
+
+  const canvas = document.createElement('canvas');
+  canvas.id = 'cursor-trail-canvas';
+  canvas.style.cssText = 'position:fixed; inset:0; pointer-events:none; z-index:9998; width:100vw; height:100vh;';
+  document.body.appendChild(canvas);
+
+  const ctx = canvas.getContext('2d');
+  let width = (canvas.width = window.innerWidth);
+  let height = (canvas.height = window.innerHeight);
+
+  window.addEventListener('resize', () => {
+    width = canvas.width = window.innerWidth;
+    height = canvas.height = window.innerHeight;
+  });
+
+  const particles = [];
+  let mouse = { x: -100, y: -100 };
+
+  window.addEventListener('mousemove', (e) => {
+    mouse.x = e.clientX;
+    mouse.y = e.clientY;
+
+    // Spawn 2 spark particles per movement
+    for (let i = 0; i < 2; i++) {
+      particles.push({
+        x: mouse.x + (Math.random() - 0.5) * 8,
+        y: mouse.y + (Math.random() - 0.5) * 8,
+        vx: (Math.random() - 0.5) * 1.5,
+        vy: (Math.random() - 0.5) * 1.5 - 0.5,
+        size: Math.random() * 2.5 + 1,
+        life: 1,
+        decay: Math.random() * 0.03 + 0.02,
+        color: Math.random() > 0.4 ? '0, 240, 255' : '168, 85, 247'
+      });
+    }
+  });
+
+  function renderTrail() {
+    ctx.clearRect(0, 0, width, height);
+
+    for (let i = particles.length - 1; i >= 0; i--) {
+      const p = particles[i];
+      p.x += p.vx;
+      p.y += p.vy;
+      p.life -= p.decay;
+
+      if (p.life <= 0) {
+        particles.splice(i, 1);
+        continue;
+      }
+
+      ctx.beginPath();
+      ctx.arc(p.x, p.y, p.size * p.life, 0, Math.PI * 2);
+      ctx.fillStyle = `rgba(${p.color}, ${p.life * 0.7})`;
+      ctx.shadowColor = `rgba(${p.color}, 0.8)`;
+      ctx.shadowBlur = 6;
+      ctx.fill();
+    }
+
+    requestAnimationFrame(renderTrail);
+  }
+
+  requestAnimationFrame(renderTrail);
+}
+
+/* ─── 3D CARD PARALLAX TILT ─── */
+function init3DCardTilt() {
+  const cards = document.querySelectorAll('.visual-card-item, .project-card, .personnel-card, .stat-card');
+
+  cards.forEach(card => {
+    card.style.transformStyle = 'preserve-3d';
+    card.style.perspective = '1000px';
+
+    card.addEventListener('mousemove', (e) => {
+      const rect = card.getBoundingClientRect();
+      const x = e.clientX - rect.left;
+      const y = e.clientY - rect.top;
+
+      const centerX = rect.width / 2;
+      const centerY = rect.height / 2;
+
+      const rotateX = (centerY - y) / 12;
+      const rotateY = (x - centerX) / 12;
+
+      card.style.transform = `perspective(1000px) rotateX(${rotateX}deg) rotateY(${rotateY}deg) scale3d(1.02, 1.02, 1.02)`;
+    });
+
+    card.addEventListener('mouseleave', () => {
+      card.style.transform = 'perspective(1000px) rotateX(0deg) rotateY(0deg) scale3d(1, 1, 1)';
+    });
+  });
+}
+
+/* ─── FRAGMENT INSPECTOR MODAL ─── */
+function initFragmentInspector() {
+  const modal = document.getElementById('frag-modal');
+  const closeBtn = document.getElementById('close-frag-modal');
+  if (!modal) return;
+
+  const t = (key, fallback) => (window.i18nEngine ? window.i18nEngine.t(key, fallback) : fallback);
+
+  document.querySelectorAll('.frag-inspect-btn').forEach(btn => {
+    btn.addEventListener('click', (e) => {
+      e.preventDefault();
+      const fragId = btn.getAttribute('data-frag');
+      if (!fragId) return;
+
+      if (window.orbitSynthBeep) window.orbitSynthBeep(600, 0.05);
+
+      const titleEl = document.getElementById('frag-modal-title');
+      const metaEl = document.getElementById('frag-modal-meta');
+      const bodyEl = document.getElementById('frag-modal-body');
+      const simLink = document.getElementById('frag-modal-sim-link');
+
+      const title = t('frag_' + fragId + '_title', `FRAGMENT ${fragId}`);
+      const body = t('frag_' + fragId + '_body', 'Transcript loading...');
+      const simText = t('open_3d_sim', '[OPEN 3D SIMULATION]');
+
+      if (titleEl) titleEl.textContent = title;
+      if (metaEl) metaEl.textContent = `Fragment ID: ${fragId} · Substrate Archive`;
+      if (bodyEl) bodyEl.textContent = body;
+      if (simLink) {
+        simLink.textContent = simText;
+        if (fragId === '03') simLink.href = 'phenomena.html';
+        else if (fragId === '07') simLink.href = 'impossibilia.html';
+        else if (fragId === '14' || fragId === '11') simLink.href = 'containment-log.html';
+        else if (fragId === '19' || fragId === '31') simLink.href = 'morphogenesis.html';
+        else if (fragId === '22') simLink.href = 'github-universe.html';
+      }
+
+      modal.style.display = 'flex';
+    });
+  });
+
+  if (closeBtn) {
+    closeBtn.addEventListener('click', () => {
+      modal.style.display = 'none';
+    });
+  }
+
+  modal.addEventListener('click', (e) => {
+    if (e.target === modal) modal.style.display = 'none';
+  });
+
+  window.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape' && modal.style.display === 'flex') {
+      modal.style.display = 'none';
+    }
+  });
+}
 
 
 
