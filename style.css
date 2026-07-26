@@ -138,17 +138,7 @@ img {
 
 /* ─── SCANLINE OVERLAY ─── */
 .scanline-overlay {
-  position: fixed;
-  inset: 0;
-  z-index: 1;
-  pointer-events: none;
-  background: repeating-linear-gradient(
-    0deg,
-    transparent,
-    transparent 2px,
-    rgba(0, 240, 255, 0.012) 2px,
-    rgba(0, 240, 255, 0.012) 4px
-  );
+  display: none !important;
 }
 
 /* ─── AMBIENT FLOATING PARTICLES ─── */
@@ -2568,28 +2558,9 @@ body::after {
   }
 }
 
-/* ─── VISUAL CARD HOLOGRAPHIC LIGHT SWEEP ─── */
+/* ─── VISUAL CARD HOLOGRAPHIC LIGHT SWEEP (DISABLED) ─── */
 .visual-card-item::after, .project-card::after, .personnel-card::after {
-  content: '';
-  position: absolute;
-  top: -50%;
-  left: -50%;
-  width: 200%;
-  height: 200%;
-  background: linear-gradient(
-    45deg,
-    transparent 45%,
-    rgba(0, 240, 255, 0.08) 50%,
-    rgba(168, 85, 247, 0.08) 52%,
-    transparent 55%
-  );
-  transform: rotate(30deg) translateY(-100%);
-  transition: transform 0.8s var(--ease-out);
-  pointer-events: none;
-}
-
-.visual-card-item:hover::after, .project-card:hover::after, .personnel-card:hover::after {
-  transform: rotate(30deg) translateY(100%);
+  display: none !important;
 }
 
 /* ─── MULTI-COLOR ANIMATED GRADIENT HEADINGS ─── */
@@ -2670,6 +2641,328 @@ body::after {
   box-shadow: 0 0 25px rgba(0, 240, 255, 0.5);
   transform: translateY(-3px) scale(1.08);
 }
+
+/* ═══════════════════════════════════════════════════
+   CERTIFICATES & LICENSES SECTION STYLING
+   ═══════════════════════════════════════════════════ */
+.section--certificates {
+  position: relative;
+  z-index: 2;
+  padding: 60px 0;
+}
+
+.cert-filter-bar {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 12px;
+  flex-wrap: wrap;
+  margin-bottom: 36px;
+}
+
+.cert-filter-btn {
+  font-family: var(--font-mono);
+  font-size: 0.82rem;
+  padding: 8px 18px;
+  border-radius: var(--radius-sm);
+  background: rgba(13, 13, 20, 0.8);
+  border: 1px solid var(--border-subtle);
+  color: var(--text-secondary);
+  cursor: pointer;
+  transition: all 0.3s var(--ease-out);
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.cert-filter-btn:hover {
+  color: var(--neon-cyan);
+  border-color: rgba(0, 240, 255, 0.3);
+  background: rgba(0, 240, 255, 0.06);
+}
+
+.cert-filter-btn.active {
+  color: #fff;
+  background: rgba(0, 240, 255, 0.15);
+  border-color: var(--neon-cyan);
+  box-shadow: 0 0 15px rgba(0, 240, 255, 0.3);
+}
+
+.certs-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+  gap: 24px;
+}
+
+.cert-card {
+  background: var(--bg-card);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-md);
+  padding: 24px;
+  position: relative;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  transition: all 0.35s var(--ease-out);
+}
+
+.cert-card::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 3px;
+  background: linear-gradient(90deg, var(--neon-cyan), var(--neon-purple));
+  opacity: 0.4;
+  transition: opacity 0.3s;
+}
+
+.cert-card:hover {
+  transform: translateY(-5px);
+  border-color: rgba(0, 240, 255, 0.4);
+  box-shadow: 0 10px 30px rgba(0, 240, 255, 0.15);
+}
+
+.cert-card:hover::before {
+  opacity: 1;
+}
+
+.cert-badge-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 16px;
+}
+
+.cert-issuer-tag {
+  font-family: var(--font-mono);
+  font-size: 0.72rem;
+  color: var(--neon-purple);
+  background: rgba(168, 85, 247, 0.1);
+  border: 1px solid rgba(168, 85, 247, 0.3);
+  padding: 3px 8px;
+  border-radius: 4px;
+  font-weight: 600;
+}
+
+.cert-status-badge {
+  font-family: var(--font-mono);
+  font-size: 0.7rem;
+  color: var(--neon-green);
+  background: rgba(34, 255, 136, 0.1);
+  border: 1px solid rgba(34, 255, 136, 0.3);
+  padding: 3px 8px;
+  border-radius: 4px;
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.cert-title {
+  font-family: var(--font-mono);
+  font-size: 1.05rem;
+  font-weight: 700;
+  color: #fff;
+  margin-bottom: 8px;
+  line-height: 1.4;
+}
+
+.cert-desc {
+  font-size: 0.84rem;
+  color: var(--text-secondary);
+  line-height: 1.6;
+  margin-bottom: 16px;
+}
+
+.cert-id-box {
+  font-family: var(--font-mono);
+  font-size: 0.76rem;
+  color: var(--neon-cyan);
+  background: rgba(0, 240, 255, 0.05);
+  border: 1px dashed rgba(0, 240, 255, 0.25);
+  padding: 6px 12px;
+  border-radius: 4px;
+  margin-bottom: 16px;
+  display: flex;
+  justify-content: space-between;
+}
+
+.cert-tags {
+  display: flex;
+  gap: 6px;
+  flex-wrap: wrap;
+  margin-bottom: 18px;
+}
+
+.cert-tag-pill {
+  font-family: var(--font-mono);
+  font-size: 0.72rem;
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  color: #cbd5e1;
+  padding: 2px 8px;
+  border-radius: 3px;
+}
+
+.cert-verify-btn {
+  font-family: var(--font-mono);
+  font-size: 0.8rem;
+  width: 100%;
+  padding: 9px 0;
+  background: rgba(0, 240, 255, 0.08);
+  border: 1px solid rgba(0, 240, 255, 0.3);
+  color: var(--neon-cyan);
+  border-radius: var(--radius-sm);
+  cursor: pointer;
+  transition: all 0.3s var(--ease-out);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  font-weight: 600;
+}
+
+.cert-verify-btn:hover {
+  background: rgba(0, 240, 255, 0.2);
+  border-color: var(--neon-cyan);
+  box-shadow: 0 0 15px rgba(0, 240, 255, 0.4);
+  color: #fff;
+}
+
+/* ─── CERTIFICATE MODAL ─── */
+.cert-modal-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 99999;
+  background: rgba(3, 3, 6, 0.85);
+  backdrop-filter: blur(10px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+  opacity: 0;
+  visibility: hidden;
+  transition: all 0.3s ease;
+}
+
+.cert-modal-overlay.active {
+  opacity: 1;
+  visibility: visible;
+}
+
+.cert-modal-card {
+  background: #0a0c14;
+  border: 1px solid var(--neon-cyan);
+  border-radius: 12px;
+  width: 100%;
+  max-width: 580px;
+  padding: 32px;
+  box-shadow: 0 0 50px rgba(0, 240, 255, 0.3), inset 0 0 20px rgba(0, 240, 255, 0.05);
+  position: relative;
+  transform: scale(0.95);
+  transition: transform 0.3s var(--ease-out);
+  overflow: hidden;
+}
+
+.cert-modal-overlay.active .cert-modal-card {
+  transform: scale(1);
+}
+
+.cert-modal-card::before {
+  content: '';
+  position: absolute;
+  top: 0; left: 0; right: 0;
+  height: 4px;
+  background: linear-gradient(90deg, var(--neon-cyan), var(--neon-purple), var(--neon-green));
+}
+
+.cert-modal-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 20px;
+  border-bottom: 1px solid rgba(0, 240, 255, 0.2);
+  padding-bottom: 16px;
+}
+
+.cert-modal-close-btn {
+  background: none;
+  border: none;
+  color: var(--neon-red);
+  font-family: var(--font-mono);
+  font-size: 1.1rem;
+  cursor: pointer;
+  padding: 4px;
+}
+
+.cert-modal-seal-badge {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  background: rgba(0, 240, 255, 0.06);
+  border: 1px solid rgba(0, 240, 255, 0.25);
+  padding: 16px;
+  border-radius: 8px;
+  margin-bottom: 20px;
+}
+
+.cert-modal-seal-icon {
+  font-size: 2.2rem;
+  filter: drop-shadow(0 0 10px var(--neon-cyan));
+}
+
+.cert-modal-hash-box {
+  font-family: var(--font-mono);
+  font-size: 0.72rem;
+  background: rgba(0, 0, 0, 0.6);
+  color: var(--neon-purple);
+  border: 1px solid rgba(168, 85, 247, 0.3);
+  padding: 10px 14px;
+  border-radius: 6px;
+  word-break: break-all;
+/* ─── CYBER EYES MOUSE TRACKING COMPONENT ─── */
+.cyber-eyes-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 28px;
+  padding: 16px 0;
+}
+
+.cyber-eye {
+  width: 64px;
+  height: 64px;
+  border-radius: 50%;
+  background: rgba(8, 12, 20, 0.9);
+  border: 2px solid var(--neon-cyan);
+  box-shadow: 0 0 20px rgba(0, 240, 255, 0.35), inset 0 0 15px rgba(0, 240, 255, 0.15);
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  transition: border-color 0.3s, box-shadow 0.3s;
+}
+
+.cyber-eye:hover {
+  border-color: var(--neon-purple);
+  box-shadow: 0 0 25px rgba(168, 85, 247, 0.5), inset 0 0 15px rgba(168, 85, 247, 0.2);
+}
+
+.cyber-eye-pupil {
+  width: 22px;
+  height: 22px;
+  border-radius: 50%;
+  background: radial-gradient(circle, #fff 15%, var(--neon-cyan) 60%, var(--neon-purple) 100%);
+  box-shadow: 0 0 12px var(--neon-cyan), 0 0 24px var(--neon-purple);
+  position: absolute;
+  transition: transform 0.04s ease-out, opacity 0.3s ease;
+  pointer-events: none;
+  opacity: 0.85;
+}
+
 
 
 

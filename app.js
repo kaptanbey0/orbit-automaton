@@ -25,6 +25,8 @@ document.addEventListener('DOMContentLoaded', () => {
   initAudioSynth();
   initLiveGitHubRepos();
   initAudioAmbientSynth();
+  initCertificates();
+  initCyberEyes();
 });
 
 /* ─── AUDIO SYNTH BEEP (used by boot loader & UI feedback) ─── */
@@ -54,13 +56,7 @@ function initStarfield() {
   if (!canvas) return;
   const ctx = canvas.getContext('2d');
   let stars = [];
-  const STAR_COUNT = 320;
-  let mouse = { x: -999, y: -999, radius: 140 };
-
-  window.addEventListener('mousemove', (e) => {
-    mouse.x = e.clientX;
-    mouse.y = e.clientY;
-  });
+  const STAR_COUNT = 240;
 
   function resize() {
     canvas.width = window.innerWidth;
@@ -75,13 +71,13 @@ function initStarfield() {
       stars.push({
         x: Math.random() * canvas.width,
         y: Math.random() * canvas.height,
-        vx: (Math.random() - 0.5) * 0.3,
-        vy: (Math.random() - 0.5) * 0.3 - 0.1,
-        size: Math.random() * 2 + 0.4,
-        baseOpacity: Math.random() * 0.65 + 0.2,
+        vx: (Math.random() - 0.5) * 0.25,
+        vy: (Math.random() - 0.5) * 0.25 - 0.08,
+        size: Math.random() * 1.8 + 0.4,
+        baseOpacity: Math.random() * 0.5 + 0.2,
         color: isPurple ? '168, 85, 247' : isGreen ? '34, 255, 136' : '0, 240, 255',
         pulse: Math.random() * Math.PI * 2,
-        pulseSpeed: Math.random() * 0.03 + 0.008,
+        pulseSpeed: Math.random() * 0.02 + 0.005,
       });
     }
   }
@@ -89,37 +85,9 @@ function initStarfield() {
   function draw() {
     ctx.clearRect(0, 0, canvas.width, canvas.height);
 
-    // Draw constellation lines between close stars
-    for (let i = 0; i < stars.length; i++) {
-      for (let j = i + 1; j < stars.length; j++) {
-        const dx = stars[i].x - stars[j].x;
-        const dy = stars[i].y - stars[j].y;
-        const dist = Math.sqrt(dx * dx + dy * dy);
-        if (dist < 90) {
-          const alpha = (1 - dist / 90) * 0.12;
-          ctx.beginPath();
-          ctx.moveTo(stars[i].x, stars[i].y);
-          ctx.lineTo(stars[j].x, stars[j].y);
-          ctx.strokeStyle = `rgba(0, 240, 255, ${alpha})`;
-          ctx.lineWidth = 0.5;
-          ctx.stroke();
-        }
-      }
-    }
-
     stars.forEach(star => {
       star.pulse += star.pulseSpeed;
       const alpha = star.baseOpacity * (0.5 + 0.5 * Math.sin(star.pulse));
-
-      // Mouse repulsion/attraction force
-      const dx = mouse.x - star.x;
-      const dy = mouse.y - star.y;
-      const dist = Math.sqrt(dx * dx + dy * dy);
-      if (dist < mouse.radius) {
-        const force = (mouse.radius - dist) / mouse.radius;
-        star.x -= (dx / dist) * force * 2;
-        star.y -= (dy / dist) * force * 2;
-      }
 
       // Movement
       star.x += star.vx;
@@ -134,8 +102,8 @@ function initStarfield() {
       // Glow aura for larger stars
       if (star.size > 1.4) {
         ctx.beginPath();
-        ctx.arc(star.x, star.y, star.size * 3, 0, Math.PI * 2);
-        ctx.fillStyle = `rgba(${star.color}, ${alpha * 0.25})`;
+        ctx.arc(star.x, star.y, star.size * 2.5, 0, Math.PI * 2);
+        ctx.fillStyle = `rgba(${star.color}, ${alpha * 0.2})`;
         ctx.fill();
       }
 
@@ -595,6 +563,14 @@ function initTerminal() {
         window.location.href = 'fragment-00.html';
       }, 500);
       addLine('ready', '<span class="terminal-line__prefix">⚡</span><span>GIZLI DECRYPT PROTOKOLÜ BLASTER. FRAGMENT 00 ACILIYOR...</span>', true);
+      return;
+    }
+
+    if (cmd === 'cv' || cmd === 'dossier' || cmd === 'resume') {
+      setTimeout(() => {
+        window.location.href = 'cv.html';
+      }, 500);
+      addLine('ready', '<span class="terminal-line__prefix">📜</span><span>OPENING KAPTANBEY0 DEVELOPER DOSSIER & CV...</span>', true);
       return;
     }
 
@@ -1599,5 +1575,105 @@ function initFragmentInspector() {
   });
 }
 
+/* ─── CERTIFICATES & LICENSES FILTERING & MODAL ENGINE ─── */
+function initCertificates() {
+  const filterBtns = document.querySelectorAll('.cert-filter-btn');
+  const certCards = document.querySelectorAll('.cert-card');
+  const modalOverlay = document.getElementById('cert-modal-overlay');
+  const closeBtn = document.getElementById('close-cert-modal');
 
+  if (filterBtns.length > 0 && certCards.length > 0) {
+    filterBtns.forEach(btn => {
+      btn.addEventListener('click', () => {
+        const filter = btn.dataset.filter;
+        
+        filterBtns.forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
 
+        if (window.orbitSynthBeep) window.orbitSynthBeep(640, 0.04);
+
+        certCards.forEach(card => {
+          const category = card.dataset.category;
+          if (filter === 'all' || category === filter) {
+            card.style.display = 'flex';
+            card.style.opacity = '1';
+            card.style.transform = 'translateY(0)';
+          } else {
+            card.style.display = 'none';
+          }
+        });
+      });
+    });
+  }
+
+  // Global Cert Modal Opener
+  window.openCertModal = function(id, title, issuer, date, desc, hash) {
+    if (!modalOverlay) return;
+    const titleEl = document.getElementById('modal-cert-title');
+    const issuerEl = document.getElementById('modal-cert-issuer');
+    const idEl = document.getElementById('modal-cert-id');
+    const dateEl = document.getElementById('modal-cert-date');
+    const descEl = document.getElementById('modal-cert-desc');
+    const hashEl = document.getElementById('modal-cert-hash');
+
+    if (titleEl) titleEl.textContent = title;
+    if (issuerEl) issuerEl.textContent = issuer;
+    if (idEl) idEl.textContent = id;
+    if (dateEl) dateEl.textContent = date;
+    if (descEl) descEl.textContent = desc;
+    if (hashEl) hashEl.textContent = hash;
+
+    modalOverlay.classList.add('active');
+    if (window.orbitSynthBeep) window.orbitSynthBeep(880, 0.06);
+  };
+
+  if (closeBtn && modalOverlay) {
+    closeBtn.addEventListener('click', () => {
+      modalOverlay.classList.remove('active');
+      if (window.orbitSynthBeep) window.orbitSynthBeep(320, 0.03);
+    });
+
+    modalOverlay.addEventListener('click', (e) => {
+      if (e.target === modalOverlay) {
+        modalOverlay.classList.remove('active');
+      }
+    });
+
+    window.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape' && modalOverlay.classList.contains('active')) {
+        modalOverlay.classList.remove('active');
+      }
+    });
+  }
+}
+
+/* ─── INTERACTIVE MOUSE-TRACKING CYBER EYES ─── */
+function initCyberEyes() {
+  const eyeLeft = document.getElementById('cyber-eye-left');
+  const eyeRight = document.getElementById('cyber-eye-right');
+  const pupilLeft = document.getElementById('cyber-pupil-left');
+  const pupilRight = document.getElementById('cyber-pupil-right');
+
+  if (!eyeLeft || !eyeRight || !pupilLeft || !pupilRight) return;
+
+  function trackEye(eye, pupil, mouseX, mouseY) {
+    const rect = eye.getBoundingClientRect();
+    const eyeCenterX = rect.left + rect.width / 2;
+    const eyeCenterY = rect.top + rect.height / 2;
+
+    const angle = Math.atan2(mouseY - eyeCenterY, mouseX - eyeCenterX);
+    const dist = Math.hypot(mouseX - eyeCenterX, mouseY - eyeCenterY);
+    const maxOffset = 14;
+    const offset = Math.min(dist * 0.1, maxOffset);
+
+    const pupilX = Math.cos(angle) * offset;
+    const pupilY = Math.sin(angle) * offset;
+
+    pupil.style.transform = `translate(${pupilX}px, ${pupilY}px)`;
+  }
+
+  window.addEventListener('mousemove', (e) => {
+    trackEye(eyeLeft, pupilLeft, e.clientX, e.clientY);
+    trackEye(eyeRight, pupilRight, e.clientX, e.clientY);
+  });
+}

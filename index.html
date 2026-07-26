@@ -57,17 +57,22 @@
       <img src="assets/logo.png" alt="KaptanBey0 Logo" class="kaptan-logo-img" id="orbit-logo" title="Click 3x for secret fragment" />
       <div class="topbar__title">
         <span class="topbar__name">KaptanBey0 Automaton</span>
-        <span class="topbar__version" data-i18n="topbar_version">v2.4.1 &middot; Nexus Prime Core</span>
+        <span class="topbar__version" data-i18n="topbar_version">v2.5.0 &middot; Cyber Vision &amp; Neural Credentials</span>
       </div>
     </div>
     <nav class="topbar__nav">
       <a href="#hero" class="topbar__link active" data-section="hero" data-i18n="nav_home">Ana Sayfa</a>
       <a href="#dashboard" class="topbar__link" data-section="dashboard" data-i18n="nav_dashboard">Kontrol</a>
+      <a href="cv.html" class="topbar__link" style="color:var(--neon-green); font-weight:600;" data-i18n="nav_cv_tab">📜 Dossier / CV</a>
       <a href="#projects" class="topbar__link" data-section="projects" data-i18n="nav_projects">Projeler</a>
       <a href="#languages" class="topbar__link" data-section="languages" data-i18n="nav_languages">Diller</a>
+      <a href="#certificates" class="topbar__link" data-section="certificates" data-i18n="nav_certificates">Sertifikalar</a>
       <a href="#terminal" class="topbar__link" data-section="terminal" data-i18n="nav_terminal">Terminal</a>
     </nav>
     <div class="topbar__right">
+      <a href="cv.html" class="cv-dossier-top-btn" style="font-family:var(--font-mono); font-size:0.75rem; background:rgba(34,255,136,0.1); color:var(--neon-green); border:1px solid rgba(34,255,136,0.35); border-radius:4px; padding:4px 12px; text-decoration:none; font-weight:600; transition:all 0.3s;" data-i18n="nav_cv_tab">
+        <span>📜 DOSSIER / CV</span>
+      </a>
       <button class="theme-toggle-btn" id="theme-toggle-btn" title="Tema Değiştir (Cyan / Emerald / Amber / Purple)" style="font-family:var(--font-mono); font-size:0.75rem; background:rgba(0,240,255,0.08); color:var(--neon-cyan); border:1px solid rgba(0,240,255,0.3); border-radius:4px; padding:4px 10px; cursor:pointer; transition:all 0.3s;">
         <span>🎨 THEME: CYAN</span>
       </button>
@@ -118,6 +123,7 @@
       </div>
       <div class="database-menu-card__list" id="db-modal-list">
         <a href="index.html" class="database-menu-item"><span class="database-menu-item__num">01.</span> <span data-i18n="db_item_1">KaptanBey0 Control Center</span> <span>[ACTIVE]</span></a>
+        <a href="cv.html" class="database-menu-item" style="border-color:rgba(34,255,136,0.3); background:rgba(34,255,136,0.05);"><span class="database-menu-item__num" style="color:var(--neon-green);">📜</span> <span data-i18n="nav_cv_tab">Developer Dossier / CV</span> <span style="color:var(--neon-green);">[LEVEL 5]</span></a>
         <a href="archive.html" class="database-menu-item"><span class="database-menu-item__num">02.</span> <span data-i18n="db_item_2">Substrate Anomaly Archive</span> <span>[INDEXED]</span></a>
         <a href="researchers.html" class="database-menu-item"><span class="database-menu-item__num">03.</span> <span data-i18n="db_item_3">Researchers Database</span> <span>[RESTRICTED]</span></a>
         <a href="phenomena.html" class="database-menu-item"><span class="database-menu-item__num">04.</span> <span data-i18n="db_item_4">Phenomena 3D Catalog</span> <span>[ACTIVE]</span></a>
@@ -216,6 +222,23 @@
           <div style="font-family: var(--font-mono); font-size: 0.78rem; color: #94a3b8; margin-top: 10px; text-align:center;">
             • <strong data-i18n="radar_freq_lbl">Frekans:</strong> 842.4 MHz<br/>
             • <strong data-i18n="radar_blips_lbl">Algılanan Sinyal:</strong> <span data-i18n="radar_blips_val">7 Aktif Düğüm</span>
+          </div>
+        </div>
+
+        <!-- CARD 5: INTERACTIVE MOUSE-TRACKING CYBER EYES -->
+        <div class="visual-card-item cyber-eye-card">
+          <h3 style="font-family: var(--font-mono); color: var(--neon-green); font-size: 0.9rem; margin-bottom: 12px;">👁️ SİBER GÖZLEM NÖRONLARI</h3>
+          <div class="cyber-eyes-container" id="cyber-eyes-container">
+            <div class="cyber-eye" id="cyber-eye-left">
+              <div class="cyber-eye-pupil" id="cyber-pupil-left"></div>
+            </div>
+            <div class="cyber-eye" id="cyber-eye-right">
+              <div class="cyber-eye-pupil" id="cyber-pupil-right"></div>
+            </div>
+          </div>
+          <div style="font-family: var(--font-mono); font-size: 0.76rem; color: #94a3b8; margin-top: 10px; text-align:center;">
+            • <strong>Optik Tarayıcı:</strong> İmleç İzleme Aktif<br/>
+            <span style="color:var(--neon-green); font-size:0.72rem;">● SİBER GÖZLER FAREYİ TAKİP EDİYOR</span>
           </div>
         </div>
 
@@ -393,6 +416,179 @@ Players.<span class="fn">PlayerAdded</span>:Connect(<span class="kw">function</s
             <span>DataStore</span>
           </div>
         </div>
+      </div>
+    </section>
+
+    <!-- ── SECTION 4.5: SERTİFİKALAR & LİSANSLAR ── -->
+    <section class="section section--certificates" id="certificates">
+      <div class="section__header">
+        <h2 class="glitch-title" data-i18n="cert_section_title" data-text="Sertifikalar & Lisanslar">Sertifikalar & Lisanslar</h2>
+        <p class="section__subtitle" data-i18n="cert_section_sub">Doğrulanmış yetki lisansları, uzmanlık sertifikaları &amp; sistem akreditasyonları</p>
+      </div>
+
+      <!-- FILTER TABS -->
+      <div class="cert-filter-bar" id="cert-filter-bar">
+        <button class="cert-filter-btn active" data-filter="all" data-i18n="cert_filter_all">Tümü</button>
+        <button class="cert-filter-btn" data-filter="bot" data-i18n="cert_filter_bot">🤖 Bot &amp; Otomasyon</button>
+        <button class="cert-filter-btn" data-filter="luau" data-i18n="cert_filter_luau">🎮 Roblox &amp; Luau</button>
+        <button class="cert-filter-btn" data-filter="ai" data-i18n="cert_filter_ai">🛠️ Yapay Zeka</button>
+        <button class="cert-filter-btn" data-filter="sec" data-i18n="cert_filter_sec">🛡️ Siber Güvenlik</button>
+        <button class="cert-filter-btn" data-filter="web" data-i18n="cert_filter_web">🌐 Web Mimarisi</button>
+      </div>
+
+      <!-- CERTIFICATES GRID -->
+      <div class="certs-grid" id="certs-grid">
+        
+        <!-- CARD 1 -->
+        <div class="cert-card" data-category="bot">
+          <div>
+            <div class="cert-badge-row">
+              <span class="cert-issuer-tag">Discord Dev Network</span>
+              <span class="cert-status-badge"><span style="color:var(--neon-green);">✓</span> <span data-i18n="cert_status_verified">DOĞRULANDI</span></span>
+            </div>
+            <h3 class="cert-title">Discord Bot Architect &amp; API Specialist</h3>
+            <p class="cert-desc">Discord.js v14 ile ölçeklenebilir bot mimarileri, event dinleyicileri, sharding ve güvenli OAuth2 entegrasyonu akreditasyonu.</p>
+            <div class="cert-id-box">
+              <span><strong data-i18n="cert_id_lbl">Lisans No:</strong> DIS-8942-JS</span>
+              <span><strong data-i18n="cert_date_lbl">Tarih:</strong> Nov 2025</span>
+            </div>
+            <div class="cert-tags">
+              <span class="cert-tag-pill">Discord.js v14</span>
+              <span class="cert-tag-pill">Node.js</span>
+              <span class="cert-tag-pill">REST API</span>
+              <span class="cert-tag-pill">Webhooks</span>
+            </div>
+            <div style="font-family:var(--font-mono); font-size:0.7rem; color:var(--neon-cyan); background:rgba(0,240,255,0.04); border:1px solid rgba(0,240,255,0.15); padding:6px 10px; border-radius:4px; margin-top:8px;">
+              HASH: 0x8942F773A1C90B5512EE90482B
+            </div>
+          </div>
+        </div>
+
+        <!-- CARD 2 -->
+        <div class="cert-card" data-category="luau">
+          <div>
+            <div class="cert-badge-row">
+              <span class="cert-issuer-tag">Roblox Luau Org</span>
+              <span class="cert-status-badge"><span style="color:var(--neon-green);">✓</span> <span data-i18n="cert_status_verified">DOĞRULANDI</span></span>
+            </div>
+            <h3 class="cert-title">Roblox Luau &amp; DataStore Systems Engineer</h3>
+            <p class="cert-desc">Luau dilinde nesne yönelimli oyun otomasyonu, client-server RemoteEvent yönetimi ve DataStore v2 veri senkronizasyon yetkinliği.</p>
+            <div class="cert-id-box">
+              <span><strong data-i18n="cert_id_lbl">Lisans No:</strong> RBX-7731-LUAU</span>
+              <span><strong data-i18n="cert_date_lbl">Tarih:</strong> Aug 2025</span>
+            </div>
+            <div class="cert-tags">
+              <span class="cert-tag-pill">Luau</span>
+              <span class="cert-tag-pill">Roblox Studio</span>
+              <span class="cert-tag-pill">DataStore v2</span>
+              <span class="cert-tag-pill">OOP</span>
+            </div>
+            <div style="font-family:var(--font-mono); font-size:0.7rem; color:var(--neon-purple); background:rgba(168,85,247,0.04); border:1px solid rgba(168,85,247,0.15); padding:6px 10px; border-radius:4px; margin-top:8px;">
+              HASH: 0x7731B901C448A292D5F1001A88
+            </div>
+          </div>
+        </div>
+
+        <!-- CARD 3 -->
+        <div class="cert-card" data-category="ai">
+          <div>
+            <div class="cert-badge-row">
+              <span class="cert-issuer-tag">Nexus Neural Labs</span>
+              <span class="cert-status-badge"><span style="color:var(--neon-green);">✓</span> <span data-i18n="cert_status_verified">DOĞRULANDI</span></span>
+            </div>
+            <h3 class="cert-title">Python AI Pipelines &amp; Neural Automation</h3>
+            <p class="cert-desc">Python 3.x tabanlı otonom veri işleme betikleri, yapay zeka entegrasyon hatları ve arka plan işlem otomasyonu uzmanlığı.</p>
+            <div class="cert-id-box">
+              <span><strong data-i18n="cert_id_lbl">Lisans No:</strong> PY-9012-AI</span>
+              <span><strong data-i18n="cert_date_lbl">Tarih:</strong> Jan 2026</span>
+            </div>
+            <div class="cert-tags">
+              <span class="cert-tag-pill">Python 3.x</span>
+              <span class="cert-tag-pill">AI Pipelines</span>
+              <span class="cert-tag-pill">Automation</span>
+              <span class="cert-tag-pill">AsyncIO</span>
+            </div>
+            <div style="font-family:var(--font-mono); font-size:0.7rem; color:var(--neon-green); background:rgba(34,255,136,0.04); border:1px solid rgba(34,255,136,0.15); padding:6px 10px; border-radius:4px; margin-top:8px;">
+              HASH: 0x9012A349F81DCE997782A0051B
+            </div>
+          </div>
+        </div>
+
+        <!-- CARD 4 -->
+        <div class="cert-card" data-category="sec">
+          <div>
+            <div class="cert-badge-row">
+              <span class="cert-issuer-tag">Substrate Cyber Guard</span>
+              <span class="cert-status-badge"><span style="color:var(--neon-green);">✓</span> <span data-i18n="cert_status_verified">DOĞRULANDI</span></span>
+            </div>
+            <h3 class="cert-title">Cybersecurity &amp; Code Integrity Specialist</h3>
+            <p class="cert-desc">Güvenli kodlama standartları, webhook imzalama doğrulaması, API token koruması ve anomali tespiti akreditasyonu.</p>
+            <div class="cert-id-box">
+              <span><strong data-i18n="cert_id_lbl">Lisans No:</strong> SEC-4040-CYBER</span>
+              <span><strong data-i18n="cert_date_lbl">Tarih:</strong> Mar 2026</span>
+            </div>
+            <div class="cert-tags">
+              <span class="cert-tag-pill">Security</span>
+              <span class="cert-tag-pill">Integrity</span>
+              <span class="cert-tag-pill">Auth Tokens</span>
+              <span class="cert-tag-pill">Crypto Hash</span>
+            </div>
+            <div style="font-family:var(--font-mono); font-size:0.7rem; color:var(--neon-amber); background:rgba(255,170,34,0.04); border:1px solid rgba(255,170,34,0.15); padding:6px 10px; border-radius:4px; margin-top:8px;">
+              HASH: 0x4040C110F99853AA882E99104F
+            </div>
+          </div>
+        </div>
+
+        <!-- CARD 5 -->
+        <div class="cert-card" data-category="web">
+          <div>
+            <div class="cert-badge-row">
+              <span class="cert-issuer-tag">W3C Cyber-Web</span>
+              <span class="cert-status-badge"><span style="color:var(--neon-green);">✓</span> <span data-i18n="cert_status_verified">DOĞRULANDI</span></span>
+            </div>
+            <h3 class="cert-title">Full-Stack WebGL &amp; Interactive UI Developer</h3>
+            <p class="cert-desc">Vanilla HTML5/CSS3, WebGL/Three.js kanvas renderlama, 7 dilli i18n motoru ve interaktif arayüz mimarisi sertifikasyonu.</p>
+            <div class="cert-id-box">
+              <span><strong data-i18n="cert_id_lbl">Lisans No:</strong> WEB-2026-NEXUS</span>
+              <span><strong data-i18n="cert_date_lbl">Tarih:</strong> Apr 2026</span>
+            </div>
+            <div class="cert-tags">
+              <span class="cert-tag-pill">WebGL / Three.js</span>
+              <span class="cert-tag-pill">HTML5 / CSS3</span>
+              <span class="cert-tag-pill">i18n Engine</span>
+              <span class="cert-tag-pill">JS ES6+</span>
+            </div>
+            <div style="font-family:var(--font-mono); font-size:0.7rem; color:var(--neon-cyan); background:rgba(0,240,255,0.04); border:1px solid rgba(0,240,255,0.15); padding:6px 10px; border-radius:4px; margin-top:8px;">
+              HASH: 0x2026W883901FEAA77412C9901D
+            </div>
+          </div>
+        </div>
+
+        <!-- CARD 6 -->
+        <div class="cert-card" data-category="bot">
+          <div>
+            <div class="cert-badge-row">
+              <span class="cert-issuer-tag">GitHub Matrix</span>
+              <span class="cert-status-badge"><span style="color:var(--neon-green);">✓</span> <span data-i18n="cert_status_verified">DOĞRULANDI</span></span>
+            </div>
+            <h3 class="cert-title">Git &amp; Autonomous Workflow Engineering</h3>
+            <p class="cert-desc">Sürüm kontrol sistemleri, GitHub Action otomasyonları, modüler proje yönetimi ve açık kaynak repo optimizasyonu.</p>
+            <div class="cert-id-box">
+              <span><strong data-i18n="cert_id_lbl">Lisans No:</strong> GH-1029-GIT</span>
+              <span><strong data-i18n="cert_date_lbl">Tarih:</strong> Jun 2026</span>
+            </div>
+            <div class="cert-tags">
+              <span class="cert-tag-pill">Git</span>
+              <span class="cert-tag-pill">GitHub Actions</span>
+              <span class="cert-tag-pill">CI / CD</span>
+              <span class="cert-tag-pill">Substrate</span>
+            </div>
+            <div style="font-family:var(--font-mono); font-size:0.7rem; color:var(--neon-purple); background:rgba(168,85,247,0.04); border:1px solid rgba(168,85,247,0.15); padding:6px 10px; border-radius:4px; margin-top:8px;">
+              HASH: 0x1029G665518290CCF4419208A
+            </div>
+          </div>
+        </div>
+
       </div>
     </section>
 
