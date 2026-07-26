@@ -483,29 +483,8 @@ img {
 }
 
 .stat-card__glow {
-  position: absolute;
-  top: -50%;
-  right: -30%;
-  width: 120px;
-  height: 120px;
-  border-radius: 50%;
-  background: radial-gradient(circle, var(--neon-cyan-dim), transparent);
-  opacity: 0;
-  transition: opacity 0.4s var(--ease-out);
-  pointer-events: none;
+  display: none !important;
 }
-
-.stat-card:hover .stat-card__glow {
-  opacity: 1;
-}
-
-/* Specific card accent colors */
-#stat-hooks .stat-card__icon { background: var(--neon-purple-dim); color: var(--neon-purple); }
-#stat-hooks .stat-card__glow { background: radial-gradient(circle, var(--neon-purple-dim), transparent); }
-#stat-apis .stat-card__icon { background: var(--neon-amber-dim); color: var(--neon-amber); }
-#stat-apis .stat-card__glow { background: radial-gradient(circle, var(--neon-amber-dim), transparent); }
-#stat-impact .stat-card__icon { background: var(--neon-green-dim); color: var(--neon-green); }
-#stat-impact .stat-card__glow { background: radial-gradient(circle, var(--neon-green-dim), transparent); }
 
 /* ─── ACTIVITY PANEL ─── */
 .activity-panel {
