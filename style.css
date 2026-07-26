@@ -152,64 +152,30 @@ img {
 
 .cosmic-dust {
   position: absolute;
-  bottom: -10px;
   border-radius: 50%;
   pointer-events: none;
-  animation: dustRise linear infinite;
+  animation: dustFloat ease-in-out infinite alternate;
   will-change: transform, opacity;
 }
 
-@keyframes dustRise {
+@keyframes dustFloat {
   0% {
-    transform: translateY(0) translateX(0) scale(1);
-    opacity: 0;
-  }
-  10% {
-    opacity: 1;
+    transform: translateY(0) translateX(0);
+    opacity: 0.2;
   }
   50% {
-    opacity: 0.7;
-  }
-  90% {
-    opacity: 0.3;
+    transform: translateY(-25px) translateX(15px);
+    opacity: 0.75;
   }
   100% {
-    transform: translateY(-105vh) translateX(40px) scale(0.3);
-    opacity: 0;
+    transform: translateY(-50px) translateX(-10px);
+    opacity: 0.15;
   }
 }
 
-/* ─── HERO ENERGY ORBS ─── */
+/* ─── HERO ENERGY ORBS (DISABLED TO FIX LIGHT REFLECTIONS) ─── */
 .hero-energy-orb {
-  position: absolute;
-  border-radius: 50%;
-  pointer-events: none;
-  z-index: 0;
-  animation: orbDrift ease-in-out infinite alternate;
-  will-change: transform, opacity;
-}
-
-@keyframes orbDrift {
-  0% {
-    transform: translate(0, 0) scale(1);
-    opacity: 0.5;
-  }
-  25% {
-    transform: translate(15px, -20px) scale(1.08);
-    opacity: 0.7;
-  }
-  50% {
-    transform: translate(-10px, -35px) scale(0.95);
-    opacity: 0.5;
-  }
-  75% {
-    transform: translate(20px, -15px) scale(1.1);
-    opacity: 0.65;
-  }
-  100% {
-    transform: translate(-15px, 10px) scale(1);
-    opacity: 0.45;
-  }
+  display: none !important;
 }
 
 /* ─── TOPBAR ─── */
@@ -2508,37 +2474,9 @@ body {
   box-shadow: 0 0 16px rgba(255, 0, 85, 0.35);
 }
 
-/* ─── SCI-FI VIEWPORT LASER SCANNER ─── */
+/* ─── SCI-FI VIEWPORT LASER SCANNER (DISABLED) ─── */
 body::after {
-  content: '';
-  position: fixed;
-  top: -100px;
-  left: 0;
-  width: 100vw;
-  height: 2px;
-  background: linear-gradient(90deg, transparent, rgba(0, 240, 255, 0.8), rgba(168, 85, 247, 0.8), transparent);
-  box-shadow: 0 0 15px rgba(0, 240, 255, 0.9), 0 0 30px rgba(168, 85, 247, 0.6);
-  pointer-events: none;
-  z-index: 9997;
-  animation: viewportLaser 8s linear infinite;
-  opacity: 0.7;
-}
-
-@keyframes viewportLaser {
-  0% {
-    top: -10px;
-    opacity: 0;
-  }
-  5% {
-    opacity: 0.8;
-  }
-  95% {
-    opacity: 0.8;
-  }
-  100% {
-    top: 100vh;
-    opacity: 0;
-  }
+  display: none !important;
 }
 
 /* ─── BUTTON NEON PULSE ANIMATIONS ─── */

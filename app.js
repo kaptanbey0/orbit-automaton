@@ -26,7 +26,6 @@ document.addEventListener('DOMContentLoaded', () => {
   initLiveGitHubRepos();
   initAudioAmbientSynth();
   initCertificates();
-  initCyberEyes();
 });
 
 /* ─── AUDIO SYNTH BEEP (used by boot loader & UI feedback) ─── */
@@ -128,13 +127,13 @@ function initAmbientParticles() {
   const container = document.getElementById('ambient-particles');
   if (!container) return;
 
-  const PARTICLE_COUNT = 35;
+  const PARTICLE_COUNT = 55;
   const colors = [
-    'rgba(0, 240, 255, 0.4)',
-    'rgba(168, 85, 247, 0.35)',
-    'rgba(34, 255, 136, 0.3)',
-    'rgba(255, 170, 34, 0.25)',
-    'rgba(0, 240, 255, 0.2)',
+    'rgba(0, 240, 255, 0.45)',
+    'rgba(168, 85, 247, 0.4)',
+    'rgba(34, 255, 136, 0.35)',
+    'rgba(255, 170, 34, 0.3)',
+    'rgba(0, 240, 255, 0.25)',
   ];
 
   for (let i = 0; i < PARTICLE_COUNT; i++) {
@@ -142,13 +141,15 @@ function initAmbientParticles() {
     dot.className = 'cosmic-dust';
     const size = Math.random() * 4 + 1.5;
     const x = Math.random() * 100;
-    const delay = Math.random() * 20;
-    const duration = Math.random() * 18 + 14;
+    const y = Math.random() * 100;
+    const delay = Math.random() * 10;
+    const duration = Math.random() * 10 + 8;
     const color = colors[Math.floor(Math.random() * colors.length)];
     const blur = Math.random() * 3 + 1;
 
     dot.style.cssText = `
       left: ${x}%;
+      top: ${y}%;
       width: ${size}px;
       height: ${size}px;
       background: ${color};
@@ -1645,35 +1646,4 @@ function initCertificates() {
       }
     });
   }
-}
-
-/* ─── INTERACTIVE MOUSE-TRACKING CYBER EYES ─── */
-function initCyberEyes() {
-  const eyeLeft = document.getElementById('cyber-eye-left');
-  const eyeRight = document.getElementById('cyber-eye-right');
-  const pupilLeft = document.getElementById('cyber-pupil-left');
-  const pupilRight = document.getElementById('cyber-pupil-right');
-
-  if (!eyeLeft || !eyeRight || !pupilLeft || !pupilRight) return;
-
-  function trackEye(eye, pupil, mouseX, mouseY) {
-    const rect = eye.getBoundingClientRect();
-    const eyeCenterX = rect.left + rect.width / 2;
-    const eyeCenterY = rect.top + rect.height / 2;
-
-    const angle = Math.atan2(mouseY - eyeCenterY, mouseX - eyeCenterX);
-    const dist = Math.hypot(mouseX - eyeCenterX, mouseY - eyeCenterY);
-    const maxOffset = 14;
-    const offset = Math.min(dist * 0.1, maxOffset);
-
-    const pupilX = Math.cos(angle) * offset;
-    const pupilY = Math.sin(angle) * offset;
-
-    pupil.style.transform = `translate(${pupilX}px, ${pupilY}px)`;
-  }
-
-  window.addEventListener('mousemove', (e) => {
-    trackEye(eyeLeft, pupilLeft, e.clientX, e.clientY);
-    trackEye(eyeRight, pupilRight, e.clientX, e.clientY);
-  });
 }
